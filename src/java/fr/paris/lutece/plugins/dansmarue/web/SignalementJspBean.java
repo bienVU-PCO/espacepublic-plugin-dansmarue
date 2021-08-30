@@ -256,9 +256,6 @@ public class SignalementJspBean extends AbstractJspBean
     /** The Constant URL_JSP_DISPLAY_SIGNALEMENTS *. */
     private static final String URL_JSP_DISPLAY_SIGNALEMENTS = "jsp/admin/plugins/signalement/DisplaySignalement.jsp";
 
-    /** The Constant URL_JSP_GET_ROAD_MAP *. */
-    private static final String URL_JSP_GET_ROAD_MAP = "jsp/admin/plugins/ramen/GetRoadMap.jsp";
-
     /** The Constant CSV_ISO. */
     private static final String CSV_ISO = "ISO-8859-1";
 
@@ -367,9 +364,6 @@ public class SignalementJspBean extends AbstractJspBean
 
     /** The Constant PARAMETER_NEXT_URL. */
     private static final String PARAMETER_NEXT_URL = "next";
-
-    /** The Constant PARAMETER_WEBAPP_RAMEN. */
-    private static final String PARAMETER_WEBAPP_RAMEN = "ramen";
 
     /** The Constant PARAMETER_SECTOR_ID. */
     private static final String PARAMETER_SECTOR_ID = "sector_id";
@@ -2748,50 +2742,7 @@ public class SignalementJspBean extends AbstractJspBean
 
             String next = request.getParameter( PARAMETER_NEXT_URL );
 
-            if ( StringUtils.contains( next, URL_JSP_GET_ROAD_MAP ) )
-            {
-                try
-                {
-                    // Return URL management
-                    URI uri = new URI( next );
-                    String nextPath = new URI( uri.getScheme( ), uri.getAuthority( ), uri.getPath( ), null, uri.getFragment( ) ).toString( );
-                    UrlItem nextUrl = new UrlItem( nextPath );
-                    // service date
-                    if ( StringUtils.isNotBlank( strDateService ) )
-                    {
-                        nextUrl.addParameter( PARAMETER_DATE_SERVICE, strDateService );
-                    }
-                    // service id
-                    if ( StringUtils.isNotBlank( strServiceId ) )
-                    {
-                        nextUrl.addParameter( PARAMETER_SERVICE_ID, strServiceId );
-                    }
-                    // unit id
-                    String strUnitId = request.getParameter( PARAMETER_UNIT_ID );
-                    if ( StringUtils.isNotBlank( strUnitId ) )
-                    {
-                        nextUrl.addParameter( PARAMETER_UNIT_ID, strUnitId );
-                    }
-                    // sector id
-                    String strSectorId = request.getParameter( PARAMETER_SECTOR_ID );
-                    if ( StringUtils.isNotBlank( strSectorId ) )
-                    {
-                        nextUrl.addParameter( PARAMETER_SECTOR_ID, strSectorId );
-                    }
-                    // set next url in the return url object
-                    urlItem.addParameter( PARAMETER_NEXT_URL, encodeURIComponent( nextUrl.getUrl( ) ) );
-                    // set next url in the session
-                    request.getSession( ).setAttribute( PARAMETER_NEXT_URL, nextUrl.getUrl( ) );
-                }
-                catch( Exception e )
-                {
-                    AppLogService.error( e );
-                }
-            }
-            else
-            {
-                urlItem.addParameter( PARAMETER_NEXT_URL, next );
-            }
+            urlItem.addParameter( PARAMETER_NEXT_URL, next );
 
             strUrl = urlItem.getUrl( );
         }
@@ -3492,36 +3443,8 @@ public class SignalementJspBean extends AbstractJspBean
             request.getSession( ).setAttribute( PARAMETER_NEXT_URL, URL_JSP_DISPLAY_SIGNALEMENTS );
         }
         else
-            if ( ( nextURL != null ) && nextURL.contains( PARAMETER_WEBAPP_RAMEN ) )
-            {
-                // redirect on RAMEN Webapp
-                UrlItem urlRedirect = new UrlItem( nextURL );
-
-                String serviceID = request.getParameter( PARAMETER_SERVICE_ID );
-                if ( serviceID != null )
-                {
-                    urlRedirect.addParameter( PARAMETER_SERVICE_ID, serviceID );
-                }
-
-                String sectorID = request.getParameter( PARAMETER_SECTOR_ID );
-                if ( sectorID != null )
-                {
-                    urlRedirect.addParameter( PARAMETER_SECTOR_ID, sectorID );
-                }
-
-                String unitID = request.getParameter( PARAMETER_UNIT_ID );
-                if ( unitID != null )
-                {
-                    urlRedirect.addParameter( PARAMETER_UNIT_ID, unitID );
-                }
-
-                model.put( MARK_BACK_URL, urlRedirect.getUrl( ) );
-            }
-            else
-            {
-                // stay on SIGNALEMENT Webapp
-                model.put( MARK_BACK_URL, JSP_MANAGE_SIGNALEMENT );
-            }
+            model.put( MARK_BACK_URL, JSP_MANAGE_SIGNALEMENT );
+        
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_TASK_WORKFLOW, getLocale( ), model );
 
