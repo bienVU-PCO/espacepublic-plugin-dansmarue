@@ -7,15 +7,15 @@
     <version>5.0.2</version>
   </parent>
   <groupId>fr.paris.lutece.plugins</groupId>
-  <artifactId>plugin-dansmarue</artifactId>
-  <version>6.8.5-SNAPSHOT</version>
+  <artifactId>plugin-bienvu</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
   <packaging>lutece-plugin</packaging>
-  <name>plugin Dans Ma Rue (BO signalement)</name>
-  <url>https://dev.lutece.paris.fr/gitlab/tmma/r59/plugin-signalement</url>
+  <name>plugin bien VU (BO signalement)</name>
+  <url>https://github.com/bienVU-PCO/espacepublic-plugin-dansmarue</url>
   <scm>
-    <connection>scm:git:https://dev.lutece.paris.fr/gitlab/tmma/r59/plugin-signalement.git</connection>
-    <developerConnection>scm:git:https://dev.lutece.paris.fr/gitlab/tmma/r59/plugin-signalement.git</developerConnection>
-    <url>https://dev.lutece.paris.fr/gitlab/tmma/r59/plugin-signalement</url>
+    <connection>scm:git:https://github.com/bienVU-PCO/espacepublic-plugin-dansmarue.git</connection>
+    <developerConnection>scm:git:https://github.com/bienVU-PCO/espacepublic-plugin-dansmarue.git</developerConnection>
+    <url>https://github.com/bienVU-PCO/espacepublic-plugin-dansmarue</url>
     <tag>HEAD</tag>
   </scm>
   <properties>
@@ -81,8 +81,8 @@
     </dependency>
     <dependency>
       <groupId>fr.paris.lutece.plugins</groupId>
-      <artifactId>module-leaflet-dansmarue</artifactId>
-      <version>[6.0.99,)</version>
+      <artifactId>module-leaflet-bienvu</artifactId>
+      <version>[0.0.1-SNAPSHOT,)</version>
     </dependency>
     <dependency>
       <groupId>fr.paris.lutece.plugins</groupId>
@@ -188,7 +188,7 @@
         <artifactId>maven-release-plugin</artifactId>
         <version>2.5.3</version>
         <configuration combine.self="override">
-          <tagNameFormat>plugin-dansmarue-@{project.version}</tagNameFormat>
+          <tagNameFormat>plugin-bienvu-@{project.version}</tagNameFormat>
         </configuration>
       </plugin>
       <plugin>
