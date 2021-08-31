@@ -39,10 +39,6 @@ package fr.paris.lutece.plugins.dansmarue.util.constants;
 public final class LibrarySiraConstants
 {
 
-    /** The Constant PROPERTY_REST_RAMEN_URL. */
-    // WebService links
-    public static final String PROPERTY_REST_RAMEN_URL = "ramen-rest-url";
-
     /** The Constant PROPERTY_REST_DMR_URL. */
     public static final String PROPERTY_REST_DMR_URL = "dmr-rest-url";
 
@@ -54,12 +50,6 @@ public final class LibrarySiraConstants
 
     /** The Constant REST_GET_DOSSIER. */
     public static final String REST_GET_DOSSIER = "getDossier";
-
-    /** The Constant REST_GET_DOSSIER_COURRANT_BY_GEOM_WITH_EXPIRATION. */
-    public static final String REST_GET_DOSSIER_COURRANT_BY_GEOM_WITH_EXPIRATION = "getDossiersCourrantsByGeomWithExpiration";
-
-    /** The Constant REST_GET_DOSSIER_COURRANT_BY_GEO_WITH_LIMIT. */
-    public static final String REST_GET_DOSSIER_COURRANT_BY_GEO_WITH_LIMIT = "getDossiersCourrantsByGeomWithLimit";
 
     /** The Constant REST_GET_SERVICE_BY_ID. */
     public static final String REST_GET_SERVICE_BY_ID = "getServiceById";
