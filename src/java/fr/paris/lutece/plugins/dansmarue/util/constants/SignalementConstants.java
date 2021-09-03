@@ -185,9 +185,6 @@ public final class SignalementConstants
     /** The Constant UNIT_DPE. */
     public static final Integer UNIT_DPE = AppPropertiesService.getPropertyInt( "signalement.unit.dpe", -1 );
 
-    /** The Constant UNIT_RAMEN. */
-    public static final Integer UNIT_RAMEN = AppPropertiesService.getPropertyInt( "signalement.unit.ramen", -1 );
-
     /** The Constant TYPE_SIGNALEMENT_ENCOMBRANT. */
     // reporting types keys definitions
     public static final String TYPE_SIGNALEMENT_ENCOMBRANT = "signalement.typeSignalement.encombrant";
