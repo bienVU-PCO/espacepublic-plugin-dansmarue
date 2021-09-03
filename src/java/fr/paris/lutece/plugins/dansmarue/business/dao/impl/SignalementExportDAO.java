@@ -194,10 +194,6 @@ public class SignalementExportDAO implements ISignalementExportDAO
     /** The Constant SQL_OR. */
     private static final String SQL_OR = " OR ";
 
-    /** The Constant SEJ_ID. */
-    // Constants
-    private static final int SEJ_ID = 94;
-
     /** The Constant COMMA_SEPARATOR. */
     private static final String COMMA_SEPARATOR = ", ";
 
@@ -473,10 +469,10 @@ public class SignalementExportDAO implements ISignalementExportDAO
                 if ( listSignalementFind.stream( ).anyMatch( signalement -> signalement.getId( ) == daoUtil.getInt( 1 ) ) )
                 {
                     listSignalementFind.stream( ).filter( signalement -> signalement.getId( ) == daoUtil.getInt( 1 ) ).findFirst( )
-                            .ifPresent( ( Signalement signalement ) -> {
-                                signalement.setPhotos( addPhotosToSignalement( daoUtil, signalement.getPhotos( ) ) );
-                                signalement.setListActionAvailable( addActionToSignalement( daoUtil, signalement.getListActionAvailable( ) ) );
-                            } );
+                    .ifPresent( ( Signalement signalement ) -> {
+                        signalement.setPhotos( addPhotosToSignalement( daoUtil, signalement.getPhotos( ) ) );
+                        signalement.setListActionAvailable( addActionToSignalement( daoUtil, signalement.getListActionAvailable( ) ) );
+                    } );
 
                 }
                 else
@@ -680,11 +676,6 @@ public class SignalementExportDAO implements ISignalementExportDAO
         {
             nIndex = addSQLWhereOr( false, sbSQL, nIndex );
             sbSQL.append( SQL_QUERY_ADD_FILTER_DIRECTION );
-            // Special case Specificity for DEVE entity, change the id from SEJ to DEVE
-            if ( filter.getIdDirection( ) == SEJ_ID )
-            {
-                filter.setIdDirection( 1 );
-            }
             sbSQL.append( filter.getIdDirection( ) );
         }
 
@@ -898,7 +889,7 @@ public class SignalementExportDAO implements ISignalementExportDAO
 
     /**
      * Add default order clause to query
-     * 
+     *
      * @param sbSQL
      *            string builder query
      */
