@@ -50,8 +50,6 @@ import fr.paris.lutece.portal.service.util.AppException;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.portal.web.pluginaction.DefaultPluginActionResult;
 import fr.paris.lutece.portal.web.pluginaction.IPluginActionResult;
-import fr.paris.lutece.util.ReferenceItem;
-import fr.paris.lutece.util.ReferenceList;
 
 /**
  * SignalementUtils.
@@ -182,22 +180,6 @@ public final class SignalementUtils
 
     }
 
-    /**
-     * Replace "DEVE" unit id by the SEJ unit id.
-     *
-     * @param listeUnits
-     *            the units list
-     */
-    public static void changeUnitDEVEIntoSEJ( ReferenceList listeUnits )
-    {
-        for ( ReferenceItem item : listeUnits )
-        {
-            if ( item.getCode( ).equals( SignalementConstants.UNIT_DEVE ) )
-            {
-                item.setCode( AppPropertiesService.getProperty( SignalementConstants.UNIT_ATELIER_JARDINAGE ) );
-            }
-        }
-    }
 
     /**
      * Checks wether the prefix belongs to reporting type.
