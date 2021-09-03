@@ -40,6 +40,7 @@ import org.apache.log4j.Logger;
 
 import fr.paris.lutece.plugins.dansmarue.business.dao.ISignalementDAO;
 import fr.paris.lutece.plugins.dansmarue.business.dao.ISignaleurDAO;
+import fr.paris.lutece.plugins.dansmarue.business.entities.Signalement;
 import fr.paris.lutece.plugins.dansmarue.business.entities.SignalementFilter;
 import fr.paris.lutece.plugins.dansmarue.business.entities.Signaleur;
 import fr.paris.lutece.portal.service.daemon.Daemon;
@@ -81,10 +82,13 @@ public class AnonymisationDaemon extends Daemon
        
        for( int idSignalement : listSignalement ) {
            try {
-               Signaleur signaleur = _signaleurDAO.loadByIdSignalement( idSignalement );
-               signaleur.setMail( EMAIL_ANONYMISE );
-               signaleur.setIdTelephone( null );
-               _signaleurDAO.update( signaleur );
+               Signalement signalement = _signalementDAO.loadById( idSignalement );
+               if( signalement.getDateServiceFaitTraitement( ) != null || signalement.getDateRejet( ) != null ) {
+                   Signaleur signaleur = _signaleurDAO.loadByIdSignalement( idSignalement );
+                   signaleur.setMail( EMAIL_ANONYMISE );
+                   signaleur.setIdTelephone( null );
+                   _signaleurDAO.update( signaleur );
+               }
            } catch (Exception e) {
                _log.error( "Une erreur est survenu lors de l'anonymisation du signaleur de l'anomalie " + idSignalement + " :\n" + e.getCause( ));
            }
