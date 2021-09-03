@@ -216,6 +216,9 @@ public class SignalementDAO implements ISignalementDAO
 
     /** The Constant SQL_QUERY_ADD_FILTER_CATEGORY. */
     private static final String SQL_QUERY_ADD_FILTER_CATEGORY = " vstswp.id_parent IN ({0}) ";
+    
+    /** The Constant SQL_QUERY_ADD_FILTER_MIN_ID */
+    private static final String SQL_QUERY_ADD_FILTER_MIN_ID = " id_signalement > ? ";
 
     /** The Constant SQL_QUERY_SELECT_ALL_ID_SIGNALEMENT. */
     private static final String SQL_QUERY_SELECT_ALL_ID_SIGNALEMENT = "select id_signalement from signalement_signalement";
@@ -1276,6 +1279,11 @@ public class SignalementDAO implements ISignalementDAO
             }
 
         }
+        
+        if ( filter.getMinId( ) > 0 )
+        {
+            daoUtil.setLong( nIndex++, filter.getMinId( ) );
+        }
 
     }
 
@@ -1825,6 +1833,7 @@ public class SignalementDAO implements ISignalementDAO
         boolean bHasFilterCategory = !CollectionUtils.isEmpty( filter.getListIdCategories( ) );
         boolean bHasFilterAdress = !StringUtils.isEmpty( filter.getAdresse( ) );
         boolean bHasFilterQuatier = !CollectionUtils.isEmpty( filter.getListIdQuartier( ) );
+        boolean bHasFilterMinId = filter.getMinId( ) > 0;
 
         List<Order> listeOrders = convertOrderToClause( filter.getOrders( ) );
         if ( !listeOrders.isEmpty( ) && !bHasFilterAdress )
@@ -2044,6 +2053,12 @@ public class SignalementDAO implements ISignalementDAO
                 }
 
             }
+        }
+        
+        if ( bHasFilterMinId )
+        {
+            nIndex = addSQLWhereOr( false, sbSQL, nIndex );
+            sbSQL.append( SQL_QUERY_ADD_FILTER_MIN_ID );
         }
 
         // ADDING CATEGORY FILTER
