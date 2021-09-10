@@ -94,4 +94,10 @@ public interface ISignaleurDAO
      *            the reporter to update
      */
     void update( Signaleur signaleur );
+    
+    /**
+     * Anonymize a reporter
+     * @param signaleur
+     */
+    void anonymisation( Signaleur signaleur );
 }

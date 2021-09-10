@@ -46,13 +46,16 @@ import fr.paris.lutece.plugins.dansmarue.business.entities.Signaleur;
 import fr.paris.lutece.portal.service.daemon.Daemon;
 import fr.paris.lutece.portal.service.datastore.DatastoreService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
+import fr.paris.lutece.portal.service.util.AppPropertiesService;
 
-public class AnonymisationDaemon extends Daemon
+public class AnonymisationSignaleurDaemon extends Daemon
 {
 
     private static final String EMAIL_ANONYMISE = "daemon.anonymisation.emailAno";
     
-    private static final String DATASTORE_KEY = "core.daemon.AnonymisationDaemon.last.maxIdSignalement";
+    private static final String DELAI_ANONYMISATION = "daemon.anonymisation.delaiAno";
+    
+    private static final String DATASTORE_KEY = "core.daemon.AnonymisationSignaleurDaemon.last.maxIdSignalement";
     
     // dao
     /** The signalement DAO. */
@@ -75,20 +78,19 @@ public class AnonymisationDaemon extends Daemon
        List<Integer> listSignalement;
        
        int minId = Integer.parseInt( DatastoreService.getDataValue( DATASTORE_KEY, "0" ) );
+       int delaiAno = Integer.parseInt( AppPropertiesService.getProperty( DELAI_ANONYMISATION ) );
+       Calendar calendar = Calendar.getInstance( );
        filters.setMinId( minId );
-       listSignalement = _signalementDAO.getIdsSignalementByFilter( filters, null );
+       listSignalement = _signalementDAO.getIdSignalementForAnonymisationSignaleurDaemon( minId, delaiAno );
        
        _log.info( "Anonymisation des informations des signaleurs des anomalies suivantes : " + listSignalement.toString( ) );
        
        for( int idSignalement : listSignalement ) {
            try {
-               Signalement signalement = _signalementDAO.loadById( idSignalement );
-               if( signalement.getDateServiceFaitTraitement( ) != null || signalement.getDateRejet( ) != null ) {
-                   Signaleur signaleur = _signaleurDAO.loadByIdSignalement( idSignalement );
-                   signaleur.setMail( EMAIL_ANONYMISE );
-                   signaleur.setIdTelephone( null );
-                   _signaleurDAO.update( signaleur );
-               }
+               Signaleur signaleur = _signaleurDAO.loadByIdSignalement( idSignalement );
+               signaleur.setMail(  AppPropertiesService.getProperty( EMAIL_ANONYMISE ) );
+               signaleur.setIdTelephone( null );
+               _signaleurDAO.anonymisation( signaleur );
            } catch (Exception e) {
                _log.error( "Une erreur est survenu lors de l'anonymisation du signaleur de l'anomalie " + idSignalement + " :\n" + e.getCause( ));
            }
