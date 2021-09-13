@@ -3106,9 +3106,9 @@ public class SignalementDAO implements ISignalementDAO
             int nIndex = 1;
             List<Integer> listResult = new ArrayList<>( );
             
-            daoUtil.setInt( nIndex, minIdSignalement );
+            daoUtil.setInt( nIndex++, minIdSignalement );
             daoUtil.setInt( nIndex++, nbDays );
-            daoUtil.setInt( nIndex++, nbDays );
+            daoUtil.setInt( nIndex, nbDays );
             
             daoUtil.executeQuery( );
             
