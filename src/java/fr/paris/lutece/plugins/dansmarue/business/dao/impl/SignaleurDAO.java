@@ -259,6 +259,7 @@ public class SignaleurDAO implements ISignaleurDAO
 
         daoUtil.setString( nIndex++, signaleur.getMail( ) );
         daoUtil.setString( nIndex++, signaleur.getIdTelephone( ) );
+        daoUtil.setLong( nIndex, signaleur.getId( ) );
         
         daoUtil.executeUpdate( );
         daoUtil.close( );
