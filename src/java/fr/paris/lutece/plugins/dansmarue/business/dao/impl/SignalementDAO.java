@@ -355,7 +355,7 @@ public class SignalementDAO implements ISignalementDAO
     /** The Constant SQL_WHERE_DATE_CREATION. */
     private static final String SQL_WHERE_DATE_CREATION = "where date_creation > (now() - ''{0} days''::interval)";
     
-    private static final String SQL_QUERY_GET_SIGNALEMENTS_DAEMON_ANONYMISATION = "select id_signalement from signalement_signalement where id_signalement > ? and (service_fait_date_passage <= current_day - ? or date_rejet <= current_day - ?)";
+    private static final String SQL_QUERY_GET_SIGNALEMENTS_DAEMON_ANONYMISATION = "select id_signalement from signalement_signalement where id_signalement > ? and (service_fait_date_passage <= current_date - ? or date_rejet <= current_date - ?)";
 
     /**
      * Instantiates a new report dao.
