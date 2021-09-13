@@ -3117,8 +3117,6 @@ public class SignalementDAO implements ISignalementDAO
                 listResult.add( daoUtil.getInt( 1 ) );
             }
 
-            daoUtil.close( );
-
             return listResult;
             
         }
