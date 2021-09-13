@@ -83,9 +83,6 @@ import fr.paris.lutece.util.sql.DAOUtil;
 public class SignalementDAO implements ISignalementDAO
 {
 
-    /** The Constant SEJ_ID. */
-    private static final int SEJ_ID = 94;
-
     /** The Constant SQL_QUERY_AND. */
     private static final String SQL_QUERY_AND = " AND ";
 
@@ -1342,12 +1339,6 @@ public class SignalementDAO implements ISignalementDAO
         }
 
         DAOUtil daoUtil = new DAOUtil( sbSQL.toString( ), plugin );
-
-        // Special case Specificity for DEVE entity, change the id from SEJ to DEVE
-        if ( filter.getIdDirection( ) == SEJ_ID )
-        {
-            filter.setIdDirection( 1 );
-        }
 
         setFilterValues( filter, daoUtil );
 

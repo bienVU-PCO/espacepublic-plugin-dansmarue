@@ -166,24 +166,6 @@ public final class SignalementConstants
     /** The Constant IMAGE_THUMBNAIL_RESIZE_HEIGHT. */
     public static final String IMAGE_THUMBNAIL_RESIZE_HEIGHT = "imageThumbnail.resize.height";
 
-    /** The Constant UNIT_ATELIER_JARDINAGE. */
-    // units property keys definitions
-    public static final String UNIT_ATELIER_JARDINAGE = "signalement.unit.atelierJardinage";
-
-    /** The Constant UNIT_JARDINAGE. */
-    public static final String UNIT_JARDINAGE = "signalement.unit.jardinage";
-
-    /** The Constant UNIT_SYLVICOLE. */
-    public static final String UNIT_SYLVICOLE = "signalement.unit.sylvicole";
-
-    /** The Constant UNIT_CIMETIERE. */
-    public static final String UNIT_CIMETIERE = "signalement.unit.cimetiere";
-
-    /** The Constant UNIT_DEVE. */
-    public static final String UNIT_DEVE = AppPropertiesService.getProperty( "signalement.unit.deve" );
-
-    /** The Constant UNIT_DPE. */
-    public static final Integer UNIT_DPE = AppPropertiesService.getPropertyInt( "signalement.unit.dpe", -1 );
 
     /** The Constant TYPE_SIGNALEMENT_ENCOMBRANT. */
     // reporting types keys definitions

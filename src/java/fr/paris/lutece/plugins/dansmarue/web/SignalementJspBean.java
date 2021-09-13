@@ -35,7 +35,6 @@ package fr.paris.lutece.plugins.dansmarue.web;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.URI;
 import java.net.URLEncoder;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
@@ -180,9 +179,6 @@ public class SignalementJspBean extends AbstractJspBean
 
     /** The Constant ID_SECTOR. */
     private static final String ID_SECTOR = "idSector";
-
-    /** The Constant SEJ_ID. */
-    private static final int SEJ_ID = 94;
 
     /** The Constant LABEL. */
     private static final String LABEL = "label";
@@ -490,9 +486,6 @@ public class SignalementJspBean extends AbstractJspBean
 
     /** The Constant VUE_PRES. */
     public static final Integer DETAILED_VIEW = 0;
-
-    /** The Constant ID_JARDIN. */
-    public static final Integer ID_JARDIN = 260;
 
     /** The Constant ID_RACINE. */
     public static final Integer ID_RACINE = 0;
@@ -966,7 +959,7 @@ public class SignalementJspBean extends AbstractJspBean
 
             if ( filter.getIdDirection( ) <= 0 )
             {
-                for ( Sector secteurUnit : _sectorService.loadByIdUnitWithoutChosenId( userUnit.getIdUnit( ), ID_JARDIN ) )
+                for ( Sector secteurUnit : _sectorService.loadByIdUnitWithoutSpecificDeveUnits( userUnit.getIdUnit( ) ) )
                 {
                     boolean bFound = false;
                     for ( Sector secteur : listSectorsOfUnits )
@@ -1006,17 +999,12 @@ public class SignalementJspBean extends AbstractJspBean
         refItem.setCode( Long.toString( -1 ) );
         refItem.setName( StringUtils.EMPTY );
         listeDirections.add( 0, refItem );
-        SignalementUtils.changeUnitDEVEIntoSEJ( listeDirections );
         model.put( MARK_DIRECTION_LIST, listeDirections );
 
         if ( filter.getIdDirection( ) > 0 )
         {
-            // Specificity for DEVE entity, change the id from SEJ to DEVE
-            if ( filter.getIdDirection( ) == SEJ_ID )
-            {
-                filter.setIdDirection( 1 );
-            }
-            listSectorsOfUnits = _sectorService.loadByIdUnitWithoutChosenId( filter.getIdDirection( ), ID_JARDIN );
+
+            listSectorsOfUnits = _sectorService.loadByIdUnitWithoutSpecificDeveUnits( filter.getIdDirection( ));
         }
 
         ReferenceList listeSecteur = ListUtils.toReferenceList( listSectorsOfUnits, ID_SECTOR, "name", StringUtils.EMPTY, true );
@@ -1153,12 +1141,6 @@ public class SignalementJspBean extends AbstractJspBean
         model.put( MARK_ACTIONS, mapActions );
 
         model.put( MARK_TITLE, I18nService.getLocalizedString( PAGE_TITLE_MANAGE_SIGNALEMENT, getLocale( ) ) );
-
-        // the filter
-        if ( filter.getIdDirection( ) == 1 )
-        {
-            filter.setIdDirection( SEJ_ID );
-        }
 
         model.put( SignalementConstants.MARK_LOCALE, request.getLocale( ) );
 
@@ -3441,10 +3423,11 @@ public class SignalementJspBean extends AbstractJspBean
             model.put( PARAMETER_FROM_PAGE, PARAMETER_VALUE_DISPLAY_PAGE );
             model.put( MARK_BACK_URL, URL_JSP_DISPLAY_SIGNALEMENTS );
             request.getSession( ).setAttribute( PARAMETER_NEXT_URL, URL_JSP_DISPLAY_SIGNALEMENTS );
-        }
-        else
+        } else
+        {
             model.put( MARK_BACK_URL, JSP_MANAGE_SIGNALEMENT );
-        
+        }
+
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_TASK_WORKFLOW, getLocale( ), model );
 
@@ -3715,11 +3698,7 @@ public class SignalementJspBean extends AbstractJspBean
             try
             {
                 Integer directionId = Integer.parseInt( strDirectionId );
-                // Specificity for DEVE entity, change the id from SEJ to DEVE
-                if ( directionId == SEJ_ID )
-                {
-                    directionId = 1;
-                }
+
                 Unit unitSelected = _unitService.getUnit( directionId, false );
                 AdminUser adminUser = AdminUserService.getAdminUser( request );
                 List<Unit> listUnits = _unitService.getUnitsByIdUser( adminUser.getUserId( ), false );
@@ -3909,10 +3888,6 @@ public class SignalementJspBean extends AbstractJspBean
             filter.setListIdCategories( noRessource );
         }
 
-        if ( filter.getIdDirection( ) == SEJ_ID )
-        {
-            filter.setIdDirection( 1 );
-        }
 
         Integer totalResult = _signalementExportService.countSearchResult( filter );
         List<Signalement> signalementList = _signalementExportService.findByFilterSearch( filter, getPaginationProperties( request, totalResult ) );
@@ -3977,10 +3952,7 @@ public class SignalementJspBean extends AbstractJspBean
         model.put( MARK_ETATS, mapStates );
         model.put( MARK_MAP_MAX_RESULTS, AppPropertiesService.getPropertyInt( PROPERTY_MAP_MAX_RESULTS, 0 ) );
 
-        if ( filter.getIdDirection( ) == 1 )
-        {
-            filter.setIdDirection( SEJ_ID );
-        }
+
         model.put( MARK_FILTER, filter );
         _signalementFilter = filter;
 
@@ -4463,7 +4435,6 @@ public class SignalementJspBean extends AbstractJspBean
         {
             idUnits.add( defaultUnit.getIdUnit( ) );
         }
-        idUnits.add( Integer.parseInt( SignalementConstants.UNIT_DEVE ) );
 
         // Default sector of the anomaly calculated by default
         Unit majorUnit = _signalementService.getMajorUnit( nTypeSignalementId, nLng, nLat );

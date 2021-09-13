@@ -57,8 +57,6 @@ import fr.paris.lutece.plugins.dansmarue.service.dto.TypeSignalementExportDTO;
 import fr.paris.lutece.plugins.dansmarue.service.impl.ImageObjetService;
 import fr.paris.lutece.plugins.dansmarue.util.constants.SignalementConstants;
 import fr.paris.lutece.plugins.dansmarue.utils.ListUtils;
-import fr.paris.lutece.plugins.dansmarue.utils.SignalementUtils;
-import fr.paris.lutece.plugins.unittree.business.unit.Unit;
 import fr.paris.lutece.plugins.unittree.service.unit.IUnitService;
 import fr.paris.lutece.portal.service.fileupload.FileUploadService;
 import fr.paris.lutece.portal.service.image.ImageResource;
@@ -68,7 +66,6 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPathService;
-import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.portal.web.constants.Parameters;
 import fr.paris.lutece.portal.web.upload.MultipartHttpServletRequest;
 import fr.paris.lutece.util.ReferenceList;
@@ -270,8 +267,6 @@ public class TypeSignalementJspBean extends AbstractJspBean
         if ( strIdTypeSignalement == null )
         {
             listeTypeSignalement = _typeSignalementService.getAllTypeSignalementWithoutParent( );
-            // Replaces "SEJ" (idUnit=94) by "DEVE" (idUnit=1) the types of incidents related to DEVE to go into SEJ
-            changeLabelUnitSEJintoDEVE( listeTypeSignalement );
             model.put( MARK_TYPE_SIGNALEMENT_LIST, listeTypeSignalement );
         }
         else
@@ -312,7 +307,7 @@ public class TypeSignalementJspBean extends AbstractJspBean
                 }
                 else
                     if ( action.equals( ACTION_DESCENDRE ) )
-                    // ACTION_DESCENDRE
+                        // ACTION_DESCENDRE
                     {
                         TypeSignalement typeSignalement = _typeSignalementService.findByIdTypeSignalement( idTypeSignalement );
                         int nIdTypeSignalementOrdreSuperieur = _typeSignalementService.getIdTypeSignalementOrdreSuperieur( typeSignalement );
@@ -353,8 +348,6 @@ public class TypeSignalementJspBean extends AbstractJspBean
 
                 Integer nIdTypeSignalement = Integer.parseInt( strIdTypeSignalement );
                 listeTypeSignalement = _typeSignalementService.getAllSousTypeSignalement( nIdTypeSignalement );
-                // Replaces "SEJ" (idUnit=94) by "DEVE" (idUnit=1) the types of incidents related to DEVE to go into SEJ
-                changeLabelUnitSEJintoDEVE( listeTypeSignalement );
                 model.put( MARK_TYPE_SIGNALEMENT_LIST, listeTypeSignalement );
 
             }
@@ -421,38 +414,6 @@ public class TypeSignalementJspBean extends AbstractJspBean
     }
 
     /**
-     * Replace "SEJ" (idUnit=94) with "DEVE" (idUnit=1).
-     *
-     * @param listeTypeSignalement
-     *            the list of reporting types
-     */
-    private void changeLabelUnitSEJintoDEVE( Collection<TypeSignalement> listeTypeSignalement )
-    {
-        Integer idSEJ;
-        Integer idDEVE;
-
-        try
-        {
-            idSEJ = Integer.valueOf( AppPropertiesService.getProperty( SignalementConstants.UNIT_ATELIER_JARDINAGE ) );
-            idDEVE = Integer.valueOf( SignalementConstants.UNIT_DEVE );
-        }
-        catch( NumberFormatException e )
-        {
-            idSEJ = -1;
-            idDEVE = -1;
-        }
-        Unit unitDEVE = _unitService.getUnit( idDEVE, false );
-
-        for ( TypeSignalement typeSignalement : listeTypeSignalement )
-        {
-            if ( ( typeSignalement.getUnit( ) != null ) && ( typeSignalement.getUnit( ).getIdUnit( ) == idSEJ ) )
-            {
-                typeSignalement.getUnit( ).setLabel( unitDEVE.getLabel( ) );
-            }
-        }
-    }
-
-    /**
      * Returns the form for reporting type creation.
      *
      * @param request
@@ -491,7 +452,6 @@ public class TypeSignalementJspBean extends AbstractJspBean
         model.put( MARK_TYPE_SIGNALEMENT_PARENT_ID, nIdTypeSignalementParent );
 
         ReferenceList listeUnits = ListUtils.toReferenceList( _unitService.getUnitsFirstLevel( false ), "idUnit", "label", "" );
-        SignalementUtils.changeUnitDEVEIntoSEJ( listeUnits );
 
         model.put( MARK_UNIT_LIST, listeUnits );
 
@@ -665,7 +625,6 @@ public class TypeSignalementJspBean extends AbstractJspBean
         }
 
         ReferenceList listeUnits = ListUtils.toReferenceList( _unitService.getUnitsFirstLevel( false ), "idUnit", "label", "" );
-        SignalementUtils.changeUnitDEVEIntoSEJ( listeUnits );
 
         model.put( MARK_UNIT_LIST, listeUnits );
 
