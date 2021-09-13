@@ -517,5 +517,14 @@ public interface ISignalementDAO
      * @return label prestataire.
      */
     String findLabelPrestataireSignalement( int idSignalement );
+    
+    /**
+     * Find signalement for Anonymization Daemon
+     * 
+     * @param minIdSignalement
+     * @param nbDays
+     * @return list of signalement
+     */
+    public List<Integer> getIdSignalementForAnonymisationSignaleurDaemon ( int minIdSignalement, int nbDays );
 
 }

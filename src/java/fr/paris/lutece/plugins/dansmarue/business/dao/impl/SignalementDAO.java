@@ -213,6 +213,9 @@ public class SignalementDAO implements ISignalementDAO
 
     /** The Constant SQL_QUERY_ADD_FILTER_CATEGORY. */
     private static final String SQL_QUERY_ADD_FILTER_CATEGORY = " vstswp.id_parent IN ({0}) ";
+    
+    /** The Constant SQL_QUERY_ADD_FILTER_MIN_ID */
+    private static final String SQL_QUERY_ADD_FILTER_MIN_ID = " id_signalement > ? ";
 
     /** The Constant SQL_QUERY_SELECT_ALL_ID_SIGNALEMENT. */
     private static final String SQL_QUERY_SELECT_ALL_ID_SIGNALEMENT = "select id_signalement from signalement_signalement";
@@ -351,6 +354,8 @@ public class SignalementDAO implements ISignalementDAO
 
     /** The Constant SQL_WHERE_DATE_CREATION. */
     private static final String SQL_WHERE_DATE_CREATION = "where date_creation > (now() - ''{0} days''::interval)";
+    
+    private static final String SQL_QUERY_GET_SIGNALEMENTS_DAEMON_ANONYMISATION = "select id_signalement from signalement_signalement where id_signalement > ? and (service_fait_date_passage <= now() - ? or date_rejet <= now() - ?)";
 
     /**
      * Instantiates a new report dao.
@@ -3088,5 +3093,34 @@ public class SignalementDAO implements ISignalementDAO
 
         }
 
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<Integer> getIdSignalementForAnonymisationSignaleurDaemon ( int minIdSignalement, int nbDays )
+    {
+        try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_GET_SIGNALEMENTS_DAEMON_ANONYMISATION ) ; )
+        {
+            int nIndex = 1;
+            List<Integer> listResult = new ArrayList<>( );
+            
+            daoUtil.setInt( nIndex++, minIdSignalement );
+            daoUtil.setInt( nIndex++, nbDays );
+            daoUtil.setInt( nIndex++, nbDays );
+            
+            daoUtil.executeQuery( );
+            
+            while ( daoUtil.next( ) )
+            {
+                listResult.add( daoUtil.getInt( 1 ) );
+            }
+
+            daoUtil.close( );
+
+            return listResult;
+            
+        }
     }
 }

@@ -126,7 +126,13 @@
 	  <daemon-name>dansmarue.daemon.suppressionPhotos.name</daemon-name>
 	  <daemon-description>dansmarue.daemon.suppressionPhotos.description</daemon-description>
 	  <daemon-class>fr.paris.lutece.plugins.dansmarue.service.deamon.SuppressionPhotosDaemon</daemon-class>
-	 </daemon>	 
+	 </daemon>
+	 <daemon>
+	  <daemon-id>AnonymisationSignaleurDaemon</daemon-id>
+	  <daemon-name>dansmarue.daemon.AnonymisationSignaleurDaemon.name</daemon-name>
+	  <daemon-description>dansmarue.daemon.AnonymisationSignaleurDaemon.description</daemon-description>
+	  <daemon-class>fr.paris.lutece.plugins.dansmarue.service.deamon.AnonymisationSignaleurDaemon</daemon-class>
+	 </daemon>		 
 	  <daemon>
 	  <daemon-id>envoiMailServiceProgrammeDaemon</daemon-id>
 	  <daemon-name>dansmarue.deamon.envoiMailServiceProgramme.name</daemon-name>

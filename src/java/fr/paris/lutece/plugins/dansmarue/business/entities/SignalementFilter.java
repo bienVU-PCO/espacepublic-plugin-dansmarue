@@ -140,6 +140,9 @@ public class SignalementFilter implements Serializable
 
     /** The list orders. */
     private List<Order> _listOrders = new ArrayList<>( );
+    
+    /** The minimum id. */
+    private int _nMinId;
 
     private int _nIdFdt;
 
@@ -797,5 +800,15 @@ public class SignalementFilter implements Serializable
     public void setIdFdt( int nIdFdt )
     {
         _nIdFdt = nIdFdt;
+    }
+    
+    public int getMinId( )
+    {
+        return _nMinId;
+    }
+
+    public void setMinId( int _nMinId )
+    {
+        this._nMinId = _nMinId;
     }
 }

@@ -64,6 +64,8 @@ public class SignaleurDAO implements ISignaleurDAO
 
     /** The Constant SQL_QUERY_UPDATE. */
     private static final String SQL_QUERY_UPDATE = "UPDATE signalement_signaleur SET id_signaleur=?, mail = ?, id_telephone=?, fk_id_signalement=?, guid=? WHERE id_signaleur=?";
+    
+    private static final String SQL_QUERY_ANONYMISATION = "UPDATE signalement_signaleur SET mail = ?, id_telephone=? WHERE id_signaleur=?";
 
     /**
      * Generates a new primary key.
@@ -245,5 +247,20 @@ public class SignaleurDAO implements ISignaleurDAO
         daoUtil.close( );
 
         return result;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void anonymisation( Signaleur signaleur ) {
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_ANONYMISATION );
+        int nIndex = 1;
+
+        daoUtil.setString( nIndex++, signaleur.getMail( ) );
+        daoUtil.setString( nIndex++, signaleur.getIdTelephone( ) );
+        
+        daoUtil.executeUpdate( );
+        daoUtil.close( );
     }
 }
