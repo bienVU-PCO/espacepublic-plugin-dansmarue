@@ -81,7 +81,7 @@ public class AnonymisationSignaleurDaemon extends Daemon
        int delaiAno = Integer.parseInt( AppPropertiesService.getProperty( DELAI_ANONYMISATION ) );
        Calendar calendar = Calendar.getInstance( );
        filters.setMinId( minId );
-       listSignalement = _signalementDAO.getIdSignalementForAnonymisationSignaleurDaemon( minId, delaiAno );
+       listSignalement = _signalementDAO.getIdSignalementForAnonymisationSignaleurDaemon( delaiAno, EMAIL_ANONYMISE );
        
        _log.info( "Anonymisation des informations des signaleurs des anomalies suivantes : " + listSignalement.toString( ) );
        

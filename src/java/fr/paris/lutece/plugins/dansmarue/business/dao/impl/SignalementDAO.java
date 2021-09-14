@@ -355,7 +355,7 @@ public class SignalementDAO implements ISignalementDAO
     /** The Constant SQL_WHERE_DATE_CREATION. */
     private static final String SQL_WHERE_DATE_CREATION = "where date_creation > (now() - ''{0} days''::interval)";
     
-    private static final String SQL_QUERY_GET_SIGNALEMENTS_DAEMON_ANONYMISATION = "select id_signalement from signalement_signalement where id_signalement > ? and (service_fait_date_passage::date <= current_date - ? or date_rejet::date <= current_date - ?)";
+    private static final String SQL_QUERY_GET_SIGNALEMENTS_DAEMON_ANONYMISATION = "select id_signalement from signalement_signalement join signalement_signaleur on id_signalement = fk_id_signalement where (service_fait_date_passage::date <= current_date - ? or date_rejet::date <= current_date - ?) and mail <> ? and id_telephone is not null";
 
     /**
      * Instantiates a new report dao.
@@ -3099,16 +3099,16 @@ public class SignalementDAO implements ISignalementDAO
      * {@inheritDoc}
      */
     @Override
-    public List<Integer> getIdSignalementForAnonymisationSignaleurDaemon ( int minIdSignalement, int nbDays )
+    public List<Integer> getIdSignalementForAnonymisationSignaleurDaemon ( int nbDays, String emailAno )
     {
         try( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_GET_SIGNALEMENTS_DAEMON_ANONYMISATION ) ; )
         {
             int nIndex = 1;
             List<Integer> listResult = new ArrayList<>( );
             
-            daoUtil.setInt( nIndex++, minIdSignalement );
             daoUtil.setInt( nIndex++, nbDays );
-            daoUtil.setInt( nIndex, nbDays );
+            daoUtil.setInt( nIndex++, nbDays );
+            daoUtil.setString( nIndex, emailAno );
             
             daoUtil.executeQuery( );
             
