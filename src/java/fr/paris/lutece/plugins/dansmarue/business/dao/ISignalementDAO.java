@@ -525,6 +525,6 @@ public interface ISignalementDAO
      * @param nbDays
      * @return list of signalement
      */
-    public List<Integer> getIdSignalementForAnonymisationSignaleurDaemon ( int minIdSignalement, int nbDays );
+    public List<Integer> getIdSignalementForAnonymisationSignaleurDaemon ( int nbDays, String emailAno );
 
 }
