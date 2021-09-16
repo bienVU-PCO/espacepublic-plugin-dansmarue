@@ -105,5 +105,14 @@ public interface ISignalementExportDAO
      * @return a list of reports formatted for search
      */
     List<Signalement> searchFindByFilter( SignalementFilter filter, List<String> listIdSignalement, Plugin plugin );
+    
+    /**
+     * 
+     * @param idSignalement
+     *          the id signalement
+     * @param emailAno
+     *          la valeur de l'email anonymisé
+     */
+    void anonymisation( int idSignalement, String emailAno );
 
 }
