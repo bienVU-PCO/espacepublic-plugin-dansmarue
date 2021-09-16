@@ -40,7 +40,7 @@ import org.apache.log4j.Logger;
 
 import fr.paris.lutece.plugins.dansmarue.business.dao.ISignalementDAO;
 import fr.paris.lutece.plugins.dansmarue.business.dao.ISignaleurDAO;
-import fr.paris.lutece.plugins.dansmarue.business.entities.Signalement;
+import fr.paris.lutece.plugins.dansmarue.business.dao.ISignalementExportDAO;
 import fr.paris.lutece.plugins.dansmarue.business.entities.SignalementFilter;
 import fr.paris.lutece.plugins.dansmarue.business.entities.Signaleur;
 import fr.paris.lutece.portal.service.daemon.Daemon;
@@ -63,6 +63,8 @@ public class AnonymisationSignaleurDaemon extends Daemon
     
     /** The signalement DAO. */
     private ISignaleurDAO _signaleurDAO = SpringContextService.getBean( "signaleurDAO" );
+    
+    private ISignalementExportDAO _signalementExportDAO = SpringContextService.getBean( "signalementExportDAO" );
     
     /** The log. */
     private final Logger _log = Logger.getLogger( "Anonymisation" );
@@ -91,6 +93,9 @@ public class AnonymisationSignaleurDaemon extends Daemon
                signaleur.setMail(  AppPropertiesService.getProperty( EMAIL_ANONYMISE ) );
                signaleur.setIdTelephone( null );
                _signaleurDAO.anonymisation( signaleur );
+               
+               _signalementExportDAO.anonymisation( idSignalement, AppPropertiesService.getProperty( EMAIL_ANONYMISE ) );
+               
            } catch (Exception e) {
                _log.error( "Une erreur est survenu lors de l'anonymisation du signaleur de l'anomalie " + idSignalement + " :\n" + e.getCause( ));
            }

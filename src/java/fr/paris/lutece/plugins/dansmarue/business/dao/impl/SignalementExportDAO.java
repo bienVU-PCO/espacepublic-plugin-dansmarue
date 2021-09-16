@@ -183,6 +183,8 @@ public class SignalementExportDAO implements ISignalementExportDAO
 
     private static final String SQL_QUERY_DEFAULT_ORDER_FDT = " id_arrondissement  asc, lower(regexp_replace(adresse,'[[:digit:]]','','g')) asc, "
             + "nullif(regexp_replace(split_part(adresse,' ',1), '\\D', '', 'g'), '')::int asc ";
+    
+    private static final String SQL_QUERY_ANONYMISATION = "UPDATE signalement_export SET mail_usager = ? WHERE id_signalement = ?";
 
     /** The Constant SQL_AND. */
     // SQL Constants
@@ -1023,5 +1025,20 @@ public class SignalementExportDAO implements ISignalementExportDAO
     private String addPercent( String name )
     {
         return "%" + name + "%";
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public void anonymisation( int id, String emailAno )
+    {
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_ANONYMISATION );
+        int nIndex = 1;
+
+        daoUtil.setString( nIndex++, emailAno );
+        daoUtil.setLong( nIndex, id );
+        
+        daoUtil.executeUpdate( );
+        daoUtil.close( );
     }
 }
