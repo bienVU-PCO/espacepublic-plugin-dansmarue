@@ -107,7 +107,7 @@ public class FeuilleDeTourneeDAO implements IFeuilleDeTourneeDAO
 
     private static final String SQL_QUERY_DELETE_OLD = "delete from signalement_feuille_de_tournee where date_creation::date < now()::date  - INTERVAL ''{0} DAY''";
 
-    private static final String SQL_QUERY_SELECT_ALL = "SELECT id, createur, fk_id_unit, date_creation, date_modification, commentaire, id_filtre_init, signalement_ids, nom FROM signalement_feuille_de_tournee order by id asc";
+    private static final String SQL_QUERY_SELECT_ALL = "SELECT id, createur, fk_id_unit, date_creation, date_modification, commentaire, id_filtre_init, array_to_string(signalement_ids, ',') as signalement_ids, nom FROM signalement_feuille_de_tournee order by id asc";
 
     /**
      * Generates a new primary key.
@@ -180,7 +180,7 @@ public class FeuilleDeTourneeDAO implements IFeuilleDeTourneeDAO
         feuilleDeTournee.setFiltreFdtId( daoUtil.getInt( ++nIndex ) );
 
         String ids = daoUtil.getString( ++nIndex );
-        List<String> idsString = Arrays.asList( ids.replace( "{", "" ).replace( "}", "" ).split( "," ) );
+        List<String> idsString = Arrays.asList( ids.split( "," ) );
         feuilleDeTournee.setListSignalementIds( idsString.stream( ).map( Integer::valueOf ).collect( Collectors.toList( ) ) );
 
         feuilleDeTournee.setNom( daoUtil.getString( ++nIndex ) );
