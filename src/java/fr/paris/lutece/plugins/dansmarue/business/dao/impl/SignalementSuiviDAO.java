@@ -93,6 +93,14 @@ public class SignalementSuiviDAO implements ISignalementSuiviDAO
     private static final String SQL_QUERY_SELECT_SIGNALEMENTS_NOT_RESOLVED_BY_GUID = "select id_signalement, suivi, date_creation, date_prevue_traitement, commentaire, annee,mois, numero, prefix, fk_id_priorite,fk_id_arrondissement,fk_id_type_signalement,fk_id_sector,is_doublon,token,service_fait_date_passage,felicitations,date_mise_surveillance,date_rejet,courriel_destinataire,courriel_expediteur,courriel_date,is_send_ws,commentaire_agent_terrain,id_adresse, adresse, ST_X(geom), ST_Y(geom), precision_localisation "
             + "from signalement_suivi join workflow_resource_workflow w on w.id_resource = signalement_suivi.fk_id_signalement join signalement_signalement signalement on signalement.id_signalement =  signalement_suivi.fk_id_signalement join signalement_adresse adresse on adresse.fk_id_signalement = signalement_suivi.fk_id_signalement WHERE fk_user_guid = ? and id_state not in (10, 11, 12, 22) order by id_suivi desc limit ?";
 
+    /** The Constant SQL_QUERY_SELECT_SIGNALEMENTS_RESOLVED_BY_GUID. */
+    private static final String SQL_QUERY_SELECT_SIGNALEMENTS_RESOLVED_BY_EMAIL = "select id_signalement, suivi, date_creation, date_prevue_traitement, commentaire, annee,mois, numero, prefix, fk_id_priorite,fk_id_arrondissement,fk_id_type_signalement,fk_id_sector,is_doublon,token,service_fait_date_passage,felicitations,date_mise_surveillance,date_rejet,courriel_destinataire,courriel_expediteur,courriel_date,is_send_ws,commentaire_agent_terrain,id_adresse, adresse, ST_X(geom), ST_Y(geom), precision_localisation "
+            + "from signalement_signaleur join workflow_resource_workflow w on w.id_resource = signalement_signaleur.fk_id_signalement join signalement_signalement signalement on signalement.id_signalement =  signalement_signaleur.fk_id_signalement join signalement_adresse adresse on adresse.fk_id_signalement = signalement_signaleur.fk_id_signalement WHERE signalement_signaleur.mail = ? and id_state in (10, 11, 12, 22) order by signalement_signaleur.fk_id_signalement desc limit ?";
+
+    /** The Constant SQL_QUERY_SELECT_SIGNALEMENTS_NOT_RESOLVED_BY_GUID. */
+    private static final String SQL_QUERY_SELECT_SIGNALEMENTS_NOT_RESOLVED_BY_EMAIL = "select id_signalement, suivi, date_creation, date_prevue_traitement, commentaire, annee,mois, numero, prefix, fk_id_priorite,fk_id_arrondissement,fk_id_type_signalement,fk_id_sector,is_doublon,token,service_fait_date_passage,felicitations,date_mise_surveillance,date_rejet,courriel_destinataire,courriel_expediteur,courriel_date,is_send_ws,commentaire_agent_terrain,id_adresse, adresse, ST_X(geom), ST_Y(geom), precision_localisation "
+            + "from signalement_signaleur join workflow_resource_workflow w on w.id_resource = signalement_signaleur.fk_id_signalement join signalement_signalement signalement on signalement.id_signalement =  signalement_signaleur.fk_id_signalement join signalement_adresse adresse on adresse.fk_id_signalement = signalement_signaleur.fk_id_signalement WHERE signalement_signaleur.mail = ? and id_state not in (10, 11, 12, 22) order by signalement_signaleur.fk_id_signalement desc limit ?";
+
     /** The Constant SQL_QUERY_SELECT_USERS_MAIL_BY_ID_SIGNALEMENT. */
     private static final String SQL_QUERY_SELECT_USERS_MAIL_BY_ID_SIGNALEMENT = "SELECT DISTINCT user_email FROM sira_user INNER JOIN signalement_suivi ON fk_user_guid = user_guid WHERE fk_id_signalement = ?";
 
@@ -390,6 +398,38 @@ public class SignalementSuiviDAO implements ISignalementSuiviDAO
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<Signalement> findSignalementsByEmail( String email, boolean isResolved )
+    {
+        DAOUtil daoUtil;
+        List<Signalement> signalements = new ArrayList<>( );
+
+        if ( isResolved )
+        {
+            daoUtil = new DAOUtil( SQL_QUERY_SELECT_SIGNALEMENTS_RESOLVED_BY_EMAIL );
+        }
+        else
+        {
+            daoUtil = new DAOUtil( SQL_QUERY_SELECT_SIGNALEMENTS_NOT_RESOLVED_BY_EMAIL );
+        }
+        int nIndex = 0;
+        daoUtil.setString( ++nIndex, email );
+
+        daoUtil.setInt( ++nIndex, Integer.parseInt( DatastoreService.getDataValue( "sitelabels.site_property.mobile.limitationNbAnoMonEspace", "100" ) ) );
+
+        daoUtil.executeQuery( );
+
+        while ( daoUtil.next( ) )
+        {
+            signalements.add( fillSignalement( daoUtil ) );
+        }
+        daoUtil.close( );
+        return signalements;
+    }
+
+    /**
      * Fill Signalement entite.
      *
      * @param daoUtil
@@ -533,7 +573,7 @@ public class SignalementSuiviDAO implements ISignalementSuiviDAO
      */
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see fr.paris.lutece.plugins.dansmarue.business.dao.ISignalementSuiviDAO#getAllSuiveursGuid(java.lang.Integer)
      */
     @Override
