@@ -1650,7 +1650,7 @@ public class SignalementDAO implements ISignalementDAO
     @Override
     public Integer getDistanceBetweenSignalement( double lat1, double lng1, double lat2, double lng2 )
     {
-        String query = "SELECT ST_Distance(ST_GeographyFromText('POINT(" + lng1 + "" + lat1 + ")'), " + "ST_GeographyFromText('POINT(" + lng2 + "" + lat2
+        String query = "SELECT ST_Distance(ST_GeographyFromText('POINT(" + lng1 + " " + lat1 + ")'), " + "ST_GeographyFromText('POINT(" + lng2 + " " + lat2
                 + ")')) ";
 
         Integer distance = 0;

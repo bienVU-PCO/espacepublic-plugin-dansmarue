@@ -431,6 +431,18 @@ public interface ISignalementService
      */
     List<Signalement> getSignalementsByGuid( String guid, boolean isResolved );
 
+
+    /**
+     * Finds all reports which are created by an user.
+     *
+     * @param eamil
+     *            the user email
+     * @param isResolved
+     *            the is resolved
+     * @return List of all reports created by this user
+     */
+    List<Signalement> getSignalementsByEmail( String guid, boolean isResolved );
+
     /**
      * Adds a follower to a report.
      *
@@ -725,7 +737,7 @@ public interface ISignalementService
 
     /**
      * Find Signalement prestataire.
-     * 
+     *
      * @param idSignalement
      *            id Signalement.
      * @return prestataire label.

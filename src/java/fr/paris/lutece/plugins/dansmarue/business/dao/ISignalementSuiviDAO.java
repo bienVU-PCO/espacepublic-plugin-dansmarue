@@ -128,6 +128,18 @@ public interface ISignalementSuiviDAO
      */
     List<Signalement> findSignalementsByGuid( String guid, boolean isRevoled );
 
+
+    /**
+     * Find signalements with email creator.
+     *
+     * @param email
+     *            the email
+     * @param isRevoled
+     *            the is revoled
+     * @return the list
+     */
+    List<Signalement> findSignalementsByEmail( String email, boolean isRevoled );
+
     /**
      * Finds all followers mails of a report.
      *
