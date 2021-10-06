@@ -1,3 +1,10 @@
+-- PCVB-51 Suppression des sous-menu
+DELETE FROM  core_datastore WHERE LOWER(entity_key) LIKE '%piwik%' OR LOWER(entity_key) like '%piwik%';
+DELETE FROM  core_datastore WHERE LOWER(entity_key) LIKE '%elastic%' OR LOWER(entity_key) like '%elastic%';
+DELETE FROM core_admin_right WHERE id_right = 'PIWIK_MANAGEMENT' OR id_right = 'ELASTICDATA_MANAGEMENT' or id_right = 'STAT_ANONYMIZATION_MANAGEMENT';
+DELETE FROM core_user_right WHERE id_right = 'PIWIK_MANAGEMENT' OR id_right = 'ELASTICDATA_MANAGEMENT' or id_right = 'STAT_ANONYMIZATION_MANAGEMENT';
+
+
 -- DMR-2249 MAJ email usager
 DROP TRIGGER IF EXISTS exp_aft_upd_signaleur ON signalement_signaleur;
 DROP FUNCTION IF EXISTS exp_update_signaleur();
