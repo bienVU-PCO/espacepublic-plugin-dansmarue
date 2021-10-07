@@ -17,12 +17,12 @@ begin
 	update signalement_export set mail_usager = new.mail where id_signalement = new.fk_id_signalement;
     RETURN NEW;
 END;
-$function$
+$function$;
 
 create
     trigger exp_aft_upd_signaleur after update
         on
-        signalement_signaleur for each row execute procedure exp_update_signaleur()
+        signalement_signaleur for each row execute procedure exp_update_signaleur();
 
 -- MAJ des tables unittree
 -- Création d'une fonction permettant de mettre à jour les associations unit-sector
