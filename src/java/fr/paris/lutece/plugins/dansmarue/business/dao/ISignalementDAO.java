@@ -519,10 +519,10 @@ public interface ISignalementDAO
     String findLabelPrestataireSignalement( int idSignalement );
     
     /**
-     * Find signalement for Anonymization Daemon
-     * 
-     * @param minIdSignalement
-     * @param nbDays
+     * Find signalement for Anonymization Daemon.
+     *
+     * @param nbDays the nb days
+     * @param emailAno the email ano
      * @return list of signalement
      */
     public List<Integer> getIdSignalementForAnonymisationSignaleurDaemon ( int nbDays, String emailAno );
