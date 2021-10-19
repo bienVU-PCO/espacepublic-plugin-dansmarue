@@ -61,7 +61,7 @@ public class FeuilleDeTourneeDAO implements IFeuilleDeTourneeDAO
 {
 
     /** The Constant SQL_QUERY_SELECT_ALL_ARRONDISSEMENT. */
-    private static final String SQL_QUERY_SELECT_BY_ID = "SELECT id, createur, fk_id_unit, date_creation, date_modification, commentaire, id_filtre_init, signalement_ids, nom, carte FROM signalement_feuille_de_tournee where id=?";
+    private static final String SQL_QUERY_SELECT_BY_ID = "SELECT id, createur, fk_id_unit, date_creation, date_modification, commentaire, id_filtre_init, array_to_string(signalement_ids, ',') as signalement_ids, nom, carte FROM signalement_feuille_de_tournee where id=?";
 
     private static final String SQL_QUERY_INSERT = "INSERT INTO signalement_feuille_de_tournee (id, createur, fk_id_unit, date_creation, commentaire, id_filtre_init, signalement_ids, nom, carte) VALUES(?, ?, ?, ?, ?, ?, ''{0}'', ?, ?)";
 
@@ -89,7 +89,7 @@ public class FeuilleDeTourneeDAO implements IFeuilleDeTourneeDAO
 
     private static final String SQL_QUERY_LOAD_SIGNALEMENTS_BEAN_BY_ID = "select id_signalement, commentaire_usager, commentaire_agent_terrain, date_creation, date_prevu_traitement, adresse, numero, priorite, etat, type_signalement from signalement_export where id_signalement = any ((select signalement_ids from signalement_feuille_de_tournee where id=?)::BIGINT[])";
 
-    private static final String SQL_QUERY_LOAD_FDT_BY_FILTER = "SELECT id, createur, fk_id_unit, date_creation, date_modification, commentaire, id_filtre_init, signalement_ids, nom FROM signalement_feuille_de_tournee ";
+    private static final String SQL_QUERY_LOAD_FDT_BY_FILTER = "SELECT id, createur, fk_id_unit, date_creation, date_modification, commentaire, id_filtre_init, array_to_string(signalement_ids, ',') as signalement_ids, nom FROM signalement_feuille_de_tournee ";
 
     private static final String SQL_QUERY_LOAD_FDT_BY_FILTER_ADD_DATE_DEBUT = " date_trunc('days',date_creation)>=? ";
 
@@ -101,7 +101,7 @@ public class FeuilleDeTourneeDAO implements IFeuilleDeTourneeDAO
 
     private static final String SQL_QUERY_LOAD_NAMES = "select nom from signalement_feuille_de_tournee";
 
-    private static final String SQL_QUERY_LOAD_BY_NAME = "SELECT id, createur, fk_id_unit, date_creation, date_modification, commentaire, id_filtre_init, signalement_ids, nom from signalement_feuille_de_tournee where nom = ?";
+    private static final String SQL_QUERY_LOAD_BY_NAME = "SELECT id, createur, fk_id_unit, date_creation, date_modification, commentaire, id_filtre_init, array_to_string(signalement_ids, ',') as signalement_ids, nom from signalement_feuille_de_tournee where nom = ?";
 
     private static final String SQL_QUERY_DELETE = "DELETE FROM  public.signalement_feuille_de_tournee WHERE id=?";
 
