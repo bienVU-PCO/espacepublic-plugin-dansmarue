@@ -35,6 +35,7 @@ package fr.paris.lutece.plugins.dansmarue.web;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.text.MessageFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -68,6 +69,7 @@ import fr.paris.lutece.plugins.dansmarue.service.IPrioriteService;
 import fr.paris.lutece.plugins.dansmarue.service.ISignalementExportService;
 import fr.paris.lutece.plugins.dansmarue.service.ITypeSignalementService;
 import fr.paris.lutece.plugins.dansmarue.service.dto.SignalementExportCSVDTO;
+import fr.paris.lutece.plugins.dansmarue.service.role.FeuilleDeTourneeResourceIdService;
 import fr.paris.lutece.plugins.dansmarue.util.constants.SignalementConstants;
 import fr.paris.lutece.plugins.dansmarue.utils.DateUtils;
 import fr.paris.lutece.plugins.dansmarue.utils.ListUtils;
@@ -81,6 +83,7 @@ import fr.paris.lutece.portal.service.admin.AccessDeniedException;
 import fr.paris.lutece.portal.service.admin.AdminUserService;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
+import fr.paris.lutece.portal.service.rbac.RBACService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
 import fr.paris.lutece.portal.service.util.AppLogService;
@@ -236,10 +239,13 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
      * @param request
      *            the request
      * @return the manage
+     * @throws AccessDeniedException 
      */
     @View( value = VIEW_MANAGE, defaultView = true )
-    public String getManage( HttpServletRequest request )
+    public String getManage( HttpServletRequest request ) throws AccessDeniedException
     {
+        checkUserRole( FeuilleDeTournee.PERMISSION_VIEW );
+        
         Map<String, Object> model = getModel( );
 
         Locale locale = getLocale( );
@@ -261,8 +267,10 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
     }
 
     @Action( ACTION_SEARCH_FDT )
-    public String doSearchFdt( HttpServletRequest request )
+    public String doSearchFdt( HttpServletRequest request ) throws AccessDeniedException
     {
+        checkUserRole( FeuilleDeTournee.PERMISSION_VIEW );
+        
         populate( _feuilleDeTourneeFilter, request );
 
         if ( !_feuilleDeTourneeFilter.isDatesValid( ) )
@@ -281,8 +289,10 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
      * @return the creates the
      */
     @View( value = VIEW_CREATE )
-    public String getCreate( HttpServletRequest request )
+    public String getCreate( HttpServletRequest request ) throws AccessDeniedException
     {
+        checkUserRole( FeuilleDeTournee.PERMISSION_CREATE );
+        
         Map<String, Object> model = getModel( );
 
         Locale locale = getLocale( );
@@ -318,12 +328,12 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
         {
             int idFilter = Integer.parseInt( request.getParameter( PARAMETER_FILTER_LOAD ) );
 
-            model.put( MARK_FILTER, initFilterWithSelectedFilter( request, states, idFilter ) );
+            model.put( MARK_FILTER, initFilterWithSelectedFilter( states, idFilter ) );
             model.put( MARK_ID_FILTER_SELECT, idFilter );
         }
         else
         {
-            model.put( MARK_FILTER, initFilter( request, states, priorites, arrondissements ) );
+            model.put( MARK_FILTER, initFilter( states, priorites, arrondissements ) );
             model.put( MARK_ID_FILTER_SELECT, DEFAULT_ID );
         }
 
@@ -355,7 +365,7 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
      *            all arrondisements
      * @return SignalementFilter
      */
-    private SignalementFilter initFilter( HttpServletRequest request, List<State> states, List<Priorite> priorites, List<Arrondissement> arrondissements )
+    private SignalementFilter initFilter( List<State> states, List<Priorite> priorites, List<Arrondissement> arrondissements )
     {
         _signalementFilter = new SignalementFilter( );
 
@@ -415,7 +425,7 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
      *            id filter select
      * @return SignalementFilter
      */
-    private SignalementFilter initFilterWithSelectedFilter( HttpServletRequest request, List<State> states, int idFilterLoad )
+    private SignalementFilter initFilterWithSelectedFilter( List<State> states, int idFilterLoad )
     {
 
         String jsonFilterValue = _feuilleTourneeService.loadSearchFilterById( idFilterLoad );
@@ -595,6 +605,7 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
     @View( value = VIEW_EDIT )
     public String getEdit( HttpServletRequest request ) throws AccessDeniedException
     {
+        checkUserRole( FeuilleDeTournee.PERMISSION_MODIFY );
         Map<String, Object> model = getModel( );
         AdminUser connectedUser = AdminUserService.getAdminUser( request );
 
@@ -660,8 +671,10 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
      * @return the creates the
      */
     @View( value = VIEW_LOAD )
-    public String getLoad( HttpServletRequest request )
+    public String getLoad( HttpServletRequest request ) throws AccessDeniedException
     {
+        checkUserRole( FeuilleDeTournee.PERMISSION_VIEW );
+        
         Map<String, Object> model = getModel( );
         int feuilledeDeTourneId = -1;
 
@@ -727,7 +740,7 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
      * @return the string
      */
     @Action( ACTION_INIT_SEARCH_ANO )
-    public String doInitSearchAno( HttpServletRequest request )
+    public String doInitSearchAno( HttpServletRequest request ) throws AccessDeniedException
     {
 
         JSONObject jsonFilterValue = JSONObject.fromObject( buildJsonSearchFilter( request ) );
@@ -744,8 +757,9 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
      * @return the string
      */
     @Action( ACTION_SEARCH_ANO )
-    public String doSearchAno( HttpServletRequest request )
+    public String doSearchAno( HttpServletRequest request ) throws AccessDeniedException
     {
+        checkUserRole( FeuilleDeTournee.PERMISSION_VIEW );
         Map<String, Object> model = getModel( );
 
         if ( ( _signalementFilter.getListIdUnit( ) == null ) || _signalementFilter.getListIdUnit( ).isEmpty( ) )
@@ -808,6 +822,7 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
     @Action( ACTION_GET_DELETE_FDT )
     public String getDeleteFDT( HttpServletRequest request ) throws AccessDeniedException
     {
+        checkUserRole( FeuilleDeTournee.PERMISSION_DELETE );
         String strFeuilleDeTourneeId = request.getParameter( PARAMETER_FEUILLE_DE_TOURNEE_ID );
 
         int nFeuilleDeTourneeId = 0;
@@ -849,8 +864,9 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
      *            the request
      * @return the string
      */
-    public String doDeleteFeuilleDeTournee( HttpServletRequest request )
+    public String doDeleteFeuilleDeTournee( HttpServletRequest request ) throws AccessDeniedException
     {
+        checkUserRole( FeuilleDeTournee.PERMISSION_DELETE );
         String strFeuilleDeTourneeId = request.getParameter( PARAMETER_FEUILLE_DE_TOURNEE_ID );
 
         int nFeuilleDeTourneeId = 0;
@@ -884,7 +900,7 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
     }
 
     @Action( ACTION_SAVE_FDT )
-    public String doSaveFDT( HttpServletRequest request )
+    public String doSaveFDT( HttpServletRequest request ) throws AccessDeniedException
     {
         if ( ( request.getParameterValues( PARAMETER_SIGNALEMENTS_SELECT_IDS ) != null )
                 && !request.getParameterValues( PARAMETER_SIGNALEMENTS_SELECT_IDS ) [0].isEmpty( ) )
@@ -931,7 +947,7 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
     }
 
     @Action( ACTION_UPDATE_FDT )
-    public String doUpdateFDT( HttpServletRequest request )
+    public String doUpdateFDT( HttpServletRequest request ) throws AccessDeniedException
     {
         String strFeuilleDeTourneeId = request.getParameter( PARAMETER_FEUILLE_DE_TOURNEE_ID );
 
@@ -975,9 +991,10 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
      * @param request
      *            the request
      * @return the string
+     * @throws AccessDeniedException 
      */
     @Action( ACTION_SAVE_FILTER )
-    public String doSaveFilter( HttpServletRequest request )
+    public String doSaveFilter( HttpServletRequest request ) throws AccessDeniedException
     {
 
         return processSaveOrUpdateFilter( request, false );
@@ -991,7 +1008,7 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
      * @return the string
      */
     @Action( ACTION_UPDATE_FILTER )
-    public String doUpdateFilter( HttpServletRequest request )
+    public String doUpdateFilter( HttpServletRequest request ) throws AccessDeniedException
     {
 
         return processSaveOrUpdateFilter( request, true );
@@ -1005,8 +1022,9 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
      * @return the string
      */
     @Action( ACTION_DELETE_FILTER )
-    public String doDeleteFilter( HttpServletRequest request )
+    public String doDeleteFilter( HttpServletRequest request ) throws AccessDeniedException
     {
+        checkUserRole( FeuilleDeTournee.PERMISSION_VIEW );
         String idFilter = request.getParameter( PARAMETER_SEARCH_FILTER_SELECT );
         if ( idFilter != null )
         {
@@ -1025,8 +1043,9 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
      *            is an update ?
      * @return the string
      */
-    private String processSaveOrUpdateFilter( HttpServletRequest request, boolean isUpdate )
+    private String processSaveOrUpdateFilter( HttpServletRequest request, boolean isUpdate ) throws AccessDeniedException
     {
+        checkUserRole( FeuilleDeTournee.PERMISSION_VIEW );
 
         String creator = request.getParameter( PARAMETER_SEARCH_FILTER_CREATOR );
         String name = request.getParameter( PARAMETER_SEARCH_FILTER_NAME );
@@ -1052,8 +1071,9 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
      * @return the string
      */
     @Action( ACTION_LOAD_FILTER )
-    public String doLoadFilter( HttpServletRequest request )
+    public String doLoadFilter( HttpServletRequest request ) throws AccessDeniedException
     {
+        checkUserRole( FeuilleDeTournee.PERMISSION_VIEW );
         String idFilter = request.getParameter( PARAMETER_SEARCH_FILTER_SELECT );
 
         if ( idFilter != null )
@@ -1130,8 +1150,9 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
         return jsonObject.toString( );
     }
 
-    public void doExportPDF( HttpServletRequest request, HttpServletResponse response )
+    public void doExportPDF( HttpServletRequest request, HttpServletResponse response ) throws AccessDeniedException
     {
+        checkUserRole( FeuilleDeTournee.PERMISSION_EXPORT );
         boolean isExportWithMap = request.getParameter( PARAMETER_MAP_CHECKBOX ) != null;
         String destinairesParam = request.getParameter( PARAMETER_DESTINAIRES_EXPORT );
         Integer feuilleeDeTourneId = request.getParameter( PARAMETER_FEUILLE_DE_TOURNEE_ID ) != null
@@ -1177,8 +1198,9 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
 
     }
 
-    public String doTransfertPDF( HttpServletRequest request, HttpServletResponse response )
+    public String doTransfertPDF( HttpServletRequest request, HttpServletResponse response ) throws AccessDeniedException
     {
+        checkUserRole( FeuilleDeTournee.PERMISSION_TRANSFERT);
         Integer feuilleeDeTourneId = request.getParameter( PARAMETER_FEUILLE_DE_TOURNEE_ID ) != null
                 ? Integer.parseInt( request.getParameter( PARAMETER_FEUILLE_DE_TOURNEE_ID ) )
                 : 0;
@@ -1260,4 +1282,18 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
 
     }
 
+    /**
+     * Check user role.
+     *
+     * @param permission the permission
+     * @throws AccessDeniedException the access denied exception
+     */
+    private void checkUserRole( String permission) throws AccessDeniedException 
+    {
+        AdminUser user = getUser();
+        if ( !RBACService.isAuthorized( FeuilleDeTournee.RESOURCE_TYPE, FeuilleDeTournee.RESOURCE_TYPE, permission, user ) )
+        {
+            throw new AccessDeniedException( MessageFormat.format( "Acces denied for {0} / {1}.", FeuilleDeTournee.RESOURCE_TYPE, FeuilleDeTournee.PERMISSION_VIEW ) );
+        }
+    }
 }
