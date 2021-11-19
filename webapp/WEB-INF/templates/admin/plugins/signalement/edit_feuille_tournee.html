@@ -17,7 +17,9 @@
 		<a class="btn btn-paris btn-blue" href="jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp">#i18n{dansmarue.button.return} </a>
 		<span style="color: #0C518A;">#i18n{dansmarue.tournee.select.result}</span> : ${paginator.itemsCount}
 		<div class="pull-right">
-			<@button id="export" params='disabled' class="btn btn-paris btn-red" title='#i18n{dansmarue.tournee.exportpdf}' />
+			<@hasAutorisationMacro ressourceType="SIGNALEMENT_FEUILLE_DE_TOURNEE" permissions=["EXPORT"]>
+				<@button id="export" params='disabled' class="btn btn-paris btn-red" title='#i18n{dansmarue.tournee.exportpdf}' />
+			</@hasAutorisationMacro>
 			<@button params='data-toggle="modal" data-target="#saveFDTModal"' class="btn btn-paris btn-red save" title='#i18n{dansmarue.tournee.sauvegarder}' />
 		</div>
 	</div>

@@ -248,7 +248,6 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
         
         Map<String, Object> model = getModel( );
 
-        Locale locale = getLocale( );
         model.put( SignalementConstants.MARK_LOCALE, request.getLocale( ) );
         model.put( MARK_NOM_TEMPLATE, NOM_TEMPLATE );
 
@@ -261,9 +260,7 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
         model.put( MARK_LIST_FDT, feuilleDeTourneeListAutorise );
         model.put( MARK_FILTER_FDT, _feuilleDeTourneeFilter );
 
-        HtmlTemplate templateList = AppTemplateService.getTemplate( TEMPLATE_MANAGE, locale, model );
-
-        return getAdminPage( templateList.getHtml( ) );
+        return getAdminPage( getTemplate( TEMPLATE_MANAGE, model ) );
     }
 
     @Action( ACTION_SEARCH_FDT )
@@ -657,10 +654,7 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
             throw new AccessDeniedException( MESSAGE_ACCESS_DENIED );
         }
 
-        Locale locale = getLocale( );
-        HtmlTemplate templateList = AppTemplateService.getTemplate( TEMPLATE_EDIT, locale, model );
-
-        return getAdminPage( templateList.getHtml( ) );
+        return getAdminPage( getTemplate( TEMPLATE_EDIT, model ) );
     }
 
     /**
@@ -726,10 +720,7 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
                     _feuilleTourneeService.getSignalementsMapMarkerDTOFromSignalementsConsultation( signalementsOrderToDisplay, request.getLocale( ) ) );
         }
 
-        Locale locale = getLocale( );
-        HtmlTemplate templateList = AppTemplateService.getTemplate( TEMPLATE_LOAD, locale, model );
-
-        return getAdminPage( templateList.getHtml( ) );
+        return getAdminPage( getTemplate( TEMPLATE_LOAD, model ) );
     }
 
     /**
