@@ -1,6 +1,7 @@
 <link rel="stylesheet" href="css/plugins/signalement/signalement.css" type="text/css"/>
 <#include "macro/modal_export_pdf.html" />
 <#include "macro/modal_transfert_fdt.html" />
+<#include "macro/commons_signalement.html" />
 <!-- Formulaire de recherche -->
 <@box color='primary'>
 	<@boxBody>
@@ -52,14 +53,16 @@
 <@box color='primary'>
 	<@boxBody>
 		<br>
-		<a href="jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp?view=create">
-			<img
-			src="images/admin/skin/plugins/signalement/carte-add.png"
-			width="20px"
-			alt="#i18n{dansmarue.tournee.lien.creation}"
-			title="#i18n{dansmarue.tournee.lien.creation}" />
-		</a> 
-		<b><a href="jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp?view=create">#i18n{dansmarue.tournee.lien.creation}</a></b>
+		<@hasAutorisationMacro ressourceType="SIGNALEMENT_FEUILLE_DE_TOURNEE" permissions=["CREATE"]>
+			<a href="jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp?view=create">
+				<img
+				src="images/admin/skin/plugins/signalement/carte-add.png"
+				width="20px"
+				alt="#i18n{dansmarue.tournee.lien.creation}"
+				title="#i18n{dansmarue.tournee.lien.creation}" />
+			</a>
+			<b><a href="jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp?view=create">#i18n{dansmarue.tournee.lien.creation}</a></b>
+		</@hasAutorisationMacro> 
 		<#assign nbresult=fdt_list?size>
 		<span class="pull-right"><b>#i18n{dansmarue.reportingList.search.results}:</b> ${nbresult} #i18n{dansmarue.tournee.recherche.resultat.nb}</span>
 		<br>
@@ -100,21 +103,27 @@
 							<a href="jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp?view=load&idFeuilleDeTournee=${fdt.id}" class="btn btn-xs btn-primary" 
 								title="#i18n{dansmarue.tournee.pdf.param.btn.consult}"> <i class="glyphicon glyphicon-eye-open"></i>
 							</a>
-							<a href="jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp?view=edit&idFeuilleDeTournee=${fdt.id}" class="btn btn-xs btn-primary" 
-								title="#i18n{dansmarue.tournee.pdf.param.btn.edit}"> <i class="glyphicon glyphicon-edit"></i>
-							</a>
+							<@hasAutorisationMacro ressourceType="SIGNALEMENT_FEUILLE_DE_TOURNEE" permissions=["MODIFY"]>
+								<a href="jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp?view=edit&idFeuilleDeTournee=${fdt.id}" class="btn btn-xs btn-primary" 
+									title="#i18n{dansmarue.tournee.pdf.param.btn.edit}"> <i class="glyphicon glyphicon-edit"></i>
+								</a>
+							</@hasAutorisationMacro>
 							<a href="jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp?action=getDeleteFDT&idFeuilleDeTournee=${fdt.id}" class="btn btn-xs btn-danger" 
 								title="#i18n{dansmarue.tournee.pdf.param.btn.delete}"> <i class="glyphicon glyphicon-trash"></i>
 							</a>
-							<button value="exportcsv"
-								data-toggle="modal" data-target="#exportFDTModal"
-								title="#i18n{dansmarue.tournee.pdf.param.btn.export}"
-								name="exportcsv" class="btn btn-xs btn-primary" onclick="addFeuilleDeTourneeId(${fdt.id})">
-								<i class="glyphicon glyphicon-save"></i>
-							</button>
-							<a href="#transfertFDTModal" onclick="addTransfertFeuilleDeTourneeId(${fdt.id})" title="#i18n{dansmarue.tournee.pdf.param.btn.transfer}" data-toggle="modal" data-target="#transfertFDTModal">
-								<img src="image?resource_type=workflow_icon_img&amp;id=12" alt="#i18n{dansmarue.tournee.pdf.param.btn.transfer}" width="24px">
-							</a>
+							<@hasAutorisationMacro ressourceType="SIGNALEMENT_FEUILLE_DE_TOURNEE" permissions=["EXPORT"]>
+								<button value="exportcsv"
+									data-toggle="modal" data-target="#exportFDTModal"
+									title="#i18n{dansmarue.tournee.pdf.param.btn.export}"
+									name="exportcsv" class="btn btn-xs btn-primary" onclick="addFeuilleDeTourneeId(${fdt.id})">
+									<i class="glyphicon glyphicon-save"></i>
+								</button>
+							</@hasAutorisationMacro>
+							<@hasAutorisationMacro ressourceType="SIGNALEMENT_FEUILLE_DE_TOURNEE" permissions=["TRANSFERT"]>
+								<a href="#transfertFDTModal" onclick="addTransfertFeuilleDeTourneeId(${fdt.id})" title="#i18n{dansmarue.tournee.pdf.param.btn.transfer}" data-toggle="modal" data-target="#transfertFDTModal">
+									<img src="image?resource_type=workflow_icon_img&amp;id=12" alt="#i18n{dansmarue.tournee.pdf.param.btn.transfer}" width="24px">
+								</a>
+							</@hasAutorisationMacro>
 						</td>
 						<td> 
 							${fdt.nom!}

@@ -36,10 +36,12 @@ package fr.paris.lutece.plugins.dansmarue.business.entities;
 import java.io.Serializable;
 import java.util.List;
 
+import fr.paris.lutece.portal.service.rbac.RBACResource;
+
 /**
  * The Class FeuilleDeTournee.
  */
-public class FeuilleDeTournee implements Serializable
+public class FeuilleDeTournee implements Serializable, RBACResource
 {
 
     /** The Constant serialVersionUID. */
@@ -82,7 +84,18 @@ public class FeuilleDeTournee implements Serializable
 
     /** display map in jasper pdf */
     private String _strDisplayMap;
+    
+    // RBAC management
+    public static final String RESOURCE_TYPE = "SIGNALEMENT_FEUILLE_DE_TOURNEE";
 
+    // Perimissions
+    public static final String PERMISSION_VIEW = "VIEW";
+    public static final String PERMISSION_CREATE = "CREATE";
+    public static final String PERMISSION_MODIFY = "MODIFY";
+    public static final String PERMISSION_DELETE = "DELETE";
+    public static final String PERMISSION_EXPORT = "EXPORT";
+    public static final String PERMISSION_TRANSFERT = "TRANSFERT";
+    
     /**
      * Instantiates a new feuille de tournee.
      */
@@ -395,6 +408,18 @@ public class FeuilleDeTournee implements Serializable
     public void setDisplayMap( String displayMap )
     {
         _strDisplayMap = displayMap;
+    }
+
+    @Override
+    public String getResourceTypeCode( )
+    {
+        return RESOURCE_TYPE;
+    }
+
+    @Override
+    public String getResourceId( )
+    {
+        return getId( ) != null ? Long.toString( getId( ) ) : "";
     }
 
 }
