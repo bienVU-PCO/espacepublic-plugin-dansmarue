@@ -139,6 +139,14 @@ public interface ISignalementSuiviDAO
      * @return the list
      */
     List<Signalement> findSignalementsByEmail( String email, boolean isRevoled );
+    
+    /**
+     * Find signalements service fait by email agent.
+     *
+     * @param emailAgent the email agent
+     * @return the list
+     */
+    List<Signalement> findSignalementsServiceFaitByEmailAgent( String emailAgent );
 
     /**
      * Finds all followers mails of a report.

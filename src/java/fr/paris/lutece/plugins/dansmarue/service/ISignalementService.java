@@ -440,6 +440,15 @@ public interface ISignalementService
      * @return List of all reports created by this user
      */
     List<Signalement> getSignalementsByEmail( String guid, boolean isResolved );
+    
+   
+    /**
+     * Gets the signalements service fait by email agent.
+     *
+     * @param emailAgent the email agent
+     * @return the signalements service fait by email agent
+     */
+    List<Signalement> getSignalementsServiceFaitByEmailAgent( String emailAgent );
 
     /**
      * Adds a follower to a report.
