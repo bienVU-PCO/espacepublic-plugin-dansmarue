@@ -1660,6 +1660,26 @@ public class SignalementService implements ISignalementService
         }
         return signalements;
     }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<Signalement> getSignalementsServiceFaitByEmailAgent( String emailAgent )
+    {
+        List<Signalement> signalements = new ArrayList<>( );
+        for ( Signalement signalement : _signalementSuiviDAO.findSignalementsServiceFaitByEmailAgent( emailAgent ) )
+        {
+            TypeSignalement typeSignalement = _typeSignalementDAO.getTypeSignalement( signalement.getTypeSignalement( ).getId( ) );
+            signalement.setTypeSignalement( typeSignalement );
+            List<PhotoDMR> listPhoto = _photoDAO.findBySignalementId( signalement.getId( ) );
+            List<Signaleur> listSignaleur = _signaleurDAO.findBySignalementId( signalement.getId( ) );
+            signalement.setPhotos( listPhoto );
+            signalement.setSignaleurs( listSignaleur );
+            signalements.add( signalement );
+        }
+        return signalements;
+    }
 
     /**
      * {@inheritDoc}
