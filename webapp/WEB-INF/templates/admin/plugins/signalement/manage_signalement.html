@@ -299,7 +299,7 @@ $(document).ready(function() {
 // 				if(categories != undefined && categories.length > 0 && categories.indexOf(element.category) == -1){
 // 					return;
 // 				}
-				if(element.name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").indexOf(request.term.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")) != -1){
+				if(element.libelle.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").indexOf(request.term.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")) != -1){
 					resultList.push(element.value);
 				}
 			});
