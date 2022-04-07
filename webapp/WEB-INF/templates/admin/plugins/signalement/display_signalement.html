@@ -211,7 +211,7 @@ function updateFiltersFromDomain(idDomaine,reset){
 						<#--if(categories != undefined && categories.length > 0 && categories.indexOf(element.idCategory.toString()) == -1){
 							return;
 						}-->
-						if(element.name.toLowerCase().indexOf(request.term.toLowerCase()) != -1){
+						if(element.name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").indexOf(request.term.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")) != -1){
 							var resultItem = new Object();
 							resultItem.label = element.name;
 							resultItem.value = element.name;
