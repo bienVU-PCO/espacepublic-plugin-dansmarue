@@ -99,7 +99,7 @@ public class MailSignalementJspBean extends AbstractJspBean
     public static final String PARAMETER_OBJECT = "objectMail";
 
     /** The Constant PARAMETER_SUBJECT. */
-    public static final String PARAMETER_SUBJECT = "DMR – Anomalie sur un espace public";
+    public static final String PARAMETER_SUBJECT = "Anomalie sur un espace public";
     /** The Constant PARAMETER_CONTENT. */
     public static final String PARAMETER_CONTENT = "contentMail";
 
