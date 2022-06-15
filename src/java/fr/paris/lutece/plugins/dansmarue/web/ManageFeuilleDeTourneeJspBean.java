@@ -234,6 +234,15 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
     private FeuilleDeTourneeFilter _feuilleDeTourneeFilter;
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void init( HttpServletRequest request, String strRight, String keyResourceType, String permission ) throws AccessDeniedException
+    {
+        super.init( request, strRight, keyResourceType, permission );
+    }
+
+    /**
      * Page de gestion des feuilles de tournée.
      *
      * @param request
