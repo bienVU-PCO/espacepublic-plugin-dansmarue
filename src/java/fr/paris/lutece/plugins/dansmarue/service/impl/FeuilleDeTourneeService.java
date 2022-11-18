@@ -321,6 +321,8 @@ public class FeuilleDeTourneeService implements IFeuilleDeTourneeService
             String objet_prefix = DatastoreService.getDataValue( "sitelabels.site_property.feuilledetournee.mail.objet", "" );
             String objet = objet_prefix + " [" + exportName + "]";
             String message = DatastoreService.getDataValue( "sitelabels.site_property.feuilledetournee.mail.message", "" );
+            String nomExpediteur = DatastoreService.getDataValue( "portal.site.site_property.meta.author", "" );
+            String mailExpediteur = DatastoreService.getDataValue( "portal.site.site_property.noreply_email", "" );
 
             List<FileAttachment> filesAttachement = new ArrayList<>( );
             FileAttachment fileAttachment = new FileAttachment( exportName + ".pdf", bytesData, "application/pdf" );
@@ -328,7 +330,7 @@ public class FeuilleDeTourneeService implements IFeuilleDeTourneeService
 
             for ( String destinaire : destinairesList )
             {
-                MailService.sendMailMultipartHtml( destinaire, null, null, "Mairie de Paris", "noreply-dansmarue@paris.fr", objet, message, null,
+                MailService.sendMailMultipartHtml( destinaire, null, null, nomExpediteur, mailExpediteur, objet, message, null,
                         filesAttachement );
             }
         }
