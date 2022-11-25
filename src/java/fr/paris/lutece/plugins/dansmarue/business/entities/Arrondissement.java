@@ -47,7 +47,7 @@ public class Arrondissement implements Comparable<Arrondissement>, RBACResource,
     private static final long serialVersionUID = 6397234356269742444L;
 
     /** The Constant RESOURCE_TYPE. */
-    public static final String RESOURCE_TYPE = "SIGNALEMENT_ARRONDISSEMENT";
+    public static final String RESOURCE_TYPE = "SIGNALEMENT_VILLE";
 
     /** The n id. */
     private Long _nId;

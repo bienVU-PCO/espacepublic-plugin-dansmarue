@@ -55,7 +55,7 @@ public class ArrondissementSignalementResourceIdService extends ResourceIdServic
 {
 
     /** Permission view District. */
-    public static final String PERMISSION_VIEW_ARRONDISSEMENT = "VIEW_ARRONDISSEMENT_SIGNALEMENT";
+    public static final String PERMISSION_VIEW_ARRONDISSEMENT = "VIEW_VILLE_SIGNALEMENT";
 
     /** The Constant PROPERTY_LABEL_RESOURCE_TYPE. */
     private static final String PROPERTY_LABEL_RESOURCE_TYPE = "dansmarue.rbac.arrondissement.resourceType.label";
