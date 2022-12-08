@@ -733,6 +733,8 @@ public class SignalementJspBean extends AbstractJspBean
     /** The Constant VALID_EMAIL_ADDRESS_REGEX. */
     public static final Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern.compile( "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE );
 
+    private static final String PARAMETER_IS_REINIT_SEARCH = "isReinitSearch";
+
     /**
      * Instantiates a new signalement jsp bean.
      */
@@ -893,6 +895,15 @@ public class SignalementJspBean extends AbstractJspBean
         if ( null != actionSearch )
         {
             dashboardSignalementList = null;
+        }
+
+        if ( request.getParameter( PARAMETER_IS_REINIT_SEARCH ) != null )
+        {
+            Boolean isReinitSearch = StringUtils.equals( "1", request.getParameter( PARAMETER_IS_REINIT_SEARCH ) );
+            if ( isReinitSearch )
+            {
+                _signalementFilter = null;
+            }
         }
 
         SignalementFilter filter = getSignalementFilter( request );
