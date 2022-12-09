@@ -111,19 +111,6 @@
 							<a href="jsp/admin/plugins/signalement/ManageFeuilleDeTournee.jsp?action=getDeleteFDT&idFeuilleDeTournee=${fdt.id}" class="btn btn-xs btn-danger" 
 								title="#i18n{dansmarue.tournee.pdf.param.btn.delete}"> <i class="glyphicon glyphicon-trash"></i>
 							</a>
-							<@hasAutorisationMacro ressourceType="SIGNALEMENT_FEUILLE_DE_TOURNEE" permissions=["EXPORT"]>
-								<button value="exportcsv"
-									data-toggle="modal" data-target="#exportFDTModal"
-									title="#i18n{dansmarue.tournee.pdf.param.btn.export}"
-									name="exportcsv" class="btn btn-xs btn-primary" onclick="addFeuilleDeTourneeId(${fdt.id})">
-									<i class="glyphicon glyphicon-save"></i>
-								</button>
-							</@hasAutorisationMacro>
-							<@hasAutorisationMacro ressourceType="SIGNALEMENT_FEUILLE_DE_TOURNEE" permissions=["TRANSFERT"]>
-								<a href="#transfertFDTModal" onclick="addTransfertFeuilleDeTourneeId(${fdt.id})" title="#i18n{dansmarue.tournee.pdf.param.btn.transfer}" data-toggle="modal" data-target="#transfertFDTModal">
-									<img src="image?resource_type=workflow_icon_img&amp;id=12" alt="#i18n{dansmarue.tournee.pdf.param.btn.transfer}" width="24px">
-								</a>
-							</@hasAutorisationMacro>
 						</td>
 						<td> 
 							${fdt.nom!}
