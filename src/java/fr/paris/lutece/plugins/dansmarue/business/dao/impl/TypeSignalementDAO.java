@@ -1094,7 +1094,7 @@ public class TypeSignalementDAO implements ITypeSignalementDAO
     public TypeSignalement getTypeSignalementByIdWithParents( Integer nIdTypeSignalement )
     {
         TypeSignalement ret = getTypeSignalement( nIdTypeSignalement );
-        if ( ret.getIdTypeSignalementParent( ) != null )
+        if ( ( ret != null ) && ( ret.getIdTypeSignalementParent( ) != null ) )
         {
             this.getTypeSignalementByIdWithParents( ret, ret.getIdTypeSignalementParent( ) );
         }
