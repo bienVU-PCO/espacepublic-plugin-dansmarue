@@ -140,7 +140,7 @@ public class SignalementExportDAO implements ISignalementExportDAO
 
     /** The Constant SQL_QUERY_ADD_FILTER_ADRESSE. */
     // Filter by address
-    private static final String SQL_QUERY_ADD_FILTER_ADRESSE = " lower_unaccent(adresse) LIKE lower_unaccent(?) ";
+    private static final String SQL_QUERY_ADD_FILTER_ADRESSE = " lower_unaccent(replace(adresse,',','')) LIKE lower_unaccent(replace(?,',','')) ";
 
     /** The Constant SQL_QUERY_ADD_FILTER_MAIL. */
     // Filter by mail
@@ -183,7 +183,7 @@ public class SignalementExportDAO implements ISignalementExportDAO
 
     private static final String SQL_QUERY_DEFAULT_ORDER_FDT = " id_arrondissement  asc, lower(regexp_replace(adresse,'[[:digit:]]','','g')) asc, "
             + "nullif(regexp_replace(split_part(adresse,' ',1), '\\D', '', 'g'), '')::int asc ";
-    
+
     private static final String SQL_QUERY_ANONYMISATION = "UPDATE signalement_export SET mail_usager = ? WHERE id_signalement = ?";
 
     /** The Constant SQL_AND. */
@@ -1026,10 +1026,11 @@ public class SignalementExportDAO implements ISignalementExportDAO
     {
         return "%" + name + "%";
     }
-    
+
     /**
      * {@inheritDoc}
      */
+    @Override
     public void anonymisation( int id, String emailAno )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_ANONYMISATION );
@@ -1037,7 +1038,7 @@ public class SignalementExportDAO implements ISignalementExportDAO
 
         daoUtil.setString( nIndex++, emailAno );
         daoUtil.setLong( nIndex, id );
-        
+
         daoUtil.executeUpdate( );
         daoUtil.close( );
     }
