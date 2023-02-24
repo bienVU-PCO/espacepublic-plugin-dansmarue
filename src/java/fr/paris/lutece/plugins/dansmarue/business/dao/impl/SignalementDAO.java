@@ -194,7 +194,7 @@ public class SignalementDAO implements ISignalementDAO
     private static final String SQL_QUERY_ADD_FILTER_ETAT = " workflow.id_state = ? ";
 
     /** The Constant SQL_QUERY_ADD_FILTER_ADRESSE. */
-    private static final String SQL_QUERY_ADD_FILTER_ADRESSE = "lower_unaccent(adr.adresse) LIKE lower_unaccent(?) ";
+    private static final String SQL_QUERY_ADD_FILTER_ADRESSE = "lower_unaccent(replace(adr.adresse,',','')) LIKE lower_unaccent(replace(?,',','')) ";
 
     /** The Constant SQL_QUERY_ADD_FILTER_MAIL. */
     private static final String SQL_QUERY_ADD_FILTER_MAIL = "lower_unaccent(signaleur.mail) LIKE lower_unaccent(?) ";
@@ -213,7 +213,7 @@ public class SignalementDAO implements ISignalementDAO
 
     /** The Constant SQL_QUERY_ADD_FILTER_CATEGORY. */
     private static final String SQL_QUERY_ADD_FILTER_CATEGORY = " vstswp.id_parent IN ({0}) ";
-    
+
     /** The Constant SQL_QUERY_ADD_FILTER_MIN_ID */
     private static final String SQL_QUERY_ADD_FILTER_MIN_ID = " id_signalement > ? ";
 
@@ -354,7 +354,7 @@ public class SignalementDAO implements ISignalementDAO
 
     /** The Constant SQL_WHERE_DATE_CREATION. */
     private static final String SQL_WHERE_DATE_CREATION = "where date_creation > (now() - ''{0} days''::interval)";
-    
+
     private static final String SQL_QUERY_GET_SIGNALEMENTS_DAEMON_ANONYMISATION = "select id_signalement from signalement_signalement join signalement_signaleur on id_signalement = fk_id_signalement where (service_fait_date_passage::date <= current_date - ? or date_rejet::date <= current_date - ?) and mail <> ?";
 
     /**
@@ -3094,7 +3094,7 @@ public class SignalementDAO implements ISignalementDAO
         }
 
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -3105,20 +3105,20 @@ public class SignalementDAO implements ISignalementDAO
         {
             int nIndex = 1;
             List<Integer> listResult = new ArrayList<>( );
-            
+
             daoUtil.setInt( nIndex++, nbDays );
             daoUtil.setInt( nIndex++, nbDays );
             daoUtil.setString( nIndex, emailAno );
-            
+
             daoUtil.executeQuery( );
-            
+
             while ( daoUtil.next( ) )
             {
                 listResult.add( daoUtil.getInt( 1 ) );
             }
 
             return listResult;
-            
+
         }
     }
 }
