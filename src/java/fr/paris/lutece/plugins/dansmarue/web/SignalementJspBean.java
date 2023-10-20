@@ -903,6 +903,7 @@ public class SignalementJspBean extends AbstractJspBean
             if ( isReinitSearch )
             {
                 _signalementFilter = null;
+                dashboardCriterias = null;
             }
         }
 
