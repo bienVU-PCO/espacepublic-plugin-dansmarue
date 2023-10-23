@@ -96,15 +96,13 @@ public interface ISignalementExportDAO
     /**
      * Return a list of reports for search screen according to the search parameters contained in the filter.
      *
-     * @param filter
-     *            the request based filter
-     * @param listIdSignalement
-     *            the list id signalement
-     * @param plugin
-     *            the plugin
+     * @param filter               the request based filter
+     * @param listIdSignalement    the list id signalement
+     * @param plugin               the plugin
+     * @param paginationProperties
      * @return a list of reports formatted for search
      */
-    List<Signalement> searchFindByFilter( SignalementFilter filter, List<String> listIdSignalement, Plugin plugin );
+    List<Signalement> searchFindByFilter( SignalementFilter filter, List<String> listIdSignalement, Plugin plugin, PaginationProperties paginationProperties );
     
     /**
      * 

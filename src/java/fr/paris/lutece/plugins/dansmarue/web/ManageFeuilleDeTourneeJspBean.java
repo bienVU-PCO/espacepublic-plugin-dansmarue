@@ -40,6 +40,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -547,7 +548,7 @@ public class ManageFeuilleDeTourneeJspBean extends AbstractJspBean
         List<Unit> listUnits = _unitService.getUnitsByIdUser( adminUser.getUserId( ), false );
         for ( Unit userUnit : listUnits )
         {
-            for ( Sector secteurUnit : _sectorService.loadByIdUnitWithoutChosenId( userUnit.getIdUnit( ), ID_JARDIN ) )
+            for ( Sector secteurUnit : _sectorService.loadByIdUnitWithoutChosenId( Collections.singletonList( userUnit.getIdUnit( ) ), ID_JARDIN ) )
             {
                 boolean bFound = false;
                 for ( Sector secteur : listSectorsOfUnits )

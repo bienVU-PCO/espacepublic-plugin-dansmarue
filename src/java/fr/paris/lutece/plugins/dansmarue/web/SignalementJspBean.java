@@ -1056,12 +1056,7 @@ public class SignalementJspBean extends AbstractJspBean
         {
             totalResult = dashboardSignalementList.size( );
             PaginationProperties paginationProperties = getPaginationProperties( request, totalResult );
-
-            List<Signalement> dashboardSignalements = _signalementService.getByIds( dashboardSignalementList,
-                    paginationProperties.getItemsPerPage( ) * ( paginationProperties.getPageIndex( ) - 1 ),
-                    paginationProperties.getItemsPerPage( ) * paginationProperties.getPageIndex( ) );
-
-            listSignalements = dashboardSignalements;
+            listSignalements = _signalementExportService.findByFilterSearchFromTableauDeGestion(filter, paginationProperties, dashboardSignalementList );
         }
         else
         {

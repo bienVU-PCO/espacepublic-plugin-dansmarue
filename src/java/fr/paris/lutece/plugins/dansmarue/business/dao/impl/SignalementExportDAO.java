@@ -92,6 +92,7 @@ public class SignalementExportDAO implements ISignalementExportDAO
 
     /** The Constant SQL_QUERY_WHERE_ID_IN. */
     private static final String SQL_QUERY_WHERE_ID_IN = " WHERE id_signalement IN ({0})";
+    private static final String SQL_QUERY_SE_WHERE_ID_IN = " WHERE se.id_signalement IN ({0})";
 
     /** The Constant SQL_QUERY_ADD_FILTER_PRIORITE. */
     private static final String SQL_QUERY_ADD_FILTER_PRIORITE = " priorite in (select sp.libelle from signalement_priorite sp where sp.id_priorite in ({0}))";
@@ -441,14 +442,13 @@ public class SignalementExportDAO implements ISignalementExportDAO
      * {@inheritDoc}
      */
     @Override
-    public List<Signalement> searchFindByFilter( SignalementFilter filter, List<String> listIdSignalement, Plugin plugin )
+    public List<Signalement> searchFindByFilter( SignalementFilter filter, List<String> listIdSignalement, Plugin plugin, PaginationProperties paginationProperties )
     {
 
         List<Signalement> listSignalementFind = new ArrayList<>( );
 
         StringBuilder sbSQL = new StringBuilder( SQL_QUERY_SELECTALL_SEARCH );
-        sbSQL.append( MessageFormat.format( SQL_QUERY_WHERE_NUMERO_IN, String.join( ",", listIdSignalement ) ) );
-        // ADD ORDERS
+        sbSQL.append( MessageFormat.format( SQL_QUERY_SE_WHERE_ID_IN, String.join( ",", listIdSignalement ) ) );
         // ADD ORDERS
         if ( ( filter.getOrders( ).get( 0 ) != null ) && DEFAULT_ORDER_FDT.equals( filter.getOrders( ).get( 0 ).getName( ) ) )
         {
@@ -525,7 +525,16 @@ public class SignalementExportDAO implements ISignalementExportDAO
 
         }
 
-        return listSignalementFind;
+        if( paginationProperties != null)
+        {
+            return listSignalementFind.subList(
+                    Math.min(listSignalementFind.size(), ( paginationProperties.getPageIndex( ) - 1 ) * paginationProperties.getItemsPerPage( ) ),
+                    Math.min(listSignalementFind.size(), ( paginationProperties.getPageIndex( ) - 1 ) * paginationProperties.getItemsPerPage( )  + paginationProperties.getItemsPerPage( ) ) );
+        }
+        else
+        {
+            return listSignalementFind;
+        }
     }
 
     /**

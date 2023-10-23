@@ -35,6 +35,7 @@ package fr.paris.lutece.plugins.dansmarue.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -137,7 +138,20 @@ public class SignalementExportService implements ISignalementExportService
         List<String> numeroFinds = _signalementExportDAO.searchNumeroByFilter( filter, paginationProperties, _pluginSignalement );
         if ( !numeroFinds.isEmpty( ) )
         {
-            result = _signalementExportDAO.searchFindByFilter( filter, numeroFinds, _pluginSignalement );
+            result = _signalementExportDAO.searchFindByFilter( filter, numeroFinds, _pluginSignalement, null );
+        }
+
+        return result;
+    }
+
+    @Override
+    public List<Signalement> findByFilterSearchFromTableauDeGestion( SignalementFilter filter, PaginationProperties paginationProperties, List<Integer> dashboardSignalementList )
+    {
+        List<Signalement> result = new ArrayList<>( );
+        List<String> numeroFinds = dashboardSignalementList.stream().map(i -> i.toString()).collect( Collectors.toList());
+        if ( !numeroFinds.isEmpty( ) )
+        {
+            result = _signalementExportDAO.searchFindByFilter( filter, numeroFinds, _pluginSignalement, paginationProperties );
         }
 
         return result;

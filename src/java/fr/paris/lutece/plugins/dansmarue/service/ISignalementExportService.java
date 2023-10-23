@@ -84,6 +84,8 @@ public interface ISignalementExportService
      */
     List<Signalement> findByFilterSearch( SignalementFilter filter, PaginationProperties paginationProperties );
 
+    List<Signalement> findByFilterSearchFromTableauDeGestion( SignalementFilter filter, PaginationProperties paginationProperties, List<Integer> dashboardSignalementList );
+
     /**
      * Find by ids with photo.
      *
