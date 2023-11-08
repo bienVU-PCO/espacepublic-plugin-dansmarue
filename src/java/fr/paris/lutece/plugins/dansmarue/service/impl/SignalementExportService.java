@@ -138,7 +138,7 @@ public class SignalementExportService implements ISignalementExportService
         List<String> numeroFinds = _signalementExportDAO.searchNumeroByFilter( filter, paginationProperties, _pluginSignalement );
         if ( !numeroFinds.isEmpty( ) )
         {
-            result = _signalementExportDAO.searchFindByFilter( filter, numeroFinds, _pluginSignalement, null );
+            result = _signalementExportDAO.searchFindByFilter( filter, numeroFinds, _pluginSignalement, null, true );
         }
 
         return result;
@@ -151,7 +151,7 @@ public class SignalementExportService implements ISignalementExportService
         List<String> numeroFinds = dashboardSignalementList.stream().map(i -> i.toString()).collect( Collectors.toList());
         if ( !numeroFinds.isEmpty( ) )
         {
-            result = _signalementExportDAO.searchFindByFilter( filter, numeroFinds, _pluginSignalement, paginationProperties );
+            result = _signalementExportDAO.searchFindByFilter( filter, numeroFinds, _pluginSignalement, paginationProperties, false );
         }
 
         return result;

@@ -442,13 +442,21 @@ public class SignalementExportDAO implements ISignalementExportDAO
      * {@inheritDoc}
      */
     @Override
-    public List<Signalement> searchFindByFilter( SignalementFilter filter, List<String> listIdSignalement, Plugin plugin, PaginationProperties paginationProperties )
+    public List<Signalement> searchFindByFilter( SignalementFilter filter, List<String> listIdSignalement, Plugin plugin, PaginationProperties paginationProperties, Boolean isSearchByNumber )
     {
 
         List<Signalement> listSignalementFind = new ArrayList<>( );
 
         StringBuilder sbSQL = new StringBuilder( SQL_QUERY_SELECTALL_SEARCH );
-        sbSQL.append( MessageFormat.format( SQL_QUERY_SE_WHERE_ID_IN, String.join( ",", listIdSignalement ) ) );
+        if ( isSearchByNumber )
+        {
+            sbSQL.append( MessageFormat.format( SQL_QUERY_WHERE_NUMERO_IN, String.join( ",", listIdSignalement ) ) );
+        }
+        else
+        {
+            sbSQL.append( MessageFormat.format( SQL_QUERY_SE_WHERE_ID_IN, String.join( ",", listIdSignalement ) ) );
+        }
+
         // ADD ORDERS
         if ( ( filter.getOrders( ).get( 0 ) != null ) && DEFAULT_ORDER_FDT.equals( filter.getOrders( ).get( 0 ).getName( ) ) )
         {

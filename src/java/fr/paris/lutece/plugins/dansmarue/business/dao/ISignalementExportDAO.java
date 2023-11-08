@@ -102,7 +102,7 @@ public interface ISignalementExportDAO
      * @param paginationProperties
      * @return a list of reports formatted for search
      */
-    List<Signalement> searchFindByFilter( SignalementFilter filter, List<String> listIdSignalement, Plugin plugin, PaginationProperties paginationProperties );
+    List<Signalement> searchFindByFilter( SignalementFilter filter, List<String> listIdSignalement, Plugin plugin, PaginationProperties paginationProperties, Boolean isSearchByNumber );
     
     /**
      * 
