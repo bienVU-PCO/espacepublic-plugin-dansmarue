@@ -236,6 +236,8 @@ public class SignalementExportDAO implements ISignalementExportDAO
         _ordersMap.put( "signalement.date_creation", "id_signalement" );
         _ordersMap.put( "signalement.heure_creation", null );
         _ordersMap.put( "photo.id_photo", "nb_photos" );
+        _ordersMap.put( "signalement.commentaireAgentTerrain", "commentaire_agent_terrain" );
+        _ordersMap.put( "signalement.date_programmation", "date_prevu_traitement" );
     }
 
     /**
