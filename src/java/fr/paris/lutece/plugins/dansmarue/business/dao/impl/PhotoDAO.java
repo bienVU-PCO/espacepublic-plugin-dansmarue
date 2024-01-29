@@ -145,7 +145,7 @@ public class PhotoDAO implements IPhotoDAO
 
             daoUtil.setLong( nIndex++, photo.getSignalement( ).getId( ) );
 
-            if ( ( photo.getDate( ) != null ) && !( photo.getDate( ).equals( EMPTY_STRING ) ) )
+            if ( ( photo.getDate( ) != null ) && !( photo.getDate( ).equals( EMPTY_STRING ) ) &&  ( DateUtil.formatDateSql( photo.getDate( ), Locale.FRENCH )!=null ) )
             {
                 daoUtil.setDate( nIndex++, DateUtil.formatDateSql( photo.getDate( ), Locale.FRENCH ) );
             }
