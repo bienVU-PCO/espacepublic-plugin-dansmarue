@@ -33,14 +33,12 @@
  */
 package fr.paris.lutece.plugins.dansmarue.service.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.google.gson.Gson;
@@ -53,7 +51,6 @@ import fr.paris.lutece.plugins.dansmarue.service.IAdresseService;
 import fr.paris.lutece.plugins.unittree.modules.dansmarue.business.sector.ISectorDAO;
 import fr.paris.lutece.plugins.unittree.modules.dansmarue.business.sector.Sector;
 import fr.paris.lutece.portal.service.util.AppLogService;
-import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.util.httpaccess.HttpAccess;
 import fr.paris.lutece.util.httpaccess.HttpAccessException;
 
@@ -185,7 +182,7 @@ public class AdresseService implements IAdresseService
      */
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see fr.paris.lutece.plugins.dansmarue.service.IAdresseService#findWrongAdresses()
      */
     @Override
@@ -203,7 +200,7 @@ public class AdresseService implements IAdresseService
      */
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see fr.paris.lutece.plugins.dansmarue.service.IAdresseService#getAdresseByPosition(fr.paris.lutece.plugins.dansmarue.business.entities.Adresse)
      */
     @Override
@@ -211,15 +208,8 @@ public class AdresseService implements IAdresseService
     {
         try
         {
-            // Appel à storeAdr pour récupérer l'adresse
-            String adresseCorrigee = getAdresseFromStoreAdr( adresse.getLat( ), adresse.getLng( ) );
-
-            if ( adresseCorrigee.isEmpty( ) )
-            {
-                // Si pas de résultat, appel à openstreetmap
-                adresse = setCoordonateLambert93ToWSG84( adresse );
-                adresseCorrigee = getAdresseFromOpenStreetMap( adresse.getLat( ), adresse.getLng( ) );
-            }
+            // Appel à api gouv pour récupérer l'adresse
+            String adresseCorrigee = getAdresseFromApiGouv( adresse.getLat( ), adresse.getLng( ) );
 
             AppLogService.info( "Correction de l'adresse " + adresse.getId( ) + ": OK" );
             AppLogService.info( "Adresse initiale : " + adresse.getAdresse( ) );
@@ -237,38 +227,21 @@ public class AdresseService implements IAdresseService
     }
 
     /**
-     * Gets the adresse from store adr.
+     * Gets the adresse from api gouv reverse.
      *
      * @param lat
      *            the lat
      * @param lng
      *            the lng
-     * @return the adresse from store adr
+     * @return the adresse from api gouv
      * @throws HttpAccessException
      *             the http access exception
      */
-    private String getAdresseFromStoreAdr( Double lat, Double lng ) throws HttpAccessException
+    private String getAdresseFromApiGouv( Double lat, Double lng ) throws HttpAccessException
     {
         HttpAccess http = new HttpAccess( );
-        String answer = http.doGet(
-                AppPropertiesService.getProperty( URL_REVERSE_GEOCODING_STORE_ADR ) + "StoreAdr/rest/AdressesPostales/R59/xy/(" + lng + "," + lat + ",5)" );
-
-        Map<String, ArrayList> answerMap = new Gson( ).fromJson( answer, Map.class );
-
-        String result = "";
-        if ( answerMap.containsKey( "Features" ) )
-        {
-            JSONArray jsonArr = new JSONArray( answerMap.get( "Features" ) );
-            if ( ( jsonArr.length( ) > 0 ) && jsonArr.getJSONObject( 0 ).has( "properties" ) )
-            {
-                JSONObject jsonObject = jsonArr.getJSONObject( 0 ).getJSONObject( "properties" );
-                if ( jsonObject.has( "Adressetypo" ) )
-                {
-                    result = jsonObject.get( "Adressetypo" ).toString( );
-                }
-            }
-        }
-        return result;
+        String answer = http.doGet("https://api-adresse.data.gouv.fr/reverse/?lon="+lng.toString( )+"&lat="+lat.toString( ));
+        return  new JSONObject( answer ).getJSONArray( "features" ).getJSONObject( 0 ).getJSONObject( "properties" ).getString( "label" );
 
     }
 
