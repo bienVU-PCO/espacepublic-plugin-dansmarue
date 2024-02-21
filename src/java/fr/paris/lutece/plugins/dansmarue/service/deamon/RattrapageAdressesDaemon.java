@@ -55,7 +55,7 @@ public class RattrapageAdressesDaemon extends Daemon
      */
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.lang.Runnable#run()
      */
     @Override
@@ -70,11 +70,6 @@ public class RattrapageAdressesDaemon extends Daemon
         // 3) Update adresses
         listWrongAdresses.forEach( adresse -> _adresseService.updateAdresse( adresse ) );
 
-        // 4) Rattrapages d'adresses avec des cas particuliers (DMR-1433) :
-        // - adresses avec E-Arrondissement
-        // - adresses en Parigi pour la ville
-        // - adresses qui n'ont pas de virgule avant le code postale
-        _adresseService.fixAdresses( );
 
     }
 

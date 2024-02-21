@@ -48,6 +48,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -106,6 +107,7 @@ import fr.paris.lutece.plugins.dansmarue.service.dto.DashboardSignalementDTO;
 import fr.paris.lutece.plugins.dansmarue.service.dto.DossierSignalementDTO;
 import fr.paris.lutece.plugins.dansmarue.service.dto.HistorySignalementDTO;
 import fr.paris.lutece.plugins.dansmarue.service.dto.SignalementExportCSVDTO;
+import fr.paris.lutece.plugins.dansmarue.util.constants.SignalementAdresseConstants;
 import fr.paris.lutece.plugins.dansmarue.util.constants.SignalementConstants;
 import fr.paris.lutece.plugins.dansmarue.utils.DateUtils;
 import fr.paris.lutece.plugins.dansmarue.utils.ImgUtils;
@@ -508,7 +510,32 @@ public class SignalementService implements ISignalementService
         Long numeroSignalement = _numeroSignalementService.findByMonthYear( signalement.getMois( ), signalement.getAnnee( ) );
         signalement.setNumero( numeroSignalement.intValue( ) );
 
+        checkAbreviationAdresse( signalement );
+
         return _signalementDAO.insert( signalement );
+    }
+
+
+    /**
+     * Remove abreviation from adresse.
+     *
+     * @param signalement
+     *            the signalement
+     */
+    public void checkAbreviationAdresse( Signalement signalement )
+    {
+        if ( ( signalement != null ) && ( signalement.getAdresses( ) != null ) && ( signalement.getAdresses( ).get( 0 ) != null )
+                && StringUtils.isNotBlank( signalement.getAdresses( ).get( 0 ).getAdresse( ) ) )
+        {
+            AtomicReference<String> adresse = new AtomicReference<>( signalement.getAdresses( ).get( 0 ).getAdresse( ) );
+            SignalementAdresseConstants.ABREVIATION_MAP.forEach( ( String key, String val ) -> {
+                if ( adresse.get( ).contains( key ) )
+                {
+                    adresse.set( adresse.get( ).replace( key, val ) );
+                }
+            } );
+            signalement.getAdresses( ).get( 0 ).setAdresse( adresse.get( ) );
+        }
     }
 
     /**
@@ -1660,7 +1687,7 @@ public class SignalementService implements ISignalementService
         }
         return signalements;
     }
-    
+
     /**
      * {@inheritDoc}
      */

@@ -69,7 +69,22 @@ public class AdresseDAO implements IAdresseDAO
     private static final String SQL_QUERY_UPDATE_ADRESSE = " UPDATE signalement_adresse SET adresse=?, is_adresse_rattrapee=TRUE WHERE id_adresse = ? ";
 
     /** The Constant SQL_QUERY_SELECT_WRONG_ADRESSES. */
-    private static final String SQL_QUERY_SELECT_WRONG_ADRESSES = "select id_adresse, adresse,	ST_X(st_transform(geom,2154)), ST_Y(st_transform(geom,2154)),	precision_localisation,	fk_id_signalement from signalement_adresse where ((adresse not similar to '%75[0-9]{3} PARIS') or adresse = '' or adresse is null or adresse similar to '%, Paris, France, 75[0-9]{3} PARIS')	and is_adresse_rattrapee is false limit 5;";
+    private static final String SQL_QUERY_SELECT_WRONG_ADRESSES = "select id_adresse, adresse, ST_X(geom), ST_Y(geom), is_adresse_rattrapee ";
+    private static final String SQL_QUERY_WRONG_TOWN_SAINT_DENIS ="from (select * from signalement_adresse  where (adresse not similar to '%93[0-9]{3} Saint-Denis') ";
+    private static final String SQL_QUERY_WRONG_TOWN_AUBERVILLIERS ="intersect select * from signalement_adresse where (adresse not similar to '%93[0-9]{3} Aubervilliers') ";
+    private static final String SQL_QUERY_WRONG_TOWN_EPINAY_SUR_SAINE="intersect select * from signalement_adresse where (adresse not similar to '%93[0-9]{3} Épinay-sur-Seine') ";
+    private static final String SQL_QUERY_WRONG_TOWN_COURNEUVE="intersect select * from signalement_adresse where (adresse not similar to '%93[0-9]{3} La Courneuve') ";
+    private static final String SQL_QUERY_WRONG_TOWN_ILE_SAINT_DENIS="intersect select * from signalement_adresse where (adresse not similar to '%93[0-9]{3} L''Île-Saint-Denis') ";
+    private static final String SQL_QUERY_WRONG_TOWN_PIERREFITTE_SUR_SEINE="intersect select * from signalement_adresse where (adresse not similar to '%93[0-9]{3} Pierrefitte-sur-Seine') ";
+    private static final String SQL_QUERY_WRONG_TOWN_SAINT_OUEN_SUR_SEINE="intersect select * from signalement_adresse where (adresse not similar to '%93[0-9]{3} Saint-Ouen-sur-Seine') ";
+    private static final String SQL_QUERY_WRONG_TOWN_STAINS = "intersect select * from signalement_adresse where (adresse not similar to '%93[0-9]{3} Stains') ";
+    private static final String SQL_QUERY_WRONG_TOWN_VILLETANEUSE = "intersect select * from signalement_adresse where (adresse not similar to '%93[0-9]{3} Villetaneuse')) as subrequest ";
+    private static final String SQL_QUERY_WHERE_ORDER_WRONG_TOWN_= "where is_adresse_rattrapee is false order by id_adresse desc limit 5;";
+
+    /** The Constant SQL_QUERY_WRONG_ADRESSES_STREET. */
+    private static final String SQL_QUERY_WRONG_ADRESSES_STREET= "select id_adresse, adresse, ST_X(geom), ST_Y(geom), is_adresse_rattrapee from signalement_adresse"
+            + " where (replace((regexp_split_to_array(adresse, '93[0-9]{3}'))[1],' ','') similar to  '%[0-9]' or (regexp_split_to_array(adresse, '93[0-9]{3}'))[1].length <= 1)"
+            + " and is_adresse_rattrapee is false order by id_adresse desc limit 5;";
 
     /** The Constant SQL_QUERY_SELECT_COORDONATE_WSG84. */
     private static final String SQL_QUERY_SELECT_COORDONATE_WSG84 = "select ST_X(geom), ST_Y(geom) from signalement_adresse where id_adresse=?";
@@ -320,29 +335,51 @@ public class AdresseDAO implements IAdresseDAO
     {
         List<Adresse> result = new ArrayList<>( );
 
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_WRONG_ADRESSES );
-        daoUtil.executeQuery( );
+        StringBuilder request = new StringBuilder( SQL_QUERY_SELECT_WRONG_ADRESSES );
+        request.append( SQL_QUERY_WRONG_TOWN_SAINT_DENIS );
+        request.append( SQL_QUERY_WRONG_TOWN_AUBERVILLIERS );
+        request.append( SQL_QUERY_WRONG_TOWN_EPINAY_SUR_SAINE );
+        request.append( SQL_QUERY_WRONG_TOWN_COURNEUVE );
+        request.append( SQL_QUERY_WRONG_TOWN_ILE_SAINT_DENIS );
+        request.append( SQL_QUERY_WRONG_TOWN_PIERREFITTE_SUR_SEINE );
+        request.append( SQL_QUERY_WRONG_TOWN_SAINT_OUEN_SUR_SEINE );
+        request.append( SQL_QUERY_WRONG_TOWN_STAINS );
+        request.append( SQL_QUERY_WRONG_TOWN_VILLETANEUSE );
+        request.append( SQL_QUERY_WHERE_ORDER_WRONG_TOWN_ );
 
-        // Pour chaque resultat retourne
-        while ( daoUtil.next( ) )
+        try ( DAOUtil daoUtil = new DAOUtil( request.toString( ) ) )
         {
-            Adresse adresse = new Adresse( );
-            int nIndex = 1;
-            adresse.setId( daoUtil.getLong( nIndex++ ) );
-            adresse.setAdresse( daoUtil.getString( nIndex++ ) );
+            daoUtil.executeQuery( );
+            while ( daoUtil.next( ) )
+            {
+                Adresse adresse = new Adresse( );
+                int nIndex = 1;
+                adresse.setId( daoUtil.getLong( nIndex++ ) );
+                adresse.setAdresse( daoUtil.getString( nIndex++ ) );
+                adresse.setLng( daoUtil.getDouble( nIndex++ ) );
+                adresse.setLat( daoUtil.getDouble( nIndex ) );
+                result.add( adresse );
+            }
 
-            adresse.setLng( daoUtil.getDouble( nIndex++ ) );
-            adresse.setLat( daoUtil.getDouble( nIndex++ ) );
-
-            adresse.setPrecisionLocalisation( daoUtil.getString( nIndex++ ) );
-
-            Signalement signalement = new Signalement( );
-            signalement.setId( daoUtil.getLong( nIndex ) );
-            adresse.setSignalement( signalement );
-            result.add( adresse );
         }
 
-        daoUtil.close( );
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_WRONG_ADRESSES_STREET ) )
+        {
+            daoUtil.executeQuery( );
+            while ( daoUtil.next( ) )
+            {
+                Adresse adresse = new Adresse( );
+                int nIndex = 1;
+                adresse.setId( daoUtil.getLong( nIndex++ ) );
+                adresse.setAdresse( daoUtil.getString( nIndex++ ) );
+                adresse.setLng( daoUtil.getDouble( nIndex++ ) );
+                adresse.setLat( daoUtil.getDouble( nIndex ) );
+                if (result.stream( ).filter( ad1 -> ad1.getId( ).longValue( ) == adresse.getId( ).longValue( ) ).count( ) < 1 ) {
+                    result.add( adresse );
+                }
+            }
+
+        }
 
         return result;
     }
@@ -389,7 +426,7 @@ public class AdresseDAO implements IAdresseDAO
      */
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * fr.paris.lutece.plugins.dansmarue.business.dao.IAdresseDAO#setCoordonateLambert93ToWSG84(fr.paris.lutece.plugins.dansmarue.business.entities.Adresse)
      */
