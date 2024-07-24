@@ -156,10 +156,12 @@ public class MailSignalementJspBean extends AbstractJspBean
     private static final String MESSAGE_MAIL_LINK_WITH_ACCOUNT = "Lien back-office authentifié";
 
     /** The Constant MESSAGE_MAIL_LINK. */
-    private static final String MESSAGE_MAIL_LINK = "Lien accessible pour concessionnaire";
+    private static final String MESSAGE_MAIL_LINK = "Lien accessible pour partenaire";
 
     /** The Constant MESSAGE_MAIL_BONJOUR. */
     private static final String MESSAGE_MAIL_BONJOUR = "Bonjour, ";
+
+    private static final String MESSAGE_MAIL_INTRODUCTION = "Nous vous prions de trouver ci-dessous une anomalie signalée à partir de l’application bienVu. ";
 
     /** The signalement service. */
     // MEMBERS VARIABLES
@@ -283,6 +285,9 @@ public class MailSignalementJspBean extends AbstractJspBean
 
                 // Bonjour
                 strBuff.append( MESSAGE_MAIL_BONJOUR + LINE_SEPARATOR );
+
+                // Phrase introduction
+                strBuff.append( LINE_SEPARATOR + MESSAGE_MAIL_INTRODUCTION + LINE_SEPARATOR );
 
                 // case number
                 strBuff.append( LINE_SEPARATOR + MESSAGE_MAIL_NUMBER_SIGNALEMENT + " : " + signalement.getNumeroSignalement( ) );
@@ -412,7 +417,7 @@ public class MailSignalementJspBean extends AbstractJspBean
         }
 
         // Send the mail
-        MailService.sendMailMultipartHtml( mailItem.getRecipientsTo( ), null, null, "Mairie de Paris", mailItem.getSenderEmail( ), mailItem.getSubject( ),
+        MailService.sendMailMultipartHtml( mailItem.getRecipientsTo( ), null, null, "Contact bienVU", mailItem.getSenderEmail( ), mailItem.getSubject( ),
                 mailItem.getMessage( ), null, mailItem.getFilesAttachement( ) );
 
         // Recording of email information in the database
