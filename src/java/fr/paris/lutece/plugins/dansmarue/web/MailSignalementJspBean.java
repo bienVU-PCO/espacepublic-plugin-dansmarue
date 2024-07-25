@@ -129,13 +129,16 @@ public class MailSignalementJspBean extends AbstractJspBean
     private static final String MESSAGE_ERROR_EXPEDITEUR_FORMAT = "dansmarue.message.exp.format";
 
     /** The Constant MESSAGE_MAIL_NUMBER_SIGNALEMENT. */
-    private static final String MESSAGE_MAIL_NUMBER_SIGNALEMENT = "Num\u00e9ro du message";
+    private static final String MESSAGE_MAIL_NUMBER_SIGNALEMENT = "Num\u00e9ro de l'anomalie";
 
     /** The Constant MESSAGE_MAIL_DATE_CREATION. */
     private static final String MESSAGE_MAIL_DATE_CREATION = "Date de cr\u00e9ation de l'anomalie";
 
     /** The Constant MESSAGE_MAIL_COMMENTAIRE. */
     private static final String MESSAGE_MAIL_COMMENTAIRE = "Commentaire";
+
+    /** The Constant MESSAGE_MAIL_COMMENTAIRE_AGENT. */
+    private static final String MESSAGE_MAIL_COMMENTAIRE_AGENT = "Commentaire agent";
 
     /** The Constant MESSAGE_MAIL_MAIL_SIGNALEUR. */
     private static final String MESSAGE_MAIL_MAIL_SIGNALEUR = "Email du signaleur";
@@ -326,7 +329,13 @@ public class MailSignalementJspBean extends AbstractJspBean
                 // comment
                 if ( StringUtils.isNotBlank( signalement.getCommentaire( ) ) )
                 {
-                    strBuff.append( MESSAGE_MAIL_COMMENTAIRE + " : " + signalement.getCommentaire( ) );
+                    strBuff.append( MESSAGE_MAIL_COMMENTAIRE + " : " + signalement.getCommentaire( ) + LINE_SEPARATOR );
+                }
+
+                // Commentaire agent terrain
+                if( StringUtils.isNotBlank( signalement.getCommentaireAgentTerrain( ) ) )
+                {
+                    strBuff.append( MESSAGE_MAIL_COMMENTAIRE_AGENT + " : " + signalement.getCommentaireAgentTerrain( ) );
                 }
 
                 // Link to the consultation page with BO account
