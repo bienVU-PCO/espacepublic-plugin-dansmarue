@@ -13,14 +13,18 @@
 		signalementDashboard.redirectToManageSignalement(request);
 		response.sendRedirect(AppPathService.getBaseUrl( request ) + "jsp/admin/plugins/signalement/ManageSignalement.jsp");
 	}
+	else {
 %>
-
 <%@ page errorPage="../../ErrorPage.jsp"%>
 <jsp:include page="../../AdminHeader.jsp" />
 
 <%
 signalementDashboard.init( request,  "SIGNALEMENT_DASHBOARD");
-		out.print(signalementDashboard.doGetManageSignalementDashboard( request ));
+		out.print(signalementDashboard.doGetManageSignalementDashboard( request )); // <--- THIS IS THE PROBLEM
 %>
 
 <%@ include file="../../AdminFooter.jsp"%>
+<%
+	}
+%>
+
