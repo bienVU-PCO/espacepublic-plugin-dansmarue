@@ -83,7 +83,7 @@ public class WorkflowService extends AbstractCacheableService implements IWorkfl
      */
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see fr.paris.lutece.portal.service.util.LuteceService#getName()
      */
     @Override
@@ -163,12 +163,13 @@ public class WorkflowService extends AbstractCacheableService implements IWorkfl
     {
         List<ResourceHistory> listResourceHistory = _workflowDAO.selectByResource( nIdResource, strResourceType, nIdWorkflow );
 
-        for ( ResourceHistory resourceHistory : listResourceHistory )
-        {
+        if (!listResourceHistory.isEmpty( )) {
+            ResourceHistory resourceHistory= listResourceHistory.get( listResourceHistory.size( ) - 1 );
             resourceHistory.setAction( _workflowDAO.findByPrimaryKey( resourceHistory.getAction( ).getId( ) ) );
+            return resourceHistory;
+        } else {
+            return null;
         }
-
-        return ( !listResourceHistory.isEmpty( ) ) ? listResourceHistory.get( 0 ) : null;
     }
 
     /**
@@ -228,7 +229,7 @@ public class WorkflowService extends AbstractCacheableService implements IWorkfl
      */
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see fr.paris.lutece.plugins.dansmarue.service.IWorkflowService#getMessagesServiceFait(java.util.List)
      */
     @Override
@@ -269,7 +270,7 @@ public class WorkflowService extends AbstractCacheableService implements IWorkfl
      */
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see fr.paris.lutece.plugins.dansmarue.service.IWorkflowService#findActionByName(java.lang.String)
      */
     @Override

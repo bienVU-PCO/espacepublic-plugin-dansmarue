@@ -86,7 +86,7 @@ public class WorkflowDAO implements IWorkflowDAO
     private static final String SQL_QUERY_SELECT_USER_SERVICE_FAIT = "select user_access_code from workflow_resource_history where id_resource = ? and id_action in (62,70,22,18,49,53,41)";
 
     /** The Constant SQL_QUERY_SELECT_HISTORY_BY_RESOURCES. */
-    private static final String SQL_QUERY_SELECT_HISTORY_BY_RESOURCES = "select * from workflow_resource_history where id_resource = ? and resource_type = ? and id_workflow = ? ";
+    private static final String SQL_QUERY_SELECT_HISTORY_BY_RESOURCES = "select * from workflow_resource_history where id_resource = ? and resource_type = ? and id_workflow = ? order by creation_date asc";
 
     /** The Constant SQL_QUERY_SELECT_ACTION_BY_HISTORY. */
     private static final String SQL_QUERY_SELECT_ACTION_BY_HISTORY = "select * from workflow_action where id_action = ?";
@@ -258,7 +258,6 @@ public class WorkflowDAO implements IWorkflowDAO
     @Override
     public List<ResourceHistory> selectByResource( int nIdResource, String strResourceType, int nIdWorkflow )
     {
-        ResourceHistory rh = new ResourceHistory( );
 
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_HISTORY_BY_RESOURCES );
         int nIndex = 1;
@@ -270,9 +269,10 @@ public class WorkflowDAO implements IWorkflowDAO
 
         daoUtil.executeQuery( );
 
-        if ( daoUtil.next( ) )
+        while ( daoUtil.next( ) )
         {
             nIndex = 1;
+            ResourceHistory rh = new ResourceHistory( );
             rh.setId( daoUtil.getInt( nIndex++ ) );
             rh.setIdResource( daoUtil.getInt( nIndex++ ) );
             rh.setResourceType( daoUtil.getString( nIndex++ ) );
