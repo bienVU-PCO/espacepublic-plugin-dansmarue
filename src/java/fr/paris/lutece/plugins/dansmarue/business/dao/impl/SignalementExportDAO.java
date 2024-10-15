@@ -79,10 +79,11 @@ public class SignalementExportDAO implements ISignalementExportDAO
     private static final String SQL_QUERY_SEARCH_ID = "SELECT numero FROM  signalement_export";
 
     private static final String SQL_QUERY_SELECTALL_SEARCH = "SELECT se.id_signalement , se.numero, se.priorite, se.type_signalement, se.direction, se.adresse, se.coord_x, se.coord_y, se.date_creation, se.etat, se.mail_usager, se.commentaire_usager,"
-            + " se.nb_suivis, se.date_prevu_traitement, se.commentaire_agent_terrain, ss.is_send_ws, ws.id_state, sp.vue_photo , sp.image_thumbnail, sp.id_photo, wa.id_action, wa.name, wa.id_icon"
+            + " se.nb_suivis, se.date_prevu_traitement, se.commentaire_agent_terrain, ss.is_send_ws, ss.commentaire_feedback, ssf.id_satisfaction_feedback, ws.id_state, sp.vue_photo , sp.image_thumbnail, sp.id_photo, wa.id_action, wa.name, wa.id_icon"
             + " FROM  signalement_export se" + " LEFT OUTER JOIN signalement_photo sp on sp.fk_id_signalement = se.id_signalement"
             + " inner join signalement_signalement ss on ss.id_signalement = se.id_signalement" + " inner join workflow_state ws on ws.name = se.etat"
-            + " LEFT OUTER JOIN workflow_action wa on wa.id_state_before = ws.id_state";
+            + " LEFT OUTER JOIN workflow_action wa on wa.id_state_before = ws.id_state"
+            + " JOIN signalement_satisfaction_feedback ssf on ssf.id_satisfaction_feedback = ss.fk_id_satisfaction_feedback";
 
     /** The Constant SQL_QUERY_COUNT_SEARCH. */
     private static final String SQL_QUERY_COUNT_SEARCH = "SELECT count(*) FROM  signalement_export";

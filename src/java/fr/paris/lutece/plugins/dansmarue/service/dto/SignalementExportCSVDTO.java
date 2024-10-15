@@ -157,6 +157,9 @@ public class SignalementExportCSVDTO
     /** The photos. */
     private List<PhotoDMR> _listPhotos = new ArrayList<>( );
 
+    /** commentaire feedback. */
+    private String _strCommentaireFeedback;
+
     /**
      * Gets the tab all datas.
      *
@@ -882,7 +885,7 @@ public class SignalementExportCSVDTO
 
     /**
      * Get number requalification.
-     * 
+     *
      * @return String value nbRequalification
      */
     public String getNbRequalifications( )
@@ -892,7 +895,7 @@ public class SignalementExportCSVDTO
 
     /**
      * Set requalification number.
-     * 
+     *
      * @param nbRequalifications
      *            nombre de requalification
      */
@@ -941,6 +944,27 @@ public class SignalementExportCSVDTO
     public void setPhotos( List<PhotoDMR> pPhotos )
     {
         _listPhotos = pPhotos;
+    }
+
+    /**
+     * Gets the commentaire feedback.
+     *
+     * @return _strCommentaireFeedback.
+     */
+    public String getCommentaireFeedback( )
+    {
+        return _strCommentaireFeedback;
+    }
+
+    /**
+     * Sets the commentaire feedback.
+     *
+     * @param strCommentaireFeedback
+     *            the new commentaire feedback
+     */
+    public void setCommentaireFeedback( String strCommentaireFeedback )
+    {
+        this._strCommentaireFeedback = strCommentaireFeedback;
     }
 
 }
