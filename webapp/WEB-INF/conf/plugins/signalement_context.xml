@@ -36,7 +36,7 @@
 	<bean id="signalement.arrondissementService"
 		class="fr.paris.lutece.plugins.dansmarue.service.impl.ArrondissementService" />
 	<bean id="signalement.conseilQuartierService"
-		class="fr.paris.lutece.plugins.dansmarue.service.impl.ConseilQuartierService" />		
+		class="fr.paris.lutece.plugins.dansmarue.service.impl.ConseilQuartierService" />
 	<bean id="fileMessageCreationService"
 		class="fr.paris.lutece.plugins.dansmarue.service.FileMessageCreationService" />
 	<bean id="signalement.signalementViewRoleService"
@@ -54,7 +54,7 @@
 	<bean id="signalement.dashboardUserPreferencesService"
 		class="fr.paris.lutece.plugins.dansmarue.service.impl.DashboardUserPreferencesService"/>
 	<bean id="observationRejetSignalementService"
-		class="fr.paris.lutece.plugins.dansmarue.service.impl.ObservationRejetSignalementService"/>	
+		class="fr.paris.lutece.plugins.dansmarue.service.impl.ObservationRejetSignalementService"/>
 	<bean id="dansmarue.numeroSignalementService"
 		class="fr.paris.lutece.plugins.dansmarue.service.impl.NumeroSignalementService"/>
 	<bean id="signalementExportService"
@@ -97,6 +97,8 @@
 		class="fr.paris.lutece.plugins.dansmarue.business.dao.impl.DomaineFonctionnelDAO" />
 	<bean id="signalement.signalementUnitDAO"
 		class="fr.paris.lutece.plugins.dansmarue.business.dao.impl.SignalementUnitDAO" />
+	<bean id="signalement.satisfactionFeedbackDAO"
+		class="fr.paris.lutece.plugins.dansmarue.business.dao.impl.SatisfactionFeedbackDAO" />
 	<bean id="siraUserDAO"
 		class="fr.paris.lutece.plugins.dansmarue.business.dao.impl.SiraUserDAO" />
 	<bean id="signalementSuiviDAO"
@@ -113,7 +115,8 @@
 		class="fr.paris.lutece.plugins.dansmarue.business.dao.impl.AnonymizationPhotoDAO" />
 	<bean id="dansmarue.FeuilleDeTourneeDAO"
 		class="fr.paris.lutece.plugins.dansmarue.business.dao.impl.FeuilleDeTourneeDAO"/>
-		
+
+
 	<!-- image services -->
 	<bean id="signalement.imageService"
 		class="fr.paris.lutece.plugins.dansmarue.service.impl.ImageService" />
@@ -130,11 +133,11 @@
 	<!-- action suppression -->
 	<bean id="signalement.masseDeletes"
 		class="fr.paris.lutece.plugins.dansmarue.service.actions.MasseDeletesAction" />
-	
+
 
 	<!-- Upload photo -->
 	<bean class="fr.paris.lutece.plugins.dansmarue.upload.handler.DansMaRueUploadHandler" id="dansmarueUploadHandler" />
-	
+
 	 <!-- SITE PROPERTIES -->
     <bean id="signalement.sitePropertiesGroup" class="fr.paris.lutece.portal.service.site.properties.SitePropertiesGroup" >
         <property name="nameKey"><value>dansmarue.site_properties.name</value></property>
@@ -143,4 +146,3 @@
     </bean>
 </beans>
 
- 	

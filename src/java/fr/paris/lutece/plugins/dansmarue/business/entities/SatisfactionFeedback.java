@@ -40,15 +40,15 @@ package fr.paris.lutece.plugins.dansmarue.business.entities;
 public class SatisfactionFeedback
 {
         // Variables declarations
-        private int _nIdSatisfactionFeedback;
-        private String _strSatisfactionFeedback;
+        private int    _nIdSatisfactionFeedback;
+        private String _strLabel;
 
 
        /**
         * Returns the IdSatisfactionFeedback
         * @return The IdSatisfactionFeedback
         */
-        public int getIdSatisfactionFeedback()
+        public int getIdSatisfactionFeedback( )
         {
             return _nIdSatisfactionFeedback;
         }
@@ -63,20 +63,20 @@ public class SatisfactionFeedback
         }
 
        /**
-        * Returns the SatisfactionFeedback
-        * @return The SatisfactionFeedback
+        * Returns the strLabel
+        * @return The strLabel
         */
-        public String getSatisfactionFeedback()
+        public String getLabel( )
         {
-            return _strSatisfactionFeedback;
+            return _strLabel;
         }
 
        /**
-        * Sets the SatisfactionFeedback
-        * @param strSatisfactionFeedback The SatisfactionFeedback
+        * Sets the setLabel
+        * @param strLabel The strLabel
         */
-        public void setSatisfactionFeedback( String strSatisfactionFeedback )
+        public void setLabel( String strLabel )
         {
-            _strSatisfactionFeedback = strSatisfactionFeedback;
+            _strLabel = strLabel;
         }
  }

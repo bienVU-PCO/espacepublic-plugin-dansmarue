@@ -66,7 +66,7 @@ public final class SatisfactionFeedbackDAO implements ISatisfactionFeedbackDAO
 
         int nIndex = 0;
         daoUtil.setInt ( ++nIndex, satisfactionFeedback.getIdSatisfactionFeedback ( ) );
-        daoUtil.setString ( ++nIndex, satisfactionFeedback.getSatisfactionFeedback ( ) );
+        daoUtil.setString ( ++nIndex, satisfactionFeedback.getLabel( ) );
 
         daoUtil.executeUpdate();
         if ( daoUtil.nextGeneratedKey() )
@@ -94,7 +94,7 @@ public final class SatisfactionFeedbackDAO implements ISatisfactionFeedbackDAO
             satisfactionFeedback = new SatisfactionFeedback();
 
             satisfactionFeedback.setIdSatisfactionFeedback( daoUtil.getInt( "id_satisfaction_feedback" ) );
-            satisfactionFeedback.setSatisfactionFeedback( daoUtil.getString( "satisfaction_feedback" ) );
+            satisfactionFeedback.setLabel( daoUtil.getString( "satisfaction_feedback" ) );
         }
 
         daoUtil.free();
@@ -125,7 +125,7 @@ public final class SatisfactionFeedbackDAO implements ISatisfactionFeedbackDAO
 
         int nIndex = 0;
         daoUtil.setInt( ++nIndex, satisfactionFeedback.getIdSatisfactionFeedback( ) );
-        daoUtil.setString( ++nIndex, satisfactionFeedback.getSatisfactionFeedback( ) );
+        daoUtil.setString( ++nIndex, satisfactionFeedback.getLabel( ) );
         daoUtil.setInt( ++nIndex, satisfactionFeedback.getIdSatisfactionFeedback( ) );
 
         daoUtil.executeUpdate( );
@@ -147,7 +147,7 @@ public final class SatisfactionFeedbackDAO implements ISatisfactionFeedbackDAO
         {
             SatisfactionFeedback satisfactionFeedback = new SatisfactionFeedback(  );
             satisfactionFeedback.setIdSatisfactionFeedback( daoUtil.getInt( "id_satisfaction_feedback" ) );
-            satisfactionFeedback.setSatisfactionFeedback( daoUtil.getString( "satisfaction_feedback" ) );
+            satisfactionFeedback.setLabel( daoUtil.getString( "satisfaction_feedback" ) );
             listSatisfactionFeedbacks.add( satisfactionFeedback );
         }
 

@@ -972,8 +972,8 @@ $(document).ready(function() {
 									params="?signalement_id=${signalement.id}">${signalement.adresses[0].adresse!}</@a></td>
 								<td class="signalement-comment">${signalement.commentaire!}</td>
 								<td class="signalement-comment">${signalement.commentaireAgentTerrain!}</td>
-                                <td class="signalement-feedback">${signalement.dateCreation!}</td>
-                                <td class="signalement-commentaire-feedback">${signalement.CommentaireFeedback!}</td>
+                                <td class="signalement-feedback">${(signalement.satisfactionFeedback.label)!}</td>
+                                <td class="signalement-commentaire-feedback">${signalement.commentaireFeedback!}</td>
                                 <td class="signalement-date">${signalement.dateCreation!}</td>
 								<td class="signalement-etat">${map_etats[signalement.id?string]!} <#if map_programming_date[signalement.id?string]?? && map_programming_date[signalement.id?string]> <br> ${signalement.datePrevueTraitement!}</#if> </td>
 							</tr>

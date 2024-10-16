@@ -160,6 +160,9 @@ public class SignalementExportCSVDTO
     /** commentaire feedback. */
     private String _strCommentaireFeedback;
 
+    /** satisfaction feedback. */
+    private String _strSatisfactionFeedback;
+
     /**
      * Gets the tab all datas.
      *
@@ -174,7 +177,7 @@ public class SignalementExportCSVDTO
                 Integer.toString( getNbSuivis( ) ), Integer.toString( getNbFelicitations( ) ), getDateCloture( ),
                 isPhotoServiceFait( ) ? "Photo présente" : "Pas de photo", getMailDestinataireCourriel( ), getCourrielExpediteur( ), getDateEnvoiCourriel( ),
                 getIdMailServiceFait( ) != 0 ? getIdMailServiceFait( ).toString( ) : "", getExecuteurServiceFait( ), getDateDerniereAction( ),
-                getDatePrevuTraitement( ), getCommentairAgentTerrain( ), getExecuteurRejet( ), getExecuteurMiseSurveillance( ), getNbRequalifications( )
+                getDatePrevuTraitement( ), getCommentairAgentTerrain( ), getExecuteurRejet( ), getExecuteurMiseSurveillance( ), getNbRequalifications( ), getSatisfactionFeedback( ), getCommentaireFeedback( ), StringUtils.isNotEmpty( getSatisfactionFeedback( ) )?"1":"0"
         };
     }
 
@@ -967,4 +970,24 @@ public class SignalementExportCSVDTO
         this._strCommentaireFeedback = strCommentaireFeedback;
     }
 
+    /**
+     * Gets the satisfaction feedback.
+     *
+     * @return _strCommentaireFeedback.
+     */
+    public String getSatisfactionFeedback( )
+    {
+        return _strSatisfactionFeedback;
+    }
+
+    /**
+     * Sets the satisfaction feedback.
+     *
+     * @param strSatisfactionFeedback
+     *            the new satisfaction feedback
+     */
+    public void setSatisfactionFeedback( String strSatisfactionFeedback )
+    {
+        this._strSatisfactionFeedback = strSatisfactionFeedback;
+    }
 }

@@ -49,22 +49,12 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import fr.paris.lutece.plugins.dansmarue.business.entities.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 
 import fr.paris.lutece.plugins.dansmarue.business.dao.ISignalementDAO;
-import fr.paris.lutece.plugins.dansmarue.business.entities.Arrondissement;
-import fr.paris.lutece.plugins.dansmarue.business.entities.DashboardPeriod;
-import fr.paris.lutece.plugins.dansmarue.business.entities.EtatSignalement;
-import fr.paris.lutece.plugins.dansmarue.business.entities.Priorite;
-import fr.paris.lutece.plugins.dansmarue.business.entities.ServiceFaitMasseFilter;
-import fr.paris.lutece.plugins.dansmarue.business.entities.Signalement;
-import fr.paris.lutece.plugins.dansmarue.business.entities.SignalementDashboardFilter;
-import fr.paris.lutece.plugins.dansmarue.business.entities.SignalementFilter;
-import fr.paris.lutece.plugins.dansmarue.business.entities.SignalementRequalification;
-import fr.paris.lutece.plugins.dansmarue.business.entities.TableauDeBordFilter;
-import fr.paris.lutece.plugins.dansmarue.business.entities.TypeSignalement;
 import fr.paris.lutece.plugins.dansmarue.commons.Order;
 import fr.paris.lutece.plugins.dansmarue.commons.dao.PaginationProperties;
 import fr.paris.lutece.plugins.dansmarue.service.dto.DashboardSignalementDTO;
@@ -160,6 +150,10 @@ public class SignalementDAO implements ISignalementDAO
 
     /** The Constant SQL_QUERY_FROM_PRORITE. */
     private static final String SQL_QUERY_FROM_PRORITE = " INNER JOIN signalement_priorite as priorite on priorite.id_priorite = signalement.fk_id_priorite  ";
+
+    /** The Constant SQL_QUERY_FROM_SATISFACTION_FEEDBACK. */
+    private static final String SQL_QUERY_FROM_SATISFACTION_FEEDBACK = " OUTER JOIN signalement_satisfaction_feedback ssf ON ssf.id_satisfaction_feedback = signalement.fk_id_satisfaction_feedback ";
+
 
     /** The Constant SQL_QUERY_ADD_FILTER_LIST_TYPE_SIGNALEMENT. */
     private static final String SQL_QUERY_ADD_FILTER_LIST_TYPE_SIGNALEMENT = " signalement.fk_id_type_signalement IN ({0}) ";
@@ -444,7 +438,7 @@ public class SignalementDAO implements ISignalementDAO
             daoUtil.setInt( nIndex++, idSector );
             daoUtil.setBoolean( nIndex++, signalement.isDoublon( ) );
             daoUtil.setString( nIndex++, signalement.getToken( ) );
-            daoUtil.setString( nIndex, signalement.getCommentaireAgentTerrain( ) );
+            daoUtil.setString( nIndex++, signalement.getCommentaireAgentTerrain( ) );
 
             daoUtil.executeUpdate( );
         }
@@ -537,8 +531,14 @@ public class SignalementDAO implements ISignalementDAO
             signalement.setCourrielExpediteur( daoUtil.getString( nIndex++ ) );
             signalement.setCourrielDate( daoUtil.getTimestamp( nIndex++ ) );
             signalement.setSendWs( daoUtil.getBoolean( nIndex++ ) );
-            signalement.setCommentaireAgentTerrain( daoUtil.getString( nIndex ) );
+            signalement.setCommentaireAgentTerrain( daoUtil.getString( nIndex++ ) );
+            signalement.setCommentaireFeedback( daoUtil.getString( nIndex++ ) );
 
+            SatisfactionFeedback satisfactionFeedback = new SatisfactionFeedback( );
+            String strIdSatisfactionFeedback = daoUtil.getString( nIndex++ );
+            satisfactionFeedback.setIdSatisfactionFeedback( Integer.parseInt( strIdSatisfactionFeedback ) );
+
+            signalement.setSatisfactionFeedback( satisfactionFeedback );
         }
 
         daoUtil.close( );
@@ -723,7 +723,15 @@ public class SignalementDAO implements ISignalementDAO
             signalement.setCourrielDate( courrielDate );
         }
         signalement.setSendWs( daoUtil.getBoolean( nIndex++ ) );
-        signalement.setCommentaireAgentTerrain( daoUtil.getString( nIndex ) );
+        signalement.setCommentaireAgentTerrain( daoUtil.getString( nIndex++ ) );
+        signalement.setCommentaireFeedback( daoUtil.getString( nIndex++ ) );
+        int lIdSatisfactionFeedback = daoUtil.getInt( nIndex++ );
+        if ( lIdSatisfactionFeedback > 0 )
+        {
+            SatisfactionFeedback satisfactionFeedback = new SatisfactionFeedback( );
+            satisfactionFeedback.setIdSatisfactionFeedback( lIdSatisfactionFeedback );
+            signalement.setSatisfactionFeedback( satisfactionFeedback );
+        }
 
         return signalement;
     }
@@ -766,6 +774,10 @@ public class SignalementDAO implements ISignalementDAO
                 }
             }
         }
+        if ( filter.getIdSatisfactionFeedback( ) > 0 )
+        {
+            sbSQL.append( "ssf.satisfaction_feedback" );
+        }
         return sbSQL;
 
     }
@@ -806,6 +818,7 @@ public class SignalementDAO implements ISignalementDAO
         sbSQL.append( updateSelectPart( filter ) );
         sbSQL.append( SQL_QUERY_FROM_ALL );
         sbSQL.append( SQL_QUERY_FROM_PRORITE );
+        sbSQL.append( SQL_QUERY_FROM_SATISFACTION_FEEDBACK );
 
         boolean bHasOrderUnit = false;
         boolean bHasOrderSignalementType = false;
@@ -843,6 +856,7 @@ public class SignalementDAO implements ISignalementDAO
         boolean bHasFilterCategory = !CollectionUtils.isEmpty( filter.getListIdCategories( ) );
         boolean bHasFilterAdress = !StringUtils.isEmpty( filter.getAdresse( ) );
         boolean bHasFilterQuatier = !CollectionUtils.isEmpty( filter.getListIdQuartier( ) );
+        boolean bHasSatisfactionFeedback = filter.getIdSatisfactionFeedback( ) > 0;
 
         List<Order> listeOrders = convertOrderToClause( filter.getOrders( ) );
         if ( !listeOrders.isEmpty( ) && !bHasFilterAdress )
@@ -1126,6 +1140,13 @@ public class SignalementDAO implements ISignalementDAO
             }
         }
 
+        // SATISFACTION_FEEDBACK
+        if ( bHasFilterSignalementType )
+        {
+            nIndex = addSQLWhereOr( false, sbSQL, nIndex );
+            sbSQL.append( SQL_QUERY_FROM_SATISFACTION_FEEDBACK );
+        }
+
         return sbSQL.toString( );
     }
 
@@ -1279,6 +1300,11 @@ public class SignalementDAO implements ISignalementDAO
 
         }
 
+        // Type
+        if ( filter.getIdSatisfactionFeedback( ) > 0 )
+        {
+            daoUtil.setLong( nIndex++, filter.getIdSatisfactionFeedback( ) );
+        }
     }
 
     /**
@@ -1360,6 +1386,12 @@ public class SignalementDAO implements ISignalementDAO
 
             signalement.setPriorite( priorite );
             signalement.setTypeSignalement( typeSignalement );
+
+            // Satisfaction Feedback
+            SatisfactionFeedback satisfactionFeedback = signalement.getSatisfactionFeedback( );
+            satisfactionFeedback.setLabel( daoUtil.getString( nIndex++ ) );
+
+            signalement.setSatisfactionFeedback( satisfactionFeedback );
 
             listSignalements.add( signalement );
         }
@@ -1821,6 +1853,7 @@ public class SignalementDAO implements ISignalementDAO
         boolean bHasFilterCategory = !CollectionUtils.isEmpty( filter.getListIdCategories( ) );
         boolean bHasFilterAdress = !StringUtils.isEmpty( filter.getAdresse( ) );
         boolean bHasFilterQuatier = !CollectionUtils.isEmpty( filter.getListIdQuartier( ) );
+        boolean bHasFilterSatisfactionFeedback = filter.getIdSatisfactionFeedback( ) > 0;
 
         List<Order> listeOrders = convertOrderToClause( filter.getOrders( ) );
         if ( !listeOrders.isEmpty( ) && !bHasFilterAdress )
@@ -2054,6 +2087,11 @@ public class SignalementDAO implements ISignalementDAO
             String unionQuery = StringUtils.join( array, COMA_SEPARATOR );
             addSQLWhereOr( false, sbSQL, nIndex );
             sbSQL.append( MessageFormat.format( SQL_QUERY_ADD_FILTER_CATEGORY, unionQuery ) );
+        }
+
+        if ( bHasFilterSatisfactionFeedback )
+        {
+            sbSQL.append( SQL_QUERY_FROM_SATISFACTION_FEEDBACK );
         }
     }
 

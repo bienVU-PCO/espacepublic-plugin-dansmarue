@@ -1,4 +1,4 @@
-<@leaflet_map_includes/> 
+<@leaflet_map_includes/>
 <#include "macro/commons_signalement.html" />
 
 <script type="text/javascript">
@@ -10,7 +10,7 @@ $(document).ready(function() {
 		var lng = $("#longitude").val();
 		var etatSignalementId = ${stateSignalement.id};
 
-		//Si � Service fait �, � Archiv� �, � Sous surveillance � , � Rejet� � -> puce vert 
+		//Si � Service fait �, � Archiv� �, � Sous surveillance � , � Rejet� � -> puce vert
 		if(etatSignalementId===10 || etatSignalementId===12 || etatSignalementId===22 || etatSignalementId===11 ) {
 			zoomToWithEtat(lat,lng, "greenIcon");
 		} else if (etatSignalementId===9 || etatSignalementId===21) {
@@ -46,9 +46,9 @@ $(document).ready(function() {
 									href="jsp/admin/plugins/signalement/ModifySignalement.jsp"
 									params="?signalement_id=${signalement.id}"
 									additionalParameters="title='#i18n{dansmarue.reportingList.alt.modify}'">
-									<i class="glyphicon glyphicon-edit"></i> </@a> 
+									<i class="glyphicon glyphicon-edit"></i> </@a>
 								</#if>
-									
+								
 								<a class="btn btn-xs btn-primary"
 									title="#i18n{dansmarue.reportingList.alt.history}"
 									href="jsp/admin/plugins/signalement/ViewHistory.jsp?signalement_id=${signalement.id}">
@@ -62,7 +62,7 @@ $(document).ready(function() {
 										<img width="24px"
 										src="image?resource_type=workflow_icon_img&id=${action.icon.id}"
 										alt="${action.name}" />
-								</a> </#if> </#list> 
+								</a> </#if> </#list>
 								
 								<#if !(signalement.isSendWS) >
 								<@a class="btn btn-xs btn-danger" visu=false
@@ -70,7 +70,7 @@ $(document).ready(function() {
 									href="jsp/admin/plugins/signalement/DeleteSignalement.jsp"
 									params="?signalement_id=${signalement.id}"
 									additionalParameters="title='#i18n{dansmarue.commons.supprimer}'">
-									<i class="glyphicon glyphicon-trash"></i> </@a> 
+									<i class="glyphicon glyphicon-trash"></i> </@a>
 								</#if>
 								
 								<@a class="btn
@@ -179,8 +179,8 @@ $(document).ready(function() {
 					</div>
 					<#if photos?has_content>
 						<#assign index = 1>
-						<#list photos as photo> 
-							<#if photo.imageUrl != "" && photo.vue == 0>  
+						<#list photos as photo>
+							<#if photo.imageUrl != "" && photo.vue == 0>
 								<div class="form-group">
 									<label class="<@labelStyle />" for="image">
 										#i18n{dansmarue.saveSignalement.vuePres}
@@ -208,7 +208,7 @@ $(document).ready(function() {
 										<#assign index = index + 1>
 									</div>
 								</div>
-							<#elseif photo.imageUrl != "" && photo.vue == 2>  
+							<#elseif photo.imageUrl != "" && photo.vue == 2>
 								<div class="form-group">
 									<label class="<@labelStyle />" for="image">
 										#i18n{dansmarue.saveSignalement.photo.done}
@@ -239,6 +239,21 @@ $(document).ready(function() {
 							${signalement.felicitations}
 						</div>
 					</div>
+                    <div class="form-group">
+						<label class="<@labelStyle />">
+							#i18n{dansmarue.viewSignalement.reponseSatisfaction} </label>
+						<div class="control-label col-xs-12 col-sm-8 col-md-6">
+							${(signalement.satisfactionFeedback.label)!}
+						</div>
+					</div>
+                    <div class="form-group">
+						<label class="<@labelStyle />">
+							#i18n{dansmarue.viewSignalement.commentaireSatisfaction} </label>
+						<div class="control-label col-xs-12 col-sm-8 col-md-6">
+							${(signalement.commentaireFeedback)!}
+						</div>
+					</div>
+
 					<!-- RAISON REJET -->
 					<#if (signalement.observationRejet.libelle)! != "">
 					<div class="form-group">

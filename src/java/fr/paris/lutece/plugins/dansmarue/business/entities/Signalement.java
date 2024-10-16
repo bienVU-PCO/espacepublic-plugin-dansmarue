@@ -180,6 +180,9 @@ public class Signalement implements Serializable
     /** commentaire feedback. */
     private String _strCommentaireFeedback;
 
+    /** satisfaction feedback. */
+    private SatisfactionFeedback _satisfactionFeedback;
+
     /**
      * Sets the direction.
      *
@@ -1127,5 +1130,15 @@ public class Signalement implements Serializable
     public void setCommentaireFeedback( String strCommentaireFeedback )
     {
         this._strCommentaireFeedback = strCommentaireFeedback;
+    }
+
+    public SatisfactionFeedback getSatisfactionFeedback( )
+    {
+        return _satisfactionFeedback;
+    }
+
+    public void setSatisfactionFeedback( SatisfactionFeedback satisfactionFeedback )
+    {
+        this._satisfactionFeedback = satisfactionFeedback;
     }
 }
