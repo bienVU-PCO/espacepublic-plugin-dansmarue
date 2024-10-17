@@ -92,7 +92,7 @@ public class SignalementDAO implements ISignalementDAO
     private static final String SQL_QUERY_NEW_PK = "SELECT nextval('seq_signalement_signalement_id_signalement')";
 
     /** The Constant SQL_QUERY_INSERT. */
-    private static final String SQL_QUERY_INSERT = "INSERT INTO signalement_signalement (id_signalement, suivi, date_creation, commentaire, annee, mois, numero, PREFIX, fk_id_priorite, fk_id_type_signalement, fk_id_arrondissement, fk_id_sector, is_doublon, token, commentaire_agent_terrain, commentaire_feedback, fk_id_satisfaction_feedback) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO signalement_signalement (id_signalement, suivi, date_creation, commentaire, annee, mois, numero, PREFIX, fk_id_priorite, fk_id_type_signalement, fk_id_arrondissement, fk_id_sector, is_doublon, token, commentaire_agent_terrain) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     /** The Constant SQL_QUERY_DELETE. */
     private static final String SQL_QUERY_DELETE = "DELETE FROM signalement_signalement WHERE id_signalement = ?";

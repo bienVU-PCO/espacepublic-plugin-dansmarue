@@ -18,11 +18,17 @@ ADD fk_id_satisfaction_feedback int8;
 ALTER TABLE signalement_signalement
 ADD commentaire_feedback VARCHAR(255);
 
+ALTER TABLE signalement_signalement
+ADD nombre_feedback SMALLINT;
+
 ALTER TABLE signalement_export
 ADD commentaire_feedback VARCHAR(255);
 
 ALTER TABLE signalement_export
-ADD satisfaction_feedback VARCHAR(255);
+ADD nature_feedback VARCHAR(255);
+
+ALTER TABLE signalement_export
+ADD nombre_feedback SMALLINT;
 
 ALTER TABLE signalement_signalement
       ADD CONSTRAINT fk_id_satisfaction_feedback_fkey FOREIGN KEY (fk_id_satisfaction_feedback) REFERENCES signalement_satisfaction_feedback(id_satisfaction_feedback);
@@ -100,11 +106,11 @@ begin
 
 		if exists (select 1 from signalement_export where id_signalement=new.id_signalement)
 			then
-				update signalement_export set id_type_signalement=new.fk_id_type_signalement, id_direction=NewIdDirection, id_sector=new.fk_id_sector, id_arrondissement = new.fk_id_arrondissement, numero =Newnumero, priorite=Newpriorite, type_signalement=TypeAno, alias=NewTypeSignalementAlias, alias_mobile=NewTypeSignalementAliasMobile, direction=NewLabelDirection, arrondissement=NewArrondissement, secteur=NewSecteurAffectation, date_creation=to_char(new.date_creation,'DD/MM/YYYY'), heure_creation=to_char(new.date_creation,'HH24:MI'),mail_usager=NewMailUsager, commentaire_usager=new.commentaire, nb_photos=NewNombrePhotos, raisons_rejet=NewRaisonRejet, nb_suivis=new.suivi, nb_felicitations=new.felicitations, is_photo_service_fait=NewPhotoServiceFait, mail_destinataire_courriel=new.courriel_destinataire, courriel_expediteur=new.courriel_expediteur, date_envoi_courriel=to_char(new.courriel_date,'DD/MM/YYYY'), date_prevu_traitement = to_char(new.date_prevue_traitement,'DD/MM/YYYY'),commentaire_agent_terrain=new.commentaire_agent_terrain, commentaire_feedback=new.commentaire_feedback, satisfaction_feedback=NewSatisfactionFeedback
+				update signalement_export set id_type_signalement=new.fk_id_type_signalement, id_direction=NewIdDirection, id_sector=new.fk_id_sector, id_arrondissement = new.fk_id_arrondissement, numero =Newnumero, priorite=Newpriorite, type_signalement=TypeAno, alias=NewTypeSignalementAlias, alias_mobile=NewTypeSignalementAliasMobile, direction=NewLabelDirection, arrondissement=NewArrondissement, secteur=NewSecteurAffectation, date_creation=to_char(new.date_creation,'DD/MM/YYYY'), heure_creation=to_char(new.date_creation,'HH24:MI'),mail_usager=NewMailUsager, commentaire_usager=new.commentaire, nb_photos=NewNombrePhotos, raisons_rejet=NewRaisonRejet, nb_suivis=new.suivi, nb_felicitations=new.felicitations, is_photo_service_fait=NewPhotoServiceFait, mail_destinataire_courriel=new.courriel_destinataire, courriel_expediteur=new.courriel_expediteur, date_envoi_courriel=to_char(new.courriel_date,'DD/MM/YYYY'), date_prevu_traitement = to_char(new.date_prevue_traitement,'DD/MM/YYYY'),commentaire_agent_terrain=new.commentaire_agent_terrain, commentaire_feedback=new.commentaire_feedback, nature_feedback=NewSatisfactionFeedback, nombre_feedback=new.nombre_feedback
 				where id_signalement=new.id_signalement;
 			else
-				insert into signalement_export(id_signalement, id_type_signalement, id_direction, id_sector, id_arrondissement, numero, priorite, type_signalement, alias, alias_mobile, direction, arrondissement, secteur, date_creation, heure_creation, mail_usager, commentaire_usager, nb_photos, raisons_rejet, nb_suivis, nb_felicitations, is_photo_service_fait, mail_destinataire_courriel, courriel_expediteur, date_envoi_courriel, date_prevu_traitement, commentaire_agent_terrain, commentaire_feedback, satisfaction_feedback )
-				values(new.id_signalement,new.fk_id_type_signalement, NewIdDirection, new.fk_id_sector, new.fk_id_arrondissement, Newnumero, Newpriorite, TypeAno, NewTypeSignalementAlias, NewTypeSignalementAliasMobile, NewLabelDirection, NewArrondissement, NewSecteurAffectation, to_char(new.date_creation,'DD/MM/YYYY'), to_char(new.date_creation,'HH24:MI'),NewMailUsager, new.commentaire, NewNombrePhotos, NewRaisonRejet, new.suivi, new.felicitations, NewPhotoServiceFait, new.courriel_destinataire, new.courriel_expediteur, to_char(new.courriel_date,'DD/MM/YYYY'), to_char(new.date_prevue_traitement,'DD/MM/YYYY'), new.commentaire_agent_terrain, new.commentaire_feedback, NewSatisfactionFeedback);
+				insert into signalement_export(id_signalement, id_type_signalement, id_direction, id_sector, id_arrondissement, numero, priorite, type_signalement, alias, alias_mobile, direction, arrondissement, secteur, date_creation, heure_creation, mail_usager, commentaire_usager, nb_photos, raisons_rejet, nb_suivis, nb_felicitations, is_photo_service_fait, mail_destinataire_courriel, courriel_expediteur, date_envoi_courriel, date_prevu_traitement, commentaire_agent_terrain, commentaire_feedback, nature_feedback, nombre_feedback )
+				values(new.id_signalement,new.fk_id_type_signalement, NewIdDirection, new.fk_id_sector, new.fk_id_arrondissement, Newnumero, Newpriorite, TypeAno, NewTypeSignalementAlias, NewTypeSignalementAliasMobile, NewLabelDirection, NewArrondissement, NewSecteurAffectation, to_char(new.date_creation,'DD/MM/YYYY'), to_char(new.date_creation,'HH24:MI'),NewMailUsager, new.commentaire, NewNombrePhotos, NewRaisonRejet, new.suivi, new.felicitations, NewPhotoServiceFait, new.courriel_destinataire, new.courriel_expediteur, to_char(new.courriel_date,'DD/MM/YYYY'), to_char(new.date_prevue_traitement,'DD/MM/YYYY'), new.commentaire_agent_terrain, new.commentaire_feedback, NewSatisfactionFeedback, new.commentaire_feedback, new.nombre_feedback );
 		end if;
 
 

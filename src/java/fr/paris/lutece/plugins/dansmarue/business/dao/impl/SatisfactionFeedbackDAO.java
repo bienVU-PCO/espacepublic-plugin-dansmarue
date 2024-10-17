@@ -62,18 +62,19 @@ public final class SatisfactionFeedbackDAO implements ISatisfactionFeedbackDAO
     @Override
     public void insert( SatisfactionFeedback satisfactionFeedback, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT , Statement.RETURN_GENERATED_KEYS, plugin );
-
-        int nIndex = 0;
-        daoUtil.setInt ( ++nIndex, satisfactionFeedback.getIdSatisfactionFeedback ( ) );
-        daoUtil.setString ( ++nIndex, satisfactionFeedback.getLabel( ) );
-
-        daoUtil.executeUpdate();
-        if ( daoUtil.nextGeneratedKey() )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, Statement.RETURN_GENERATED_KEYS, plugin ) )
         {
-            satisfactionFeedback.setIdSatisfactionFeedback( daoUtil.getGeneratedKeyInt( 1 ) );
+
+            int nIndex = 0;
+            daoUtil.setInt( ++nIndex, satisfactionFeedback.getIdSatisfactionFeedback( ) );
+            daoUtil.setString( ++nIndex, satisfactionFeedback.getLabel( ) );
+
+            daoUtil.executeUpdate( );
+            if ( daoUtil.nextGeneratedKey( ) )
+            {
+                satisfactionFeedback.setIdSatisfactionFeedback( daoUtil.getGeneratedKeyInt( 1 ) );
+            }
         }
-        daoUtil.free( );
     }
 
 
@@ -83,21 +84,23 @@ public final class SatisfactionFeedbackDAO implements ISatisfactionFeedbackDAO
     @Override
     public SatisfactionFeedback load( int nId, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT , plugin );
-        daoUtil.setInt( 1 , nId );
-        daoUtil.executeQuery();
-
         SatisfactionFeedback satisfactionFeedback = null;
-
-        if ( daoUtil.next() )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin ) )
         {
-            satisfactionFeedback = new SatisfactionFeedback();
+            daoUtil.setInt( 1, nId );
+            daoUtil.executeQuery( );
 
-            satisfactionFeedback.setIdSatisfactionFeedback( daoUtil.getInt( "id_satisfaction_feedback" ) );
-            satisfactionFeedback.setLabel( daoUtil.getString( "satisfaction_feedback" ) );
+
+
+            if ( daoUtil.next( ) )
+            {
+                satisfactionFeedback = new SatisfactionFeedback( );
+
+                satisfactionFeedback.setIdSatisfactionFeedback( daoUtil.getInt( "id_satisfaction_feedback" ) );
+                satisfactionFeedback.setLabel( daoUtil.getString( "satisfaction_feedback" ) );
+            }
+
         }
-
-        daoUtil.free();
         return satisfactionFeedback;
     }
 
@@ -108,10 +111,11 @@ public final class SatisfactionFeedbackDAO implements ISatisfactionFeedbackDAO
     @Override
     public void delete( int nSatisfactionFeedbackId, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE , plugin );
-        daoUtil.setInt( 1 , nSatisfactionFeedbackId );
-        daoUtil.executeUpdate();
-        daoUtil.free();
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin ) )
+        {
+            daoUtil.setInt( 1, nSatisfactionFeedbackId );
+            daoUtil.executeUpdate( );
+        }
     }
 
 
@@ -121,15 +125,15 @@ public final class SatisfactionFeedbackDAO implements ISatisfactionFeedbackDAO
     @Override
     public void store( SatisfactionFeedback satisfactionFeedback, Plugin plugin )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE , plugin );
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin ) )
+        {
+            int nIndex = 0;
+            daoUtil.setInt( ++nIndex, satisfactionFeedback.getIdSatisfactionFeedback( ) );
+            daoUtil.setString( ++nIndex, satisfactionFeedback.getLabel( ) );
+            daoUtil.setInt( ++nIndex, satisfactionFeedback.getIdSatisfactionFeedback( ) );
 
-        int nIndex = 0;
-        daoUtil.setInt( ++nIndex, satisfactionFeedback.getIdSatisfactionFeedback( ) );
-        daoUtil.setString( ++nIndex, satisfactionFeedback.getLabel( ) );
-        daoUtil.setInt( ++nIndex, satisfactionFeedback.getIdSatisfactionFeedback( ) );
-
-        daoUtil.executeUpdate( );
-        daoUtil.free( );
+            daoUtil.executeUpdate( );
+        }
     }
 
 
@@ -140,18 +144,19 @@ public final class SatisfactionFeedbackDAO implements ISatisfactionFeedbackDAO
     public List<SatisfactionFeedback> selectSatisfactionFeedbacksList( Plugin plugin )
     {
         List<SatisfactionFeedback> listSatisfactionFeedbacks = new ArrayList<>(  );
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL , plugin );
-        daoUtil.executeQuery(  );
-
-        while ( daoUtil.next(  ) )
+        try ( DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECTALL, plugin ) )
         {
-            SatisfactionFeedback satisfactionFeedback = new SatisfactionFeedback(  );
-            satisfactionFeedback.setIdSatisfactionFeedback( daoUtil.getInt( "id_satisfaction_feedback" ) );
-            satisfactionFeedback.setLabel( daoUtil.getString( "satisfaction_feedback" ) );
-            listSatisfactionFeedbacks.add( satisfactionFeedback );
-        }
+            daoUtil.executeQuery( );
 
-        daoUtil.free();
+            while ( daoUtil.next( ) )
+            {
+                SatisfactionFeedback satisfactionFeedback = new SatisfactionFeedback( );
+                satisfactionFeedback.setIdSatisfactionFeedback( daoUtil.getInt( "id_satisfaction_feedback" ) );
+                satisfactionFeedback.setLabel( daoUtil.getString( "satisfaction_feedback" ) );
+                listSatisfactionFeedbacks.add( satisfactionFeedback );
+            }
+
+        }
         return listSatisfactionFeedbacks;
     }
 
