@@ -54,21 +54,12 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
 
+import fr.paris.lutece.plugins.dansmarue.business.dao.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.util.DigestUtils;
 
-import fr.paris.lutece.plugins.dansmarue.business.dao.IAdresseDAO;
-import fr.paris.lutece.plugins.dansmarue.business.dao.IConseilQuartierDao;
-import fr.paris.lutece.plugins.dansmarue.business.dao.IObservationRejetDAO;
-import fr.paris.lutece.plugins.dansmarue.business.dao.IPhotoDAO;
-import fr.paris.lutece.plugins.dansmarue.business.dao.IPrioriteDAO;
-import fr.paris.lutece.plugins.dansmarue.business.dao.ISignalementDAO;
-import fr.paris.lutece.plugins.dansmarue.business.dao.ISignalementSuiviDAO;
-import fr.paris.lutece.plugins.dansmarue.business.dao.ISignaleurDAO;
-import fr.paris.lutece.plugins.dansmarue.business.dao.ITaskNotificationConfigDAO;
-import fr.paris.lutece.plugins.dansmarue.business.dao.ITypeSignalementDAO;
 import fr.paris.lutece.plugins.dansmarue.business.entities.Adresse;
 import fr.paris.lutece.plugins.dansmarue.business.entities.Arrondissement;
 import fr.paris.lutece.plugins.dansmarue.business.entities.ConseilQuartier;
@@ -375,6 +366,11 @@ public class SignalementService implements ISignalementService
     @Inject
     private ISignaleurService                   _signaleurService;
 
+    /** The _satisfactionFeedbackDAO dao. */
+    @Inject
+    @Named( "signalement.satisfactionFeedbackDAO" )
+    private ISatisfactionFeedbackDAO _satisfactionFeedbackDAO;
+
     /**
      * {@inheritDoc}
      */
@@ -438,6 +434,8 @@ public class SignalementService implements ISignalementService
             return null;
         }
 
+        Plugin pluginSignalement = PluginService.getPlugin( SignalementPlugin.PLUGIN_NAME );
+        signalement.setSatisfactionFeedback( _satisfactionFeedbackDAO.load( signalement.getSatisfactionFeedback( ).getIdSatisfactionFeedback( ), pluginSignalement ) );
         // get his priority
         signalement.setPriorite( _prioriteDAO.load( signalement.getPriorite( ).getId( ) ) );
 
