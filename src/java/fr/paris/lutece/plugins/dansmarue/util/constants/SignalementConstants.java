@@ -275,6 +275,9 @@ public final class SignalementConstants
     /** The Constant RETOUR_CREATION_SIGNALEMENT. */
     public static final String RETOUR_CREATION_SIGNALEMENT = "isSaveSignalementOk";
 
+    /** The Constant RETOUR_SAVE_SATISFACTION_FORM_OK. */
+    public static final String RETOUR_SAVE_SATISFACTION_FORM_OK = "sauvegarderFeedbackOk";
+
     /** The Constant CODE_ERREUR_CREATION_SIGNALEMENT. */
     public static final String CODE_ERREUR_CREATION_SIGNALEMENT = "codeErreurCreation";
 

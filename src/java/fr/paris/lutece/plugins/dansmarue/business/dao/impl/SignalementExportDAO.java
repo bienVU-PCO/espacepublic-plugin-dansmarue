@@ -73,7 +73,7 @@ public class SignalementExportDAO implements ISignalementExportDAO
     private static final String SQL_QUERY_SEARCH_ID = "SELECT numero FROM  signalement_export";
 
     private static final String SQL_QUERY_SELECTALL_SEARCH = "SELECT se.id_signalement , se.numero, se.priorite, se.type_signalement, se.direction, se.adresse, se.coord_x, se.coord_y, se.date_creation, se.etat, se.mail_usager, se.commentaire_usager,"
-            + " se.nb_suivis, se.date_prevu_traitement, se.commentaire_agent_terrain, ss.is_send_ws, se.commentaire_feedback, se.nature_feedback, ws.id_state, sp.vue_photo , sp.image_thumbnail, sp.id_photo, wa.id_action, wa.name, wa.id_icon"
+            + " se.nb_suivis, se.date_prevu_traitement, se.commentaire_agent_terrain, ss.is_send_ws, ws.id_state, sp.vue_photo , sp.image_thumbnail, sp.id_photo, wa.id_action, wa.name, wa.id_icon, se.commentaire_feedback, se.nombre_feedback, se.nature_feedback, ss.fk_id_satisfaction_feedback "
             + " FROM  signalement_export se" + " LEFT OUTER JOIN signalement_photo sp on sp.fk_id_signalement = se.id_signalement"
             + " inner join signalement_signalement ss on ss.id_signalement = se.id_signalement" + " inner join workflow_state ws on ws.name = se.etat"
             + " LEFT OUTER JOIN workflow_action wa on wa.id_state_before = ws.id_state";
@@ -522,12 +522,6 @@ public class SignalementExportDAO implements ISignalementExportDAO
                     exportReport.setDatePrevueTraitement( daoUtil.getString( nIndex++ ) );
                     exportReport.setCommentaireAgentTerrain( daoUtil.getString( nIndex++ ) );
                     exportReport.setSendWs( daoUtil.getBoolean( nIndex++ ) );
-                    exportReport.setCommentaireFeedback( daoUtil.getString( nIndex++ ) );
-                    SatisfactionFeedback satisfactionFeedback = new SatisfactionFeedback( );
-                    satisfactionFeedback.setIdSatisfactionFeedback( daoUtil.getInt( nIndex++ ) );
-                    satisfactionFeedback.setLabel( daoUtil.getString( nIndex++ ) );
-                    exportReport.setSatisfactionFeedback( satisfactionFeedback );
-
                     exportReport.setIdState( daoUtil.getInt( nIndex++ ) );
 
                     List<PhotoDMR> listPhotos = new ArrayList<>( );
@@ -535,6 +529,14 @@ public class SignalementExportDAO implements ISignalementExportDAO
 
                     List<Action> listActions = new ArrayList<>( );
                     exportReport.setListActionAvailable( addActionToSignalement( daoUtil, listActions ) );
+
+                    exportReport.setCommentaireFeedback( daoUtil.getString( nIndex++ ) );
+                    exportReport.setNombreFeedback( daoUtil.getInt( nIndex++ ) );
+
+                    SatisfactionFeedback satisfactionFeedback = new SatisfactionFeedback( );
+                    satisfactionFeedback.setLabel( daoUtil.getString( nIndex++ ) );
+                    satisfactionFeedback.setIdSatisfactionFeedback( daoUtil.getInt( nIndex++ ) );
+                    exportReport.setSatisfactionFeedback( satisfactionFeedback );
 
                     listSignalementFind.add( exportReport );
                 }

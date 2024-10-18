@@ -258,6 +258,9 @@ public class SignalementService implements ISignalementService
     /** The Constant PARAMETER_SUIVI. */
     private static final String                 PARAMETER_SUIVI                              = "suivi";
 
+    /** The Constant PARAMETER_FORMULAIRE_SATISFACTION. */
+    private static final String                 PARAMETER_FORMULAIRE_SATISFACTION                             = "formulaireSatisfaction";
+
     /** The Constant PARAMETER_TOKEN. */
     private static final String                 PARAMETER_TOKEN                              = "token";
 
@@ -1401,6 +1404,8 @@ public class SignalementService implements ISignalementService
     {
         Plugin pluginSignalement = PluginService.getPlugin( SignalementPlugin.PLUGIN_NAME );
         Signalement signalement = _signalementDAO.getSignalementByToken( token, pluginSignalement );
+        signalement = _signalementDAO.loadById( signalement.getId( ) );
+
         if ( signalement != null )
         {
             signalement = getSignalement( signalement.getId( ) );
@@ -2323,5 +2328,21 @@ public class SignalementService implements ISignalementService
         }
 
         return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getLienFormulaireSatisfaction( Signalement signalement, HttpServletRequest request )
+    {
+        UrlItem urlItem;
+
+        urlItem = new UrlItem( AppPropertiesService.getProperty( PROPERTY_BASE_TS_URL ) + JSP_PORTAL );
+
+        urlItem.addParameter( PARAMETER_PAGE, PARAMETER_FORMULAIRE_SATISFACTION );
+        urlItem.addParameter( PARAMETER_TOKEN, signalement.getToken( ) );
+
+        return urlItem.getUrl( );
     }
 }

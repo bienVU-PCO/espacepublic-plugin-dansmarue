@@ -98,7 +98,7 @@ public class SignalementDAO implements ISignalementDAO
     private static final String SQL_QUERY_DELETE = "DELETE FROM signalement_signalement WHERE id_signalement = ?";
 
     /** The Constant SQL_QUERY_SELECT. */
-    private static final String SQL_QUERY_SELECT = "SELECT id_signalement, suivi, date_creation, date_prevue_traitement, commentaire, annee, mois, numero, prefix, fk_id_priorite, fk_id_arrondissement, fk_id_type_signalement, fk_id_sector, is_doublon, token, service_fait_date_passage, felicitations, date_mise_surveillance, date_rejet, courriel_destinataire, courriel_expediteur, courriel_date, is_send_ws, commentaire_agent_terrain, commentaire_feedback, fk_id_satisfaction_feedback FROM signalement_signalement WHERE id_signalement = ?";
+    private static final String SQL_QUERY_SELECT = "SELECT id_signalement, suivi, date_creation, date_prevue_traitement, commentaire, annee, mois, numero, prefix, fk_id_priorite, fk_id_arrondissement, fk_id_type_signalement, fk_id_sector, is_doublon, token, service_fait_date_passage, felicitations, date_mise_surveillance, date_rejet, courriel_destinataire, courriel_expediteur, courriel_date, is_send_ws, commentaire_agent_terrain, commentaire_feedback, fk_id_satisfaction_feedback, nombre_feedback FROM signalement_signalement WHERE id_signalement = ?";
 
     /** The Constant SQL_QUERY_SELECT_BY_NUMBER. */
     private static final String SQL_QUERY_SELECT_BY_NUMBER = "SELECT id_signalement, suivi, date_creation, date_prevue_traitement, commentaire, annee, mois, numero, prefix, fk_id_priorite, fk_id_arrondissement, fk_id_type_signalement, fk_id_sector, is_doublon, token, service_fait_date_passage, felicitations, date_mise_surveillance, date_rejet, courriel_destinataire, courriel_expediteur, courriel_date, is_send_ws, commentaire_agent_terrain, commentaire_feedback, fk_id_satisfaction_feedback FROM signalement_signalement WHERE prefix || annee || mois || numero = ?";
@@ -106,7 +106,7 @@ public class SignalementDAO implements ISignalementDAO
     /** The Constant SQL_QUERY_SELECT_BY_STATUS. */
     private static final String SQL_QUERY_SELECT_BY_STATUS = "SELECT signalement.id_signalement, signalement.suivi, signalement.date_creation, signalement.date_prevue_traitement, signalement.commentaire, signalement.annee,  signalement.mois, signalement.numero, signalement.prefix, signalement.fk_id_priorite,   signalement.fk_id_arrondissement,  signalement.fk_id_type_signalement,  signalement.fk_id_sector,   signalement.is_doublon, signalement.service_fait_date_passage FROM signalement_signalement AS signalement  INNER JOIN workflow_resource_workflow AS resource_workflow ON resource_workflow.id_resource = signalement.id_signalement  INNER JOIN workflow_resource_history AS resource_history ON resource_history.id_resource = signalement.id_signalement INNER JOIN workflow_action AS action ON action.id_action = resource_history.id_action WHERE resource_workflow.resource_type = ''SIGNALEMENT_SIGNALEMENT''  AND resource_history.resource_type = ''SIGNALEMENT_SIGNALEMENT''  AND resource_workflow.id_state = ? AND action.id_state_after = ? AND resource_history.creation_date + '''{0} ''days''::interval < now();";
     /** The Constant SQL_QUERY_UPDATE. */
-    private static final String SQL_QUERY_UPDATE = "UPDATE signalement_signalement SET id_signalement=?, suivi=?, date_creation=?, date_prevue_traitement=?, commentaire=? , fk_id_priorite=?, fk_id_type_signalement=?, fk_id_arrondissement = ?, fk_id_sector = ?, is_doublon = ?, service_fait_date_passage = ?, courriel_destinataire = ?, courriel_expediteur = ?, courriel_date = ?, is_send_ws = ?, commentaire_agent_terrain=?, commentaire_feedback=?, fk_id_satisfaction_feedback=? WHERE id_signalement=?";
+    private static final String SQL_QUERY_UPDATE = "UPDATE signalement_signalement SET id_signalement=?, suivi=?, date_creation=?, date_prevue_traitement=?, commentaire=? , fk_id_priorite=?, fk_id_type_signalement=?, fk_id_arrondissement = ?, fk_id_sector = ?, is_doublon = ?, service_fait_date_passage = ?, courriel_destinataire = ?, courriel_expediteur = ?, courriel_date = ?, is_send_ws = ?, commentaire_agent_terrain=?, commentaire_feedback=?, fk_id_satisfaction_feedback=?, nombre_feedback=? WHERE id_signalement=?";
 
     /** The Constant SQL_QUERY_SELECT_ALL. */
     private static final String SQL_QUERY_SELECT_ALL = "SELECT id_signalement, suivi, date_creation, date_prevue_traitement, commentaire, annee, mois, numero, prefix, fk_id_priorite, fk_id_arrondissement, fk_id_type_signalement, fk_id_sector, is_doublon, is_send_ws FROM signalement_signalement";
@@ -537,6 +537,8 @@ public class SignalementDAO implements ISignalementDAO
             SatisfactionFeedback satisfactionFeedback = new SatisfactionFeedback( );
             String strIdSatisfactionFeedback = daoUtil.getString( nIndex++ );
             satisfactionFeedback.setIdSatisfactionFeedback( Integer.parseInt( strIdSatisfactionFeedback ) );
+            signalement.setNombreFeedback( daoUtil.getInt( nIndex++ ) );
+
 
             signalement.setSatisfactionFeedback( satisfactionFeedback );
         }
@@ -600,7 +602,12 @@ public class SignalementDAO implements ISignalementDAO
         daoUtil.setTimestamp( nIndex++, signalement.getCourrielDate( ) );
         daoUtil.setBoolean( nIndex++, signalement.getIsSendWS( ) );
         daoUtil.setString( nIndex++, signalement.getCommentaireAgentTerrain( ) );
-        daoUtil.setLong( nIndex, signalement.getId( ) );
+        daoUtil.setString( nIndex++, signalement.getCommentaireFeedback( ) );
+        daoUtil.setInt( nIndex++, signalement.getSatisfactionFeedback( ).getIdSatisfactionFeedback( ) );
+        daoUtil.setInt( nIndex++, signalement.getNombreFeedback( ) );
+
+        daoUtil.setLong( nIndex++, signalement.getId( ) );
+
         daoUtil.executeUpdate( );
         daoUtil.close( );
     }
@@ -732,6 +739,7 @@ public class SignalementDAO implements ISignalementDAO
             satisfactionFeedback.setIdSatisfactionFeedback( lIdSatisfactionFeedback );
             signalement.setSatisfactionFeedback( satisfactionFeedback );
         }
+        signalement.setNombreFeedback( daoUtil.getInt( nIndex++ ) );
 
         return signalement;
     }

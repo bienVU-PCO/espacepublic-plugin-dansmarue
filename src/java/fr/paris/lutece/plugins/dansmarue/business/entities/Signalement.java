@@ -183,6 +183,9 @@ public class Signalement implements Serializable
     /** satisfaction feedback. */
     private SatisfactionFeedback _satisfactionFeedback;
 
+    /** nombreFeedback. */
+    private int _nombreFeedback;
+
     /**
      * Sets the direction.
      *
@@ -1140,5 +1143,15 @@ public class Signalement implements Serializable
     public void setSatisfactionFeedback( SatisfactionFeedback satisfactionFeedback )
     {
         this._satisfactionFeedback = satisfactionFeedback;
+    }
+
+    public int getNombreFeedback( )
+    {
+        return _nombreFeedback;
+    }
+
+    public void setNombreFeedback( int nombreFeedback )
+    {
+        this._nombreFeedback = nombreFeedback;
     }
 }

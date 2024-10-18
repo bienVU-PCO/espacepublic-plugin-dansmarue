@@ -64,7 +64,7 @@ public final class LibrarySiraConstants
     public static final String REST_TYPE_SIGNALEMENT_SERVICE = "getAllSousTypeSignalementCascade";
 
     /** The Constant REST_GET_SAVE_SATISFACTION_FORM_ANSWER. */
-    public static final String REST_GET_SAVE_SATISFACTION_FORM_ANSWER = "getSaveSatisfactionFormAnswer";
+    public static final String REST_GET_SAVE_SATISFACTION_FORM_ANSWER = "saveSatisfactionFormAnswer";
 
     /** The Constant REST_LIST_SIGNALEMENT_DOSSIER_SERVICE. */
     public static final String REST_LIST_SIGNALEMENT_DOSSIER_SERVICE = "getListSignalementDossierByParam";
