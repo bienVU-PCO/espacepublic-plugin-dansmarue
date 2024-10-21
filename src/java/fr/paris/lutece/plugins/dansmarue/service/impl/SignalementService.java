@@ -55,29 +55,12 @@ import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
 
 import fr.paris.lutece.plugins.dansmarue.business.dao.*;
+import fr.paris.lutece.plugins.dansmarue.business.entities.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.util.DigestUtils;
 
-import fr.paris.lutece.plugins.dansmarue.business.entities.Adresse;
-import fr.paris.lutece.plugins.dansmarue.business.entities.Arrondissement;
-import fr.paris.lutece.plugins.dansmarue.business.entities.ConseilQuartier;
-import fr.paris.lutece.plugins.dansmarue.business.entities.DashboardPeriod;
-import fr.paris.lutece.plugins.dansmarue.business.entities.EtatSignalement;
-import fr.paris.lutece.plugins.dansmarue.business.entities.ObservationRejet;
-import fr.paris.lutece.plugins.dansmarue.business.entities.PhotoDMR;
-import fr.paris.lutece.plugins.dansmarue.business.entities.Priorite;
-import fr.paris.lutece.plugins.dansmarue.business.entities.ServiceFaitMasseFilter;
-import fr.paris.lutece.plugins.dansmarue.business.entities.Signalement;
-import fr.paris.lutece.plugins.dansmarue.business.entities.SignalementDashboardFilter;
-import fr.paris.lutece.plugins.dansmarue.business.entities.SignalementFilter;
-import fr.paris.lutece.plugins.dansmarue.business.entities.SignalementRequalification;
-import fr.paris.lutece.plugins.dansmarue.business.entities.SignalementSuivi;
-import fr.paris.lutece.plugins.dansmarue.business.entities.Signaleur;
-import fr.paris.lutece.plugins.dansmarue.business.entities.SiraUser;
-import fr.paris.lutece.plugins.dansmarue.business.entities.TableauDeBordFilter;
-import fr.paris.lutece.plugins.dansmarue.business.entities.TypeSignalement;
 import fr.paris.lutece.plugins.dansmarue.business.exceptions.AlreadyFollowedException;
 import fr.paris.lutece.plugins.dansmarue.business.exceptions.InvalidStateActionException;
 import fr.paris.lutece.plugins.dansmarue.business.exceptions.NonExistentFollowItem;
@@ -438,7 +421,11 @@ public class SignalementService implements ISignalementService
         }
 
         Plugin pluginSignalement = PluginService.getPlugin( SignalementPlugin.PLUGIN_NAME );
-        signalement.setSatisfactionFeedback( _satisfactionFeedbackDAO.load( signalement.getSatisfactionFeedback( ).getIdSatisfactionFeedback( ), pluginSignalement ) );
+        if ( signalement.getSatisfactionFeedback( ) != null && signalement.getSatisfactionFeedback( ).getIdSatisfactionFeedback( ) != 0 )
+        {
+            signalement.setSatisfactionFeedback( _satisfactionFeedbackDAO.load( signalement.getSatisfactionFeedback( ).getIdSatisfactionFeedback( ), pluginSignalement ) );
+        }
+
         // get his priority
         signalement.setPriorite( _prioriteDAO.load( signalement.getPriorite( ).getId( ) ) );
 
@@ -2344,5 +2331,14 @@ public class SignalementService implements ISignalementService
         urlItem.addParameter( PARAMETER_TOKEN, signalement.getToken( ) );
 
         return urlItem.getUrl( );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void updateSatisfactionFormFields( Signalement signalement )
+    {
+        _signalementDAO.updateSatisfactionFormFields( signalement );
     }
 }

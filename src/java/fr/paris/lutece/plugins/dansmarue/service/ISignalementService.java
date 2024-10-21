@@ -777,4 +777,12 @@ public interface ISignalementService
      * @return the tracking link
      */
     String getLienFormulaireSatisfaction( Signalement signalement, HttpServletRequest request );
+
+    /**
+     * Updates signalement with satisfaction form info
+     *
+     * @param signalement the signalement
+     */
+    void updateSatisfactionFormFields( Signalement signalement );
+
 }

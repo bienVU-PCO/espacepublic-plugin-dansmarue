@@ -106,7 +106,10 @@ public class SignalementDAO implements ISignalementDAO
     /** The Constant SQL_QUERY_SELECT_BY_STATUS. */
     private static final String SQL_QUERY_SELECT_BY_STATUS = "SELECT signalement.id_signalement, signalement.suivi, signalement.date_creation, signalement.date_prevue_traitement, signalement.commentaire, signalement.annee,  signalement.mois, signalement.numero, signalement.prefix, signalement.fk_id_priorite,   signalement.fk_id_arrondissement,  signalement.fk_id_type_signalement,  signalement.fk_id_sector,   signalement.is_doublon, signalement.service_fait_date_passage FROM signalement_signalement AS signalement  INNER JOIN workflow_resource_workflow AS resource_workflow ON resource_workflow.id_resource = signalement.id_signalement  INNER JOIN workflow_resource_history AS resource_history ON resource_history.id_resource = signalement.id_signalement INNER JOIN workflow_action AS action ON action.id_action = resource_history.id_action WHERE resource_workflow.resource_type = ''SIGNALEMENT_SIGNALEMENT''  AND resource_history.resource_type = ''SIGNALEMENT_SIGNALEMENT''  AND resource_workflow.id_state = ? AND action.id_state_after = ? AND resource_history.creation_date + '''{0} ''days''::interval < now();";
     /** The Constant SQL_QUERY_UPDATE. */
-    private static final String SQL_QUERY_UPDATE = "UPDATE signalement_signalement SET id_signalement=?, suivi=?, date_creation=?, date_prevue_traitement=?, commentaire=? , fk_id_priorite=?, fk_id_type_signalement=?, fk_id_arrondissement = ?, fk_id_sector = ?, is_doublon = ?, service_fait_date_passage = ?, courriel_destinataire = ?, courriel_expediteur = ?, courriel_date = ?, is_send_ws = ?, commentaire_agent_terrain=?, commentaire_feedback=?, fk_id_satisfaction_feedback=?, nombre_feedback=? WHERE id_signalement=?";
+    private static final String SQL_QUERY_UPDATE = "UPDATE signalement_signalement SET id_signalement=?, suivi=?, date_creation=?, date_prevue_traitement=?, commentaire=? , fk_id_priorite=?, fk_id_type_signalement=?, fk_id_arrondissement = ?, fk_id_sector = ?, is_doublon = ?, service_fait_date_passage = ?, courriel_destinataire = ?, courriel_expediteur = ?, courriel_date = ?, is_send_ws = ?, commentaire_agent_terrain=? WHERE id_signalement=?";
+
+     /** The Constant SQL_QUERY_UPDATE_SATISFACTION_FORM_FIELDS. */
+    private static final String SQL_QUERY_UPDATE_SATISFACTION_FORM_FIELDS = "UPDATE signalement_signalement SET commentaire_feedback=?, fk_id_satisfaction_feedback=?, nombre_feedback=? WHERE id_signalement=?";
 
     /** The Constant SQL_QUERY_SELECT_ALL. */
     private static final String SQL_QUERY_SELECT_ALL = "SELECT id_signalement, suivi, date_creation, date_prevue_traitement, commentaire, annee, mois, numero, prefix, fk_id_priorite, fk_id_arrondissement, fk_id_type_signalement, fk_id_sector, is_doublon, is_send_ws FROM signalement_signalement";
@@ -602,10 +605,6 @@ public class SignalementDAO implements ISignalementDAO
         daoUtil.setTimestamp( nIndex++, signalement.getCourrielDate( ) );
         daoUtil.setBoolean( nIndex++, signalement.getIsSendWS( ) );
         daoUtil.setString( nIndex++, signalement.getCommentaireAgentTerrain( ) );
-        daoUtil.setString( nIndex++, signalement.getCommentaireFeedback( ) );
-        daoUtil.setInt( nIndex++, signalement.getSatisfactionFeedback( ).getIdSatisfactionFeedback( ) );
-        daoUtil.setInt( nIndex++, signalement.getNombreFeedback( ) );
-
         daoUtil.setLong( nIndex++, signalement.getId( ) );
 
         daoUtil.executeUpdate( );
@@ -733,12 +732,11 @@ public class SignalementDAO implements ISignalementDAO
         signalement.setCommentaireAgentTerrain( daoUtil.getString( nIndex++ ) );
         signalement.setCommentaireFeedback( daoUtil.getString( nIndex++ ) );
         int lIdSatisfactionFeedback = daoUtil.getInt( nIndex++ );
-        if ( lIdSatisfactionFeedback > 0 )
-        {
-            SatisfactionFeedback satisfactionFeedback = new SatisfactionFeedback( );
-            satisfactionFeedback.setIdSatisfactionFeedback( lIdSatisfactionFeedback );
-            signalement.setSatisfactionFeedback( satisfactionFeedback );
-        }
+
+        SatisfactionFeedback satisfactionFeedback = new SatisfactionFeedback( );
+        satisfactionFeedback.setIdSatisfactionFeedback( lIdSatisfactionFeedback );
+        signalement.setSatisfactionFeedback( satisfactionFeedback );
+
         signalement.setNombreFeedback( daoUtil.getInt( nIndex++ ) );
 
         return signalement;
@@ -3167,4 +3165,23 @@ public class SignalementDAO implements ISignalementDAO
 
         }
     }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void updateSatisfactionFormFields( Signalement signalement )
+    {
+
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE_SATISFACTION_FORM_FIELDS );
+        int nIndex = 1;
+
+        daoUtil.setString( nIndex++, signalement.getCommentaireFeedback( ) );
+        daoUtil.setInt( nIndex++, signalement.getSatisfactionFeedback( ).getIdSatisfactionFeedback( ) );
+        daoUtil.setInt( nIndex++, signalement.getNombreFeedback( ) );
+        daoUtil.setLong( nIndex++, signalement.getId( ) );
+
+        daoUtil.executeUpdate( );
+        daoUtil.close( );
+    }
+
 }
