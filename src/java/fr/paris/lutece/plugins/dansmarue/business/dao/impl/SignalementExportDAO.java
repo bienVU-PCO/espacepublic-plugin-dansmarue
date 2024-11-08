@@ -72,7 +72,7 @@ public class SignalementExportDAO implements ISignalementExportDAO
 
     /** The Constant SQL_QUERY_SELECTALL. */
     // SQL QUERIES
-    private static final String SQL_QUERY_SELECTALL = "SELECT numero, priorite, type_signalement, alias, alias_mobile, direction, quartier, adresse, coord_x, coord_y, arrondissement, secteur, date_creation, heure_creation, etat, mail_usager, commentaire_usager, nb_photos, raisons_rejet, nb_suivis, nb_felicitations, date_cloture, is_photo_service_fait, mail_destinataire_courriel, courriel_expediteur, date_envoi_courriel, id_mail_service_fait, executeur_service_fait, date_derniere_action, date_prevu_traitement, commentaire_agent_terrain, executeur_rejet, executeur_mise_surveillance, nb_requalifications, id_signalement "
+    private static final String SQL_QUERY_SELECTALL = "SELECT numero, priorite, type_signalement, alias, alias_mobile, direction, quartier, adresse, coord_x, coord_y, arrondissement, secteur, date_creation, heure_creation, etat, mail_usager, commentaire_usager, nb_photos, raisons_rejet, nb_suivis, nb_felicitations, date_cloture, is_photo_service_fait, mail_destinataire_courriel, courriel_expediteur, date_envoi_courriel, id_mail_service_fait, executeur_service_fait, date_derniere_action, date_prevu_traitement, commentaire_agent_terrain, executeur_rejet, executeur_mise_surveillance, nb_requalifications, id_signalement, date_requalification, heure_requalification, date_programme, heure_programme "
             + "FROM  signalement_export";
 
     /** The Constant SQL_QUERY_SEARCH_ID. */
@@ -306,7 +306,11 @@ public class SignalementExportDAO implements ISignalementExportDAO
             exportReport.setExecuteurRejet( daoUtil.getString( nIndex++ ) );
             exportReport.setExecuteurMiseSurveillance( daoUtil.getString( nIndex++ ) );
             exportReport.setNbRequalifications( daoUtil.getInt( nIndex++ ) );
-            exportReport.setIdSignalement( daoUtil.getInt( nIndex ) );
+            exportReport.setIdSignalement( daoUtil.getInt( nIndex++ ) );
+            exportReport.setDateRequalification( daoUtil.getString( nIndex++ ) );
+            exportReport.setHeureRequalification( daoUtil.getString( nIndex++ ) );
+            exportReport.setDateEtatProgramme( daoUtil.getString( nIndex++ ) );
+            exportReport.setHeureEtatProgramme( daoUtil.getString( nIndex ) );
 
             exportList.add( exportReport );
 
@@ -389,7 +393,12 @@ public class SignalementExportDAO implements ISignalementExportDAO
             exportReport.setCommentairAgentTerrain( daoUtil.getString( nIndex++ ) );
             exportReport.setExecuteurRejet( daoUtil.getString( nIndex++ ) );
             exportReport.setExecuteurMiseSurveillance( daoUtil.getString( nIndex++ ) );
-            exportReport.setNbRequalifications( daoUtil.getInt( nIndex ) );
+            exportReport.setNbRequalifications( daoUtil.getInt( nIndex++ ) );
+            exportReport.setIdSignalement( daoUtil.getInt( nIndex++ ) );
+            exportReport.setDateRequalification( daoUtil.getString( nIndex++ ) );
+            exportReport.setHeureRequalification( daoUtil.getString( nIndex++ ) );
+            exportReport.setDateEtatProgramme( daoUtil.getString( nIndex++ ) );
+            exportReport.setHeureEtatProgramme( daoUtil.getString( nIndex ) );
 
             exportList.add( exportReport );
 
