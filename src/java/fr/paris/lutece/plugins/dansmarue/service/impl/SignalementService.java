@@ -54,39 +54,13 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
 
+import fr.paris.lutece.plugins.dansmarue.business.dao.*;
+import fr.paris.lutece.plugins.dansmarue.business.entities.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.util.DigestUtils;
 
-import fr.paris.lutece.plugins.dansmarue.business.dao.IAdresseDAO;
-import fr.paris.lutece.plugins.dansmarue.business.dao.IConseilQuartierDao;
-import fr.paris.lutece.plugins.dansmarue.business.dao.IObservationRejetDAO;
-import fr.paris.lutece.plugins.dansmarue.business.dao.IPhotoDAO;
-import fr.paris.lutece.plugins.dansmarue.business.dao.IPrioriteDAO;
-import fr.paris.lutece.plugins.dansmarue.business.dao.ISignalementDAO;
-import fr.paris.lutece.plugins.dansmarue.business.dao.ISignalementSuiviDAO;
-import fr.paris.lutece.plugins.dansmarue.business.dao.ISignaleurDAO;
-import fr.paris.lutece.plugins.dansmarue.business.dao.ITaskNotificationConfigDAO;
-import fr.paris.lutece.plugins.dansmarue.business.dao.ITypeSignalementDAO;
-import fr.paris.lutece.plugins.dansmarue.business.entities.Adresse;
-import fr.paris.lutece.plugins.dansmarue.business.entities.Arrondissement;
-import fr.paris.lutece.plugins.dansmarue.business.entities.ConseilQuartier;
-import fr.paris.lutece.plugins.dansmarue.business.entities.DashboardPeriod;
-import fr.paris.lutece.plugins.dansmarue.business.entities.EtatSignalement;
-import fr.paris.lutece.plugins.dansmarue.business.entities.ObservationRejet;
-import fr.paris.lutece.plugins.dansmarue.business.entities.PhotoDMR;
-import fr.paris.lutece.plugins.dansmarue.business.entities.Priorite;
-import fr.paris.lutece.plugins.dansmarue.business.entities.ServiceFaitMasseFilter;
-import fr.paris.lutece.plugins.dansmarue.business.entities.Signalement;
-import fr.paris.lutece.plugins.dansmarue.business.entities.SignalementDashboardFilter;
-import fr.paris.lutece.plugins.dansmarue.business.entities.SignalementFilter;
-import fr.paris.lutece.plugins.dansmarue.business.entities.SignalementRequalification;
-import fr.paris.lutece.plugins.dansmarue.business.entities.SignalementSuivi;
-import fr.paris.lutece.plugins.dansmarue.business.entities.Signaleur;
-import fr.paris.lutece.plugins.dansmarue.business.entities.SiraUser;
-import fr.paris.lutece.plugins.dansmarue.business.entities.TableauDeBordFilter;
-import fr.paris.lutece.plugins.dansmarue.business.entities.TypeSignalement;
 import fr.paris.lutece.plugins.dansmarue.business.exceptions.AlreadyFollowedException;
 import fr.paris.lutece.plugins.dansmarue.business.exceptions.InvalidStateActionException;
 import fr.paris.lutece.plugins.dansmarue.business.exceptions.NonExistentFollowItem;
@@ -267,6 +241,9 @@ public class SignalementService implements ISignalementService
     /** The Constant PARAMETER_SUIVI. */
     private static final String                 PARAMETER_SUIVI                              = "suivi";
 
+    /** The Constant PARAMETER_FORMULAIRE_SATISFACTION. */
+    private static final String                 PARAMETER_FORMULAIRE_SATISFACTION                             = "formulaireSatisfaction";
+
     /** The Constant PARAMETER_TOKEN. */
     private static final String                 PARAMETER_TOKEN                              = "token";
 
@@ -375,6 +352,11 @@ public class SignalementService implements ISignalementService
     @Inject
     private ISignaleurService                   _signaleurService;
 
+    /** The _satisfactionFeedbackDAO dao. */
+    @Inject
+    @Named( "signalement.satisfactionFeedbackDAO" )
+    private ISatisfactionFeedbackDAO _satisfactionFeedbackDAO;
+
     /**
      * {@inheritDoc}
      */
@@ -436,6 +418,12 @@ public class SignalementService implements ISignalementService
         if ( signalement == null )
         {
             return null;
+        }
+
+        Plugin pluginSignalement = PluginService.getPlugin( SignalementPlugin.PLUGIN_NAME );
+        if ( signalement.getSatisfactionFeedback( ) != null && signalement.getSatisfactionFeedback( ).getIdSatisfactionFeedback( ) != 0 )
+        {
+            signalement.setSatisfactionFeedback( _satisfactionFeedbackDAO.load( signalement.getSatisfactionFeedback( ).getIdSatisfactionFeedback( ), pluginSignalement ) );
         }
 
         // get his priority
@@ -1403,6 +1391,8 @@ public class SignalementService implements ISignalementService
     {
         Plugin pluginSignalement = PluginService.getPlugin( SignalementPlugin.PLUGIN_NAME );
         Signalement signalement = _signalementDAO.getSignalementByToken( token, pluginSignalement );
+        signalement = _signalementDAO.loadById( signalement.getId( ) );
+
         if ( signalement != null )
         {
             signalement = getSignalement( signalement.getId( ) );
@@ -2325,5 +2315,30 @@ public class SignalementService implements ISignalementService
         }
 
         return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getLienFormulaireSatisfaction( Signalement signalement, HttpServletRequest request )
+    {
+        UrlItem urlItem;
+
+        urlItem = new UrlItem( AppPropertiesService.getProperty( PROPERTY_BASE_TS_URL ) + JSP_PORTAL );
+
+        urlItem.addParameter( PARAMETER_PAGE, PARAMETER_FORMULAIRE_SATISFACTION );
+        urlItem.addParameter( PARAMETER_TOKEN, signalement.getToken( ) );
+
+        return urlItem.getUrl( );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void updateSatisfactionFormFields( Signalement signalement )
+    {
+        _signalementDAO.updateSatisfactionFormFields( signalement );
     }
 }

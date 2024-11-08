@@ -161,13 +161,37 @@
          <artifactId>assertj-core</artifactId>
          <version>3.19.0</version>
      </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.13.2</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.13.2</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <version>RELEASE</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.13.2</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
   <repositories>
         <repository>
             <id>luteceReleaseRepository</id>
             <name>luteceReleaseRepository</name>
-            <url>http://dev.lutece.paris.fr/nexus/content/groups/maven_repository/</url>
+            <url>https://dev.lutece.paris.fr/nexus/content/groups/maven_repository/</url>
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
@@ -175,11 +199,11 @@
         <repository>
             <id>luteceSnapshotRepository</id>
             <name>luteceSnapshotRepository</name>
-            <url>http://dev.lutece.paris.fr/nexus/content/groups/snapshot_repository/</url>
+            <url>https://dev.lutece.paris.fr/nexus/content/groups/snapshot_repository/</url>
             <snapshots>
                 <enabled>true</enabled>
             </snapshots>
-        </repository>       
+        </repository>
     </repositories>
 
   <build>

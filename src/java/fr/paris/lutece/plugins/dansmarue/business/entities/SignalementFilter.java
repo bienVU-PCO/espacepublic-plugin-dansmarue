@@ -130,6 +130,9 @@ public class SignalementFilter implements Serializable
     /** The list id quartier. */
     private List<Integer> _listIdQuartier;
 
+    /** The n id satisfaction feedback. */
+    private int _nIdSatisfactionFeedback;
+
     /**
      * Mail dernier interveant sur l'anomalie.
      */
@@ -140,7 +143,7 @@ public class SignalementFilter implements Serializable
 
     /** The list orders. */
     private List<Order> _listOrders = new ArrayList<>( );
-    
+
     /** The minimum id. */
     private int _nMinId;
 
@@ -801,7 +804,7 @@ public class SignalementFilter implements Serializable
     {
         _nIdFdt = nIdFdt;
     }
-    
+
     public int getMinId( )
     {
         return _nMinId;
@@ -810,5 +813,15 @@ public class SignalementFilter implements Serializable
     public void setMinId( int _nMinId )
     {
         this._nMinId = _nMinId;
+    }
+
+    public int getIdSatisfactionFeedback( )
+    {
+        return _nIdSatisfactionFeedback;
+    }
+
+    public void setIdSatisfactionFeedback( int nIdSatisfactionFeedback )
+    {
+        this._nIdSatisfactionFeedback = nIdSatisfactionFeedback;
     }
 }

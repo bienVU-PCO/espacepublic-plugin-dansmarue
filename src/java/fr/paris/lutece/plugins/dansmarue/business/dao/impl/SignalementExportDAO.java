@@ -42,17 +42,11 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import fr.paris.lutece.plugins.dansmarue.business.entities.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 
 import fr.paris.lutece.plugins.dansmarue.business.dao.ISignalementExportDAO;
-import fr.paris.lutece.plugins.dansmarue.business.entities.Adresse;
-import fr.paris.lutece.plugins.dansmarue.business.entities.EtatSignalement;
-import fr.paris.lutece.plugins.dansmarue.business.entities.PhotoDMR;
-import fr.paris.lutece.plugins.dansmarue.business.entities.Priorite;
-import fr.paris.lutece.plugins.dansmarue.business.entities.Signalement;
-import fr.paris.lutece.plugins.dansmarue.business.entities.SignalementFilter;
-import fr.paris.lutece.plugins.dansmarue.business.entities.Signaleur;
 import fr.paris.lutece.plugins.dansmarue.commons.Order;
 import fr.paris.lutece.plugins.dansmarue.commons.dao.PaginationProperties;
 import fr.paris.lutece.plugins.dansmarue.service.dto.SignalementExportCSVDTO;
@@ -72,14 +66,14 @@ public class SignalementExportDAO implements ISignalementExportDAO
 
     /** The Constant SQL_QUERY_SELECTALL. */
     // SQL QUERIES
-    private static final String SQL_QUERY_SELECTALL = "SELECT numero, priorite, type_signalement, alias, alias_mobile, direction, quartier, adresse, coord_x, coord_y, arrondissement, secteur, date_creation, heure_creation, etat, mail_usager, commentaire_usager, nb_photos, raisons_rejet, nb_suivis, nb_felicitations, date_cloture, is_photo_service_fait, mail_destinataire_courriel, courriel_expediteur, date_envoi_courriel, id_mail_service_fait, executeur_service_fait, date_derniere_action, date_prevu_traitement, commentaire_agent_terrain, executeur_rejet, executeur_mise_surveillance, nb_requalifications, id_signalement, date_requalification, heure_requalification, date_programme, heure_programme "
+    private static final String SQL_QUERY_SELECTALL = "SELECT numero, priorite, type_signalement, alias, alias_mobile, direction, quartier, adresse, coord_x, coord_y, arrondissement, secteur, date_creation, heure_creation, etat, mail_usager, commentaire_usager, nb_photos, raisons_rejet, nb_suivis, nb_felicitations, date_cloture, is_photo_service_fait, mail_destinataire_courriel, courriel_expediteur, date_envoi_courriel, id_mail_service_fait, executeur_service_fait, date_derniere_action, date_prevu_traitement, commentaire_agent_terrain, executeur_rejet, executeur_mise_surveillance, nb_requalifications, id_signalement, commentaire_feedback, nature_feedback, date_requalification, heure_requalification, date_programme, heure_programme "
             + "FROM  signalement_export";
 
     /** The Constant SQL_QUERY_SEARCH_ID. */
     private static final String SQL_QUERY_SEARCH_ID = "SELECT numero FROM  signalement_export";
 
     private static final String SQL_QUERY_SELECTALL_SEARCH = "SELECT se.id_signalement , se.numero, se.priorite, se.type_signalement, se.direction, se.adresse, se.coord_x, se.coord_y, se.date_creation, se.etat, se.mail_usager, se.commentaire_usager,"
-            + " se.nb_suivis, se.date_prevu_traitement, se.commentaire_agent_terrain, ss.is_send_ws, ws.id_state, sp.vue_photo , sp.image_thumbnail, sp.id_photo, wa.id_action, wa.name, wa.id_icon"
+            + " se.nb_suivis, se.date_prevu_traitement, se.commentaire_agent_terrain, ss.is_send_ws, ws.id_state, sp.vue_photo , sp.image_thumbnail, sp.id_photo, wa.id_action, wa.name, wa.id_icon, se.commentaire_feedback, se.nombre_feedback, se.nature_feedback, ss.fk_id_satisfaction_feedback "
             + " FROM  signalement_export se" + " LEFT OUTER JOIN signalement_photo sp on sp.fk_id_signalement = se.id_signalement"
             + " inner join signalement_signalement ss on ss.id_signalement = se.id_signalement" + " inner join workflow_state ws on ws.name = se.etat"
             + " LEFT OUTER JOIN workflow_action wa on wa.id_state_before = ws.id_state";
@@ -238,6 +232,8 @@ public class SignalementExportDAO implements ISignalementExportDAO
         _ordersMap.put( "photo.id_photo", "nb_photos" );
         _ordersMap.put( "signalement.commentaireAgentTerrain", "commentaire_agent_terrain" );
         _ordersMap.put( "signalement.date_programmation", "date_prevu_traitement" );
+        _ordersMap.put( "signalement.nature_feedback", "nature_feedback" );
+        _ordersMap.put( "signalement.commentaire_feedback", "commentaire_feedback" );
     }
 
     /**
@@ -307,6 +303,8 @@ public class SignalementExportDAO implements ISignalementExportDAO
             exportReport.setExecuteurMiseSurveillance( daoUtil.getString( nIndex++ ) );
             exportReport.setNbRequalifications( daoUtil.getInt( nIndex++ ) );
             exportReport.setIdSignalement( daoUtil.getInt( nIndex++ ) );
+            exportReport.setCommentaireFeedback( daoUtil.getString( nIndex++ ) );
+            exportReport.setSatisfactionFeedback( daoUtil.getString( nIndex++ ) );
             exportReport.setDateRequalification( daoUtil.getString( nIndex++ ) );
             exportReport.setHeureRequalification( daoUtil.getString( nIndex++ ) );
             exportReport.setDateEtatProgramme( daoUtil.getString( nIndex++ ) );
@@ -395,6 +393,8 @@ public class SignalementExportDAO implements ISignalementExportDAO
             exportReport.setExecuteurMiseSurveillance( daoUtil.getString( nIndex++ ) );
             exportReport.setNbRequalifications( daoUtil.getInt( nIndex++ ) );
             exportReport.setIdSignalement( daoUtil.getInt( nIndex++ ) );
+            exportReport.setCommentaireFeedback( daoUtil.getString( nIndex++ ) );
+            exportReport.setSatisfactionFeedback( daoUtil.getString( nIndex++ ) );            
             exportReport.setDateRequalification( daoUtil.getString( nIndex++ ) );
             exportReport.setHeureRequalification( daoUtil.getString( nIndex++ ) );
             exportReport.setDateEtatProgramme( daoUtil.getString( nIndex++ ) );
@@ -530,13 +530,21 @@ public class SignalementExportDAO implements ISignalementExportDAO
                     exportReport.setDatePrevueTraitement( daoUtil.getString( nIndex++ ) );
                     exportReport.setCommentaireAgentTerrain( daoUtil.getString( nIndex++ ) );
                     exportReport.setSendWs( daoUtil.getBoolean( nIndex++ ) );
-                    exportReport.setIdState( daoUtil.getInt( nIndex ) );
+                    exportReport.setIdState( daoUtil.getInt( nIndex++ ) );
 
                     List<PhotoDMR> listPhotos = new ArrayList<>( );
                     exportReport.setPhotos( addPhotosToSignalement( daoUtil, listPhotos ) );
 
                     List<Action> listActions = new ArrayList<>( );
                     exportReport.setListActionAvailable( addActionToSignalement( daoUtil, listActions ) );
+
+                    exportReport.setCommentaireFeedback( daoUtil.getString( nIndex++ ) );
+                    exportReport.setNombreFeedback( daoUtil.getInt( nIndex++ ) );
+
+                    SatisfactionFeedback satisfactionFeedback = new SatisfactionFeedback( );
+                    satisfactionFeedback.setLabel( daoUtil.getString( nIndex++ ) );
+                    satisfactionFeedback.setIdSatisfactionFeedback( daoUtil.getInt( nIndex++ ) );
+                    exportReport.setSatisfactionFeedback( satisfactionFeedback );
 
                     listSignalementFind.add( exportReport );
                 }

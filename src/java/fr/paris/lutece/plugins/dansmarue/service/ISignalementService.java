@@ -440,8 +440,8 @@ public interface ISignalementService
      * @return List of all reports created by this user
      */
     List<Signalement> getSignalementsByEmail( String guid, boolean isResolved );
-    
-   
+
+
     /**
      * Gets the signalements service fait by email agent.
      *
@@ -768,4 +768,21 @@ public interface ISignalementService
      * @return the state if date indicated
      */
     EtatSignalement getStateIfDateIndicated( SignalementFilter signalementFilter );
+
+    /**
+     * Returns the link of the satisfaction form.
+     *
+     * @param request
+     *            HttpServletRequest
+     * @return the tracking link
+     */
+    String getLienFormulaireSatisfaction( Signalement signalement, HttpServletRequest request );
+
+    /**
+     * Updates signalement with satisfaction form info
+     *
+     * @param signalement the signalement
+     */
+    void updateSatisfactionFormFields( Signalement signalement );
+
 }

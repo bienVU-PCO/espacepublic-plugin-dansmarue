@@ -38,7 +38,7 @@ function getSigMarkers(){
 		
 		var marker = L.marker([signalement.lat,signalement.lng], {
           icon: new L.AwesomeNumberMarkers({
-            number: signalementNumber, 
+            number: signalementNumber,
             markerColor: color
         })});
 		
@@ -77,8 +77,8 @@ function getSigMarkers(){
 				leafletmap.options.maxZoom = 19;
 				$(".legendeGestionAno").html(getLegendPin())
 			}
-		  	
-		  	
+		  
+		  
 		  });
 	  
 	  //Ancienne librairie utilis�e pour l'impression, ne fonctionnais pas sur les vielles version de firefox. A voir pour utilisation si MAJ du navigateur
@@ -92,8 +92,8 @@ function getSigMarkers(){
 		}).addTo(leafletmap);*/
 		
 		//On enregistre le layer HeatLayer afin de pouvoir l'imprimer
-		L.Control.BrowserPrint.Utils.registerLayer( L.HeatLayer, "L.HeatLayer", function(layer) { 
-		 return L.heatLayer(layer.getLatLng(), layer.options); 
+		L.Control.BrowserPrint.Utils.registerLayer( L.HeatLayer, "L.HeatLayer", function(layer) {
+		 return L.heatLayer(layer.getLatLng(), layer.options);
 		} );
 
 		//Ajout de l'impression
@@ -135,7 +135,7 @@ function getSigMarkers(){
 		  onAdd: function (map) {
 		    var container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom export-leaflet ');
 		
-		    container.style.backgroundColor = 'white';     
+		    container.style.backgroundColor = 'white';
 		    container.style.width = '30px';
 		    container.style.height = '30px';
 		    container.innerHTML = "<a href='jsp/admin/plugins/signalement/DoGetExportForMap.jsp' title='EXPORT CSV'><span class='glyphicon glyphicon-save'></span></a>";
@@ -143,7 +143,7 @@ function getSigMarkers(){
 		    return container;
 		  }
 		});
-	  
+	 
 		//leafletmap.addControl(new printControl());
 		leafletmap.addControl(new exportControl());
 		
@@ -162,7 +162,7 @@ function updateSectorList(idDirection, isDeleteField){
             data: {
                 direction_id: idDirection
             },
-            success : function(data) { 
+            success : function(data) {
                 var text = "";
                 if(!(data.secteur_list === void 0))
                 {
@@ -174,15 +174,15 @@ function updateSectorList(idDirection, isDeleteField){
                                 var option = $("<option />").attr("value", secteur.id).text(secteur.value);
                                 if ($("#idSelectedSector").val() == secteur.id && !isDeleteField){
                                     option.attr("selected", "selected");
-                                }                                   
+                                }
                                 selectSecteurs.append(option);
-                        });     
+                        });
                     }
                 }
             },
             error:function (xhr, ajaxOptions, thrownError){
-                alert(thrownError); 
-            }   
+                alert(thrownError);
+            }
         });
     }
 }
@@ -200,8 +200,8 @@ function initType(){
 	// on recupere l id de cette option
     var valeurAsoumettre = elementOfListe.attr('id');
     
-	// on affecte la valeur de cette id au typeSignalement 
-    $('#idTypeSignalement').val(valeurAsoumettre);      
+	// on affecte la valeur de cette id au typeSignalement
+    $('#idTypeSignalement').val(valeurAsoumettre);
 }
 
 function initTypeValue (){
@@ -219,8 +219,8 @@ function initTypeValue (){
 	// on recupere l id de cette option
     var valeurAffiche = elementOfListe.attr('value');
     
-	// on affecte la valeur de cette id au typeSignalement 
-    $('#typeSignalements').attr("value",valeurAffiche);    
+	// on affecte la valeur de cette id au typeSignalement
+    $('#typeSignalements').attr("value",valeurAffiche);
 	
 }
 
@@ -245,7 +245,7 @@ $(document).ready(function() {
 			$(".leaflet-control-zoom-out").prop('title', 'Dezoomer');
 		});
 	</#if>
-    
+ 
 	var isOptionAvance = false;
 	$(".display-advanced-search").click(function(){
 		$(".advanced-search-block").toggleClass("hidden");
@@ -316,7 +316,7 @@ $(document).ready(function() {
 	function select_all_states() {
 		var checkboxes = $( "label[checkType='etat'] > input");
 		$( "label[checkType='etat']").addClass("active");
-	  
+	 
 		for (var i = 0; i < checkboxes.length; i++) {
 		  checkboxes[i].checked = true
 		}
@@ -335,7 +335,7 @@ $(document).ready(function() {
 	function select_all_arrondissement() {
 		var checkboxes = $( "label[checkType='arrondissement'] > input");
 		$( "label[checkType='arrondissement']").addClass("active");
-	  
+	 
 		for (var i = 0; i < checkboxes.length; i++) {
 		  checkboxes[i].checked = true
 		}
@@ -352,7 +352,7 @@ $(document).ready(function() {
 
 </script>
 <link rel="stylesheet" href="css/plugins/signalement/signalement.css" type="text/css"/>
-<link rel="stylesheet" href="js/jquery/plugins/autocomplete/jquery.autocomplete.css" type="text/css" media="screen, projection" />	
+<link rel="stylesheet" href="js/jquery/plugins/autocomplete/jquery.autocomplete.css" type="text/css" media="screen, projection" />
 
 <style>
 .ui-autocomplete {
@@ -405,17 +405,17 @@ $(document).ready(function() {
 								<label class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
 									for="filter_type">#i18n{dansmarue.reportingList.type}
 								</label><span id="firt_filter"></span>
-								<div  class="col-xs-12 col-sm-12 col-md-12 col-lg-12 ">	
-										
+								<div  class="col-xs-12 col-sm-12 col-md-12 col-lg-12 ">
+									
 									<input  class="form-control input-sm" id="typeSignalements" value="${idTypeSignalement!}" defaultValue="${(filter.idTypeSignalement)!}"  type="text" placeholder="" maxlength="255" onchange='initType();'/>
 									
 									<input id="idTypeSignalement" name="idTypeSignalement" defaultValue="-1"  value="" type="hidden" />
 									
-									<datalist id="idTypeSignalements">											
+									<datalist id="idTypeSignalements">
 										<#list type_list as type>
 											<option id="${type.id}" value="${type.formatTypeSignalement}">${type.formatTypeSignalement}</option>
 										</#list>
-									</datalist>														
+									</datalist>
 								</div>
 							</div>
 							<div class="form-group">
@@ -468,14 +468,14 @@ $(document).ready(function() {
 										<select name="idFdt"  id="idFdt" class="selectpicker show-menu-arrow form-control" data-size="10" data-actions-box="true" data-live-search="true">
 											<option></option>
 											<#list feuille_de_tournee_list as feuilleDeTournee>
-												<option value="${feuilleDeTournee.id}" 
+												<option value="${feuilleDeTournee.id}"
 													<#if filter.idFdt?? && filter.idFdt==feuilleDeTournee.id>selected</#if> >
 													${feuilleDeTournee.nom}
 												</option>
 											</#list>
 										</select>
 									<#else>
-										#i18n{dansmarue.reportingList.listEmpty} 
+										#i18n{dansmarue.reportingList.listEmpty}
 									</#if>
 								</div>
 								
@@ -606,7 +606,7 @@ $(document).ready(function() {
 										<label class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
 											for="filter_arrondissement">#i18n{dansmarue.reportingList.quartier}
 										</label>
-											
+										
 										<div id="" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" data-toggle="buttons">
 											<select name="listIdQuartierParam"  id="conseilQuartier" class="selectpicker show-menu-arrow form-control" data-width="300px" data-size="10" multiple data-actions-box="true" data-live-search="true">
 												<#list conseilQuartier_list as conseilQuartier>
@@ -669,7 +669,7 @@ $(document).ready(function() {
 								</div>
 							</div>
 							<style>
-								
+							
 							</style>
 							<div class="form-group">
 								<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -746,7 +746,7 @@ $(document).ready(function() {
 							name="exportcsv" class="btn btn-xs btn-primary">
 							<i class="glyphicon glyphicon-save"></i>
 						</button>
-						</@estAutoriseMacro> 
+						</@estAutoriseMacro>
 						
 						<#if hasSignalementPrestataire >
 						
@@ -757,7 +757,7 @@ $(document).ready(function() {
 								id="button-fait-masse" name="servicefait"
 								title="#i18n{dansmarue.caseList.ServiceFaitMasse}" disabled>
 								<i class="glyphicon glyphicon-ok"></i>
-							</button>						
+							</button>
 							<button class="btn btn-xs btn-primary" type="submit" value="5"
 								id="button-programmer-masse" name="programmer"
 								title="#i18n{dansmarue.caseList.ProgrammerMasse}" disabled>
@@ -834,7 +834,7 @@ $(document).ready(function() {
 									attribute="signalement.suivi"/>#i18n{dansmarue.reportingList.nbfollowers}</th>
 									<th><@sort
 									jsp_url="jsp/admin/plugins/signalement/ManageSignalement.jsp"
-									attribute="signaleur.mail"/>#i18n{dansmarue.reportingList.mail}</th> 
+									attribute="signaleur.mail"/>#i18n{dansmarue.reportingList.mail}</th>
 								<th><@sort
 									jsp_url="jsp/admin/plugins/signalement/ManageSignalement.jsp"
 									attribute="numSignalement"/>#i18n{dansmarue.reportingList.number}</th>
@@ -858,6 +858,12 @@ $(document).ready(function() {
 									attribute="signalement.commentaireAgentTerrain"/>#i18n{dansmarue.saveSignalement.commentaireAgentTerrain}</th>
 								<th><@sort
 									jsp_url="jsp/admin/plugins/signalement/ManageSignalement.jsp"
+									attribute="signalement.satisfaction_feedback"/>#i18n{dansmarue.reportingList.reponseSatisfaction}</th>
+                                <th><@sort
+									jsp_url="jsp/admin/plugins/signalement/ManageSignalement.jsp"
+									attribute="signalement.commentaire_feedback"/>#i18n{dansmarue.reportingList.commentaireSatisfaction}</th>
+                                <th><@sort
+									jsp_url="jsp/admin/plugins/signalement/ManageSignalement.jsp"
 									attribute="signalement.date_creation"/>#i18n{dansmarue.reportingList.creationDate}</th>
 								<th>#i18n{dansmarue.reportingList.etat}</th>
 							</tr>
@@ -877,7 +883,7 @@ $(document).ready(function() {
 								<td class="signalement-actions">
 									<#assign itemPerPage=paginator.itemsPerPage currentPage=paginator.pageCurrent>
 								  	<#assign signalementNumber=( ( paginator.pageCurrent-1 ) * paginator.itemsPerPage ) + signalement?index + 1>
-								  	 ${signalementNumber} 
+								  	 ${signalementNumber}
 								</td>
 								<td class="signalement-actions">
 								
@@ -886,7 +892,7 @@ $(document).ready(function() {
 									href="jsp/admin/plugins/signalement/ViewSignalement.jsp"
 									params="?signalement_id=${signalement.id}"
 									additionalParameters="title='#i18n{dansmarue.reportingList.alt.view}'"> <i
-									class="glyphicon glyphicon-eye-open"></i> </@a> 
+									class="glyphicon glyphicon-eye-open"></i> </@a>
 									
 									<#if !(signalement.isSendWS) >
 										<@a class="btn
@@ -895,7 +901,7 @@ $(document).ready(function() {
 										href="jsp/admin/plugins/signalement/ModifySignalement.jsp"
 										params="?signalement_id=${signalement.id}"
 										additionalParameters="title='#i18n{dansmarue.reportingList.alt.modify}'">
-										<i class="glyphicon glyphicon-edit"></i> </@a> 
+										<i class="glyphicon glyphicon-edit"></i> </@a>
 									</#if>
 									
 									<a
@@ -903,10 +909,10 @@ $(document).ready(function() {
 									title="#i18n{dansmarue.reportingList.alt.history}"
 									href="jsp/admin/plugins/signalement/ViewHistory.jsp?signalement_id=${signalement.id}">
 										<i class="glyphicon glyphicon-book"></i>
-									</a> 
+									</a>
 									
 									<#assign list_actions = map_actions[signalement.id?string] />
-									<#-- actions du workflow --> 
+									<#-- actions du workflow -->
 									<#list list_actions as action>
 									<#if
 									rights.estAutorise("*","*",(signalement.secteur.idSector)!?string)>
@@ -916,9 +922,9 @@ $(document).ready(function() {
 										<img width="24px"
 										src="image?resource_type=workflow_icon_img&id=${action.icon.id}"
 										alt="${action.name}" />
-									</a> </#if> 
+									</a> </#if>
 									
-									</#list> 
+									</#list>
 									
 									<#if !(signalement.isSendWS) >
 									<@a class="btn btn-xs btn-danger" visu=false
@@ -926,7 +932,7 @@ $(document).ready(function() {
 									href="jsp/admin/plugins/signalement/DeleteSignalement.jsp"
 									params="?signalement_id=${signalement.id}"
 									additionalParameters="title='#i18n{dansmarue.commons.supprimer}'">
-									<i class="glyphicon glyphicon-trash"></i> </@a> 
+									<i class="glyphicon glyphicon-trash"></i> </@a>
 									</#if>
 									
 									<@a class="btn
@@ -941,9 +947,9 @@ $(document).ready(function() {
 
 
 								<td class="signalement-photo">
-									<#if signalement.photos?has_content> 
+									<#if signalement.photos?has_content>
 										<#assign isHidden = false>
-										<#list signalement.photos as photo> 
+										<#list signalement.photos as photo>
 											<span id='${signalement.id}'>
 												<a href='#' data-toggle="modal" data-target="#imageModal" id-vue='${photo.vue}' id-signalement='${signalement.id}' image-url='${photo.imageUrl}' <#if isHidden> style='display: none'</#if>>
 													<img src="${photo.imageThumbnailUrl}" width="100" />
@@ -966,7 +972,9 @@ $(document).ready(function() {
 									params="?signalement_id=${signalement.id}">${signalement.adresses[0].adresse!}</@a></td>
 								<td class="signalement-comment">${signalement.commentaire!}</td>
 								<td class="signalement-comment">${signalement.commentaireAgentTerrain!}</td>
-								<td class="signalement-date">${signalement.dateCreation!}</td>
+                                <td class="signalement-feedback">${(signalement.satisfactionFeedback.label)!}</td>
+                                <td class="signalement-commentaire-feedback">${signalement.commentaireFeedback!}</td>
+                                <td class="signalement-date">${signalement.dateCreation!}</td>
 								<td class="signalement-etat">${map_etats[signalement.id?string]!} <#if map_programming_date[signalement.id?string]?? && map_programming_date[signalement.id?string]> <br> ${signalement.datePrevueTraitement!}</#if> </td>
 							</tr>
 							</#list> <#else>
@@ -993,7 +1001,7 @@ $(document).ready(function() {
 							name="exportcsv" class="btn btn-xs btn-primary">
 							<i class="glyphicon glyphicon-save"></i>
 						</button>
-						</@estAutoriseMacro> 
+						</@estAutoriseMacro>
 						
 						<#if hasSignalementPrestataire >
 						
@@ -1004,7 +1012,7 @@ $(document).ready(function() {
 								id="button-fait-masse" name="servicefait"
 								title="#i18n{dansmarue.caseList.ServiceFaitMasse}" disabled>
 								<i class="glyphicon glyphicon-ok"></i>
-							</button>						
+							</button>
 							<button class="btn btn-xs btn-primary" type="submit" value="5"
 								id="button-programmer-masse" name="programmer"
 								title="#i18n{dansmarue.caseList.ProgrammerMasse}" disabled>
@@ -1089,7 +1097,7 @@ $(document).ready(function() {
     function deleteFields()
     {
     	$("#isReinitSearch").val("1");
-		$("#formulaireDeRecherche").submit(); 
+		$("#formulaireDeRecherche").submit();
     }
 </script>
 
@@ -1113,7 +1121,7 @@ $(window).load(function() {
                     
                     $(this).click(function() {
                         var idImg = $(this).attr("src").split("id=")[1];
-                        var offsetGrandeImage = $("#grande"+idImg).offset().top; 
+                        var offsetGrandeImage = $("#grande"+idImg).offset().top;
                         $('html, body').animate({scrollTop:offsetGrandeImage});
                     });
                 });

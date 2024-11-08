@@ -165,6 +165,12 @@ public class SignalementExportCSVDTO
     /** The photos. */
     private List<PhotoDMR> _listPhotos = new ArrayList<>( );
 
+    /** commentaire feedback. */
+    private String _strCommentaireFeedback;
+
+    /** satisfaction feedback. */
+    private String _strSatisfactionFeedback;
+
     /**
      * Gets the tab all datas.
      *
@@ -179,7 +185,7 @@ public class SignalementExportCSVDTO
                 Integer.toString( getNbSuivis( ) ), Integer.toString( getNbFelicitations( ) ), getDateCloture( ),
                 isPhotoServiceFait( ) ? "Photo présente" : "Pas de photo", getMailDestinataireCourriel( ), getCourrielExpediteur( ), getDateEnvoiCourriel( ),
                 getIdMailServiceFait( ) != 0 ? getIdMailServiceFait( ).toString( ) : "", getExecuteurServiceFait( ), getDateDerniereAction( ),
-                getDatePrevuTraitement( ), getCommentairAgentTerrain( ), getExecuteurRejet( ), getExecuteurMiseSurveillance( ), getNbRequalifications( ),
+                getDatePrevuTraitement( ), getCommentairAgentTerrain( ), getExecuteurRejet( ), getExecuteurMiseSurveillance( ), getNbRequalifications( ), getSatisfactionFeedback( ), getCommentaireFeedback( ), StringUtils.isNotEmpty( getSatisfactionFeedback( ) )?"1":"0",
                 getDateRequalification( ), getHeureRequalification( ), getDateEtatProgramme( ), getHeureEtatProgramme( )
         };
     }
@@ -891,7 +897,7 @@ public class SignalementExportCSVDTO
 
     /**
      * Get number requalification.
-     * 
+     *
      * @return String value nbRequalification
      */
     public String getNbRequalifications( )
@@ -901,7 +907,7 @@ public class SignalementExportCSVDTO
 
     /**
      * Set requalification number.
-     * 
+     *
      * @param nbRequalifications
      *            nombre de requalification
      */
@@ -952,6 +958,47 @@ public class SignalementExportCSVDTO
         _listPhotos = pPhotos;
     }
 
+    /**
+     * Gets the commentaire feedback.
+     *
+     * @return _strCommentaireFeedback.
+     */
+    public String getCommentaireFeedback( )
+    {
+        return _strCommentaireFeedback;
+    }
+
+    /**
+     * Sets the commentaire feedback.
+     *
+     * @param strCommentaireFeedback
+     *            the new commentaire feedback
+     */
+    public void setCommentaireFeedback( String strCommentaireFeedback )
+    {
+        this._strCommentaireFeedback = strCommentaireFeedback;
+    }
+
+    /**
+     * Gets the satisfaction feedback.
+     *
+     * @return _strCommentaireFeedback.
+     */
+    public String getSatisfactionFeedback( )
+    {
+        return _strSatisfactionFeedback;
+    }
+
+    /**
+     * Sets the satisfaction feedback.
+     *
+     * @param strSatisfactionFeedback
+     *            the new satisfaction feedback
+     */
+    public void setSatisfactionFeedback( String strSatisfactionFeedback )
+    {
+        this._strSatisfactionFeedback = strSatisfactionFeedback;
+    }
 
     public String getDateRequalification() {
         return _strDateRequalification;
@@ -984,5 +1031,4 @@ public class SignalementExportCSVDTO
     public void setHeureEtatProgramme(String strHeureEtatProgramme) {
         this._strHeureEtatProgramme = strHeureEtatProgramme;
     }
-
 }

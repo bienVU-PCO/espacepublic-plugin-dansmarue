@@ -517,7 +517,7 @@ public interface ISignalementDAO
      * @return label prestataire.
      */
     String findLabelPrestataireSignalement( int idSignalement );
-    
+
     /**
      * Find signalement for Anonymization Daemon.
      *
@@ -526,5 +526,13 @@ public interface ISignalementDAO
      * @return list of signalement
      */
     public List<Integer> getIdSignalementForAnonymisationSignaleurDaemon ( int nbDays, String emailAno );
+
+    /**
+     * Updates signalement with satisfaction form info
+     *
+     * @param signalement the signalement
+     */
+    void updateSatisfactionFormFields( Signalement signalement );
+
 
 }

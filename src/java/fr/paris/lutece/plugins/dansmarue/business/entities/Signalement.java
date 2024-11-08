@@ -54,7 +54,7 @@ public class Signalement implements Serializable
 {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = -6605556413130882923L;
 
@@ -176,6 +176,15 @@ public class Signalement implements Serializable
 
     /** state name. */
     private String _strStateName;
+
+    /** commentaire feedback. */
+    private String _strCommentaireFeedback;
+
+    /** satisfaction feedback. */
+    private SatisfactionFeedback _satisfactionFeedback;
+
+    /** nombreFeedback. */
+    private int _nombreFeedback;
 
     /**
      * Sets the direction.
@@ -1044,7 +1053,7 @@ public class Signalement implements Serializable
 
     /**
      * Get list actions available.
-     * 
+     *
      * @return list action
      */
     public List<Action> getListActionAvailable( )
@@ -1105,4 +1114,44 @@ public class Signalement implements Serializable
         _strStateName = stateName;
     }
 
+    /**
+     * Gets the commentaire feedback.
+     *
+     * @return _strCommentaireFeedback.
+     */
+    public String getCommentaireFeedback( )
+    {
+        return _strCommentaireFeedback;
+    }
+
+    /**
+     * Sets the commentaire feedback.
+     *
+     * @param strCommentaireFeedback
+     *            the new commentaire feedback
+     */
+    public void setCommentaireFeedback( String strCommentaireFeedback )
+    {
+        this._strCommentaireFeedback = strCommentaireFeedback;
+    }
+
+    public SatisfactionFeedback getSatisfactionFeedback( )
+    {
+        return _satisfactionFeedback;
+    }
+
+    public void setSatisfactionFeedback( SatisfactionFeedback satisfactionFeedback )
+    {
+        this._satisfactionFeedback = satisfactionFeedback;
+    }
+
+    public int getNombreFeedback( )
+    {
+        return _nombreFeedback;
+    }
+
+    public void setNombreFeedback( int nombreFeedback )
+    {
+        this._nombreFeedback = nombreFeedback;
+    }
 }
