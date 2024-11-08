@@ -154,6 +154,14 @@ public class SignalementExportCSVDTO
 
     private Integer _nIdSignalement;
 
+    private String _strDateRequalification;
+
+    private String _strHeureRequalification;
+
+    private String _strDateEtatProgramme;
+
+    private String _strHeureEtatProgramme;
+
     /** The photos. */
     private List<PhotoDMR> _listPhotos = new ArrayList<>( );
 
@@ -177,7 +185,8 @@ public class SignalementExportCSVDTO
                 Integer.toString( getNbSuivis( ) ), Integer.toString( getNbFelicitations( ) ), getDateCloture( ),
                 isPhotoServiceFait( ) ? "Photo présente" : "Pas de photo", getMailDestinataireCourriel( ), getCourrielExpediteur( ), getDateEnvoiCourriel( ),
                 getIdMailServiceFait( ) != 0 ? getIdMailServiceFait( ).toString( ) : "", getExecuteurServiceFait( ), getDateDerniereAction( ),
-                getDatePrevuTraitement( ), getCommentairAgentTerrain( ), getExecuteurRejet( ), getExecuteurMiseSurveillance( ), getNbRequalifications( ), getSatisfactionFeedback( ), getCommentaireFeedback( ), StringUtils.isNotEmpty( getSatisfactionFeedback( ) )?"1":"0"
+                getDatePrevuTraitement( ), getCommentairAgentTerrain( ), getExecuteurRejet( ), getExecuteurMiseSurveillance( ), getNbRequalifications( ), getSatisfactionFeedback( ), getCommentaireFeedback( ), StringUtils.isNotEmpty( getSatisfactionFeedback( ) )?"1":"0",
+                getDateRequalification( ), getHeureRequalification( ), getDateEtatProgramme( ), getHeureEtatProgramme( )
         };
     }
 
@@ -989,5 +998,37 @@ public class SignalementExportCSVDTO
     public void setSatisfactionFeedback( String strSatisfactionFeedback )
     {
         this._strSatisfactionFeedback = strSatisfactionFeedback;
+    }
+
+    public String getDateRequalification() {
+        return _strDateRequalification;
+    }
+
+    public void setDateRequalification(String strDateRequalification) {
+        this._strDateRequalification = strDateRequalification;
+    }
+
+    public String getHeureRequalification() {
+        return _strHeureRequalification;
+    }
+
+    public void setHeureRequalification(String strHeureRequalification) {
+        this._strHeureRequalification = strHeureRequalification;
+    }
+
+    public String getDateEtatProgramme() {
+        return _strDateEtatProgramme;
+    }
+
+    public void setDateEtatProgramme(String strDateEtatProgramme) {
+        this._strDateEtatProgramme = strDateEtatProgramme;
+    }
+
+    public String getHeureEtatProgramme() {
+        return _strHeureEtatProgramme;
+    }
+
+    public void setHeureEtatProgramme(String strHeureEtatProgramme) {
+        this._strHeureEtatProgramme = strHeureEtatProgramme;
     }
 }

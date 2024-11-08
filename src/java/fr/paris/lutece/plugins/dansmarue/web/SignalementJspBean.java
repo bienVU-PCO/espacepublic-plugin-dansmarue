@@ -3489,7 +3489,8 @@ public class SignalementJspBean extends AbstractJspBean
                     "Raisons de rejet", "Nombre de suivis", "Nombre de félicitations", "Date de clôture", "Présence de photos de service fait",
                     "Mail du destinataire du courriel", "Expéditeur courriel", "Date envoi courriel", "Identifiant type de message service fait",
                     "Nom exécuteur service fait", "Date de dernière prise en compte", "Date de programmation", "Commentaire agent terrain", "Rejeté par",
-                    "Sous Surveillance par", "Nombre de requalifications", "Formulaire de satisfaction:réponse", "Formulaire de satisfaction:commentaire", "Complétion du formulaire"
+                    "Sous Surveillance par", "Nombre de requalifications", "Formulaire de satisfaction:réponse", "Formulaire de satisfaction:commentaire", "Complétion du formulaire",
+                    "Sous Surveillance par", "Nombre de requalifications", "Date de requalification", "Heure de requalification", "Date état programmé", "Heure état programmé"
             } );
             for ( SignalementExportCSVDTO signalementDTO : listeSignalementExportCSVDTO )
             {
@@ -4513,7 +4514,8 @@ public class SignalementJspBean extends AbstractJspBean
                         "Commentaire usager", "Nombre de photos", "Raisons de rejet", "Nombre de suivis", "Nombre de félicitations", "Date de clôture",
                         "Présence de photos de service fait", "Mail du destinataire du courriel", "Expéditeur courriel", "Date envoi courriel",
                         "Identifiant type de message service fait", "Nom exécuteur service fait", "Date de dernière prise en compte", "Date de programmation",
-                        "Commentaire agent terrain", "Rejeté par", "Sous Surveillance par", "Nombre de requalifications"
+                        "Commentaire agent terrain", "Rejeté par", "Sous Surveillance par", "Nombre de requalifications", "Date de requalification", "Heure de requalification",
+                        "Date état programmé", "Heure état programmé"
                 } );
                 int numPin = 1;
                 for ( SignalementExportCSVDTO signalementDTO : listeSignalementExportCSVDTO )
