@@ -538,6 +538,8 @@ public class SignalementExportDAO implements ISignalementExportDAO
                     List<Action> listActions = new ArrayList<>( );
                     exportReport.setListActionAvailable( addActionToSignalement( daoUtil, listActions ) );
 
+                    nIndex = 24;
+
                     exportReport.setCommentaireFeedback( daoUtil.getString( nIndex++ ) );
                     exportReport.setNombreFeedback( daoUtil.getInt( nIndex++ ) );
 
