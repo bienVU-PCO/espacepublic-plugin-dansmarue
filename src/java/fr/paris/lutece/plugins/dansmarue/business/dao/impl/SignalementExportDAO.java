@@ -42,11 +42,18 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import fr.paris.lutece.plugins.dansmarue.business.entities.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 
 import fr.paris.lutece.plugins.dansmarue.business.dao.ISignalementExportDAO;
+import fr.paris.lutece.plugins.dansmarue.business.entities.Adresse;
+import fr.paris.lutece.plugins.dansmarue.business.entities.EtatSignalement;
+import fr.paris.lutece.plugins.dansmarue.business.entities.PhotoDMR;
+import fr.paris.lutece.plugins.dansmarue.business.entities.Priorite;
+import fr.paris.lutece.plugins.dansmarue.business.entities.SatisfactionFeedback;
+import fr.paris.lutece.plugins.dansmarue.business.entities.Signalement;
+import fr.paris.lutece.plugins.dansmarue.business.entities.SignalementFilter;
+import fr.paris.lutece.plugins.dansmarue.business.entities.Signaleur;
 import fr.paris.lutece.plugins.dansmarue.commons.Order;
 import fr.paris.lutece.plugins.dansmarue.commons.dao.PaginationProperties;
 import fr.paris.lutece.plugins.dansmarue.service.dto.SignalementExportCSVDTO;
@@ -73,7 +80,7 @@ public class SignalementExportDAO implements ISignalementExportDAO
     private static final String SQL_QUERY_SEARCH_ID = "SELECT numero FROM  signalement_export";
 
     private static final String SQL_QUERY_SELECTALL_SEARCH = "SELECT se.id_signalement , se.numero, se.priorite, se.type_signalement, se.direction, se.adresse, se.coord_x, se.coord_y, se.date_creation, se.etat, se.mail_usager, se.commentaire_usager,"
-            + " se.nb_suivis, se.date_prevu_traitement, se.commentaire_agent_terrain, ss.is_send_ws, ws.id_state, sp.vue_photo , sp.image_thumbnail, sp.id_photo, wa.id_action, wa.name, wa.id_icon, se.commentaire_feedback, se.nombre_feedback, se.nature_feedback, ss.fk_id_satisfaction_feedback "
+            + " se.nb_suivis, se.date_prevu_traitement, se.commentaire_agent_terrain, ss.is_send_ws, ws.id_state, se.commentaire_feedback, se.nombre_feedback, se.nature_feedback, ss.fk_id_satisfaction_feedback, sp.vue_photo , sp.image_thumbnail, sp.id_photo, wa.id_action, wa.name, wa.id_icon "
             + " FROM  signalement_export se" + " LEFT OUTER JOIN signalement_photo sp on sp.fk_id_signalement = se.id_signalement"
             + " inner join signalement_signalement ss on ss.id_signalement = se.id_signalement" + " inner join workflow_state ws on ws.name = se.etat"
             + " LEFT OUTER JOIN workflow_action wa on wa.id_state_before = ws.id_state";
@@ -394,7 +401,7 @@ public class SignalementExportDAO implements ISignalementExportDAO
             exportReport.setNbRequalifications( daoUtil.getInt( nIndex++ ) );
             exportReport.setIdSignalement( daoUtil.getInt( nIndex++ ) );
             exportReport.setCommentaireFeedback( daoUtil.getString( nIndex++ ) );
-            exportReport.setSatisfactionFeedback( daoUtil.getString( nIndex++ ) );            
+            exportReport.setSatisfactionFeedback( daoUtil.getString( nIndex++ ) );
             exportReport.setDateRequalification( daoUtil.getString( nIndex++ ) );
             exportReport.setHeureRequalification( daoUtil.getString( nIndex++ ) );
             exportReport.setDateEtatProgramme( daoUtil.getString( nIndex++ ) );
@@ -532,12 +539,6 @@ public class SignalementExportDAO implements ISignalementExportDAO
                     exportReport.setSendWs( daoUtil.getBoolean( nIndex++ ) );
                     exportReport.setIdState( daoUtil.getInt( nIndex++ ) );
 
-                    List<PhotoDMR> listPhotos = new ArrayList<>( );
-                    exportReport.setPhotos( addPhotosToSignalement( daoUtil, listPhotos ) );
-
-                    List<Action> listActions = new ArrayList<>( );
-                    exportReport.setListActionAvailable( addActionToSignalement( daoUtil, listActions ) );
-
                     exportReport.setCommentaireFeedback( daoUtil.getString( nIndex++ ) );
                     exportReport.setNombreFeedback( daoUtil.getInt( nIndex++ ) );
 
@@ -545,6 +546,12 @@ public class SignalementExportDAO implements ISignalementExportDAO
                     satisfactionFeedback.setLabel( daoUtil.getString( nIndex++ ) );
                     satisfactionFeedback.setIdSatisfactionFeedback( daoUtil.getInt( nIndex++ ) );
                     exportReport.setSatisfactionFeedback( satisfactionFeedback );
+
+                    List<PhotoDMR> listPhotos = new ArrayList<>( );
+                    exportReport.setPhotos( addPhotosToSignalement( daoUtil, listPhotos ) );
+
+                    List<Action> listActions = new ArrayList<>( );
+                    exportReport.setListActionAvailable( addActionToSignalement( daoUtil, listActions ) );
 
                     listSignalementFind.add( exportReport );
                 }
@@ -556,7 +563,7 @@ public class SignalementExportDAO implements ISignalementExportDAO
         {
             return listSignalementFind.subList(
                     Math.min(listSignalementFind.size(), ( paginationProperties.getPageIndex( ) - 1 ) * paginationProperties.getItemsPerPage( ) ),
-                    Math.min(listSignalementFind.size(), ( paginationProperties.getPageIndex( ) - 1 ) * paginationProperties.getItemsPerPage( )  + paginationProperties.getItemsPerPage( ) ) );
+                    Math.min(listSignalementFind.size(), ( ( paginationProperties.getPageIndex( ) - 1 ) * paginationProperties.getItemsPerPage( ) )  + paginationProperties.getItemsPerPage( ) ) );
         }
         else
         {
@@ -576,9 +583,9 @@ public class SignalementExportDAO implements ISignalementExportDAO
     private List<PhotoDMR> addPhotosToSignalement( DAOUtil daoUtil, List<PhotoDMR> listPhotos )
     {
 
-        int indexVuePhoto = 18;
-        int indexPhotoMiniature = 19;
-        int indexIdPhoto = 20;
+        int indexVuePhoto = 22;
+        int indexPhotoMiniature = 23;
+        int indexIdPhoto = 24;
 
         long idPhoto = daoUtil.getLong( indexIdPhoto );
 
@@ -614,9 +621,9 @@ public class SignalementExportDAO implements ISignalementExportDAO
      */
     private List<Action> addActionToSignalement( DAOUtil daoUtil, List<Action> listAction )
     {
-        int indexIdAction = 21;
-        int indexActionName = 22;
-        int indexActionIconId = 23;
+        int indexIdAction = 25;
+        int indexActionName = 26;
+        int indexActionIconId = 27;
 
         int idAction = daoUtil.getInt( indexIdAction );
         if ( idAction > 0 )
