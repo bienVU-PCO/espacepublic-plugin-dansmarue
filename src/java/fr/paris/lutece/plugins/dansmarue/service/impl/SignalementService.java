@@ -54,13 +54,40 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
 
-import fr.paris.lutece.plugins.dansmarue.business.dao.*;
-import fr.paris.lutece.plugins.dansmarue.business.entities.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.util.DigestUtils;
 
+import fr.paris.lutece.plugins.dansmarue.business.dao.IAdresseDAO;
+import fr.paris.lutece.plugins.dansmarue.business.dao.IConseilQuartierDao;
+import fr.paris.lutece.plugins.dansmarue.business.dao.IObservationRejetDAO;
+import fr.paris.lutece.plugins.dansmarue.business.dao.IPhotoDAO;
+import fr.paris.lutece.plugins.dansmarue.business.dao.IPrioriteDAO;
+import fr.paris.lutece.plugins.dansmarue.business.dao.ISatisfactionFeedbackDAO;
+import fr.paris.lutece.plugins.dansmarue.business.dao.ISignalementDAO;
+import fr.paris.lutece.plugins.dansmarue.business.dao.ISignalementSuiviDAO;
+import fr.paris.lutece.plugins.dansmarue.business.dao.ISignaleurDAO;
+import fr.paris.lutece.plugins.dansmarue.business.dao.ITaskNotificationConfigDAO;
+import fr.paris.lutece.plugins.dansmarue.business.dao.ITypeSignalementDAO;
+import fr.paris.lutece.plugins.dansmarue.business.entities.Adresse;
+import fr.paris.lutece.plugins.dansmarue.business.entities.Arrondissement;
+import fr.paris.lutece.plugins.dansmarue.business.entities.ConseilQuartier;
+import fr.paris.lutece.plugins.dansmarue.business.entities.DashboardPeriod;
+import fr.paris.lutece.plugins.dansmarue.business.entities.EtatSignalement;
+import fr.paris.lutece.plugins.dansmarue.business.entities.ObservationRejet;
+import fr.paris.lutece.plugins.dansmarue.business.entities.PhotoDMR;
+import fr.paris.lutece.plugins.dansmarue.business.entities.Priorite;
+import fr.paris.lutece.plugins.dansmarue.business.entities.ServiceFaitMasseFilter;
+import fr.paris.lutece.plugins.dansmarue.business.entities.Signalement;
+import fr.paris.lutece.plugins.dansmarue.business.entities.SignalementDashboardFilter;
+import fr.paris.lutece.plugins.dansmarue.business.entities.SignalementFilter;
+import fr.paris.lutece.plugins.dansmarue.business.entities.SignalementRequalification;
+import fr.paris.lutece.plugins.dansmarue.business.entities.SignalementSuivi;
+import fr.paris.lutece.plugins.dansmarue.business.entities.Signaleur;
+import fr.paris.lutece.plugins.dansmarue.business.entities.SiraUser;
+import fr.paris.lutece.plugins.dansmarue.business.entities.TableauDeBordFilter;
+import fr.paris.lutece.plugins.dansmarue.business.entities.TypeSignalement;
 import fr.paris.lutece.plugins.dansmarue.business.exceptions.AlreadyFollowedException;
 import fr.paris.lutece.plugins.dansmarue.business.exceptions.InvalidStateActionException;
 import fr.paris.lutece.plugins.dansmarue.business.exceptions.NonExistentFollowItem;
@@ -421,7 +448,7 @@ public class SignalementService implements ISignalementService
         }
 
         Plugin pluginSignalement = PluginService.getPlugin( SignalementPlugin.PLUGIN_NAME );
-        if ( signalement.getSatisfactionFeedback( ) != null && signalement.getSatisfactionFeedback( ).getIdSatisfactionFeedback( ) != 0 )
+        if ( ( signalement.getSatisfactionFeedback( ) != null ) && ( signalement.getSatisfactionFeedback( ).getIdSatisfactionFeedback( ) != 0 ) )
         {
             signalement.setSatisfactionFeedback( _satisfactionFeedbackDAO.load( signalement.getSatisfactionFeedback( ).getIdSatisfactionFeedback( ), pluginSignalement ) );
         }
@@ -1181,12 +1208,21 @@ public class SignalementService implements ISignalementService
      * {@inheritDoc}
      */
     @Override
-    public List<Signalement> findAllSignalementInPerimeterWithInfo( Double lat, Double lng, Integer radius )
+    public List<Signalement> findAllSignalementInPerimeterWithInfo( Double lat, Double lng, Integer radius, String specificSignalementNumberSearch )
     {
+
+        List<Signalement> listAllSignalement = new ArrayList<>( );
+
+        if ( !StringUtils.isEmpty( specificSignalementNumberSearch ) )
+        {
+            Signalement signalement = getAnomalieByNumber( specificSignalementNumberSearch );
+            listAllSignalement.add( signalement );
+            return listAllSignalement;
+        }
+
         List<Integer> listStatus = getStatusToShowToPublic( );
 
         List<Integer> listIdSignalementInParameter = _signalementDAO.findAllSignalementInPerimeter( lat, lng, radius, listStatus );
-        List<Signalement> listAllSignalement = new ArrayList<>( );
 
         for ( Integer nIdSignalement : listIdSignalementInParameter )
         {
