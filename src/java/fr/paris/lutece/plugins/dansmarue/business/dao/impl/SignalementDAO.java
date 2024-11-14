@@ -129,7 +129,7 @@ public class SignalementDAO implements ISignalementDAO
     private static final String SQL_QUERY_ADD_FILTER_SECTOR_ALLOWED = " fk_id_sector IN (SELECT s.id_sector FROM unittree_sector s INNER JOIN unittree_unit_sector u ON s.id_sector = u.id_sector WHERE u.id_unit in ({0}))";
 
     /** The Constant SQL_QUERY_SELECT_SIGNALEMENT_BY_TOKEN. */
-    private static final String SQL_QUERY_SELECT_SIGNALEMENT_BY_TOKEN = "SELECT id_signalement, token FROM signalement_signalement WHERE token = ?";
+    private static final String SQL_QUERY_SELECT_SIGNALEMENT_BY_TOKEN = "SELECT id_signalement, token, nombre_feedback FROM signalement_signalement WHERE token = ?";
 
     /** SQL QUERY FOR WebServicePartnerDaemon. */
     private static final String SQL_QUERY_SELECT_ID_SIGNALEMENT_FOR_PARTNER_DEAMON = "SELECT DISTINCT id_signalement FROM signalement_signalement sis, workflow_resource_workflow wrw, workflow_resource_history wrh WHERE sis.id_signalement = wrw.id_resource AND wrw.id_state = ? AND sis.id_signalement = wrh.id_resource AND wrh.creation_date > current_date - integer 'NB_DAYS' ORDER BY sis.id_signalement DESC";
@@ -1756,7 +1756,8 @@ public class SignalementDAO implements ISignalementDAO
 
             signalement = new Signalement( );
             signalement.setId( daoUtil.getLong( nIndex++ ) );
-            signalement.setToken( daoUtil.getString( nIndex ) );
+            signalement.setToken( daoUtil.getString( nIndex++ ) );
+            signalement.setNombreFeedback( daoUtil.getInt( nIndex++ ) );
         }
 
         daoUtil.close( );
