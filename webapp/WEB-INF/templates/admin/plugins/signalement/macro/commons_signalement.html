@@ -20,7 +20,6 @@ rights.hasAutorisation(ressourceType, permissions, sector)> <#nested> </#if>
 <#macro inputUnitTree node parentLabel="" depth=0 domaine_fonctionnel={}>
 	<#if node?has_content>
 		<#if depth gt 0>
-		<div>
 			<option value="${node.unit.idUnit}"
 			<#if (domaine_fonctionnel.unitIds)?has_content>
 				<#if domaine_fonctionnel.unitIds?seq_contains(node.unit.idUnit)>
@@ -29,7 +28,6 @@ rights.hasAutorisation(ressourceType, permissions, sector)> <#nested> </#if>
 			</#if>
 			
 			>${getNodeLabel(node.unit.label,parentLabel)}</option>
-		</div>
 		</#if>
 		<#list node.subUnits as subNode>
 			<#if depth gt 0>
