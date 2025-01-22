@@ -7,6 +7,8 @@ CREATE TABLE signalement_satisfaction_feedback (
     PRIMARY KEY (id_satisfaction_feedback)
 );
 
+GRANT ALL PRIVILEGES ON TABLE signalement_satisfaction_feedback TO bienvu;
+
 INSERT INTO signalement_satisfaction_feedback(id_satisfaction_feedback, satisfaction_feedback) VALUES
 (1, 'Je remercie les agents pour la résolution de l’anomalie'),
 (2, 'Je considère que le signalement est traité seulement en partie' ),
