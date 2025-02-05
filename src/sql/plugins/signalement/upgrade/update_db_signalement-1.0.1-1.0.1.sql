@@ -16,6 +16,7 @@ declare
  NewHeureRequalification varchar(5) := '';
  NewDateEtatProgramme varchar(10) := '';
  NewHeureEtatProgramme varchar(5) := '';
+ NameLastAction varchar (255) :='';
 begin
     -- état
 	SELECT ws.name into NewEtat from workflow_state as ws where ws.id_state=new.id_state;
@@ -41,7 +42,9 @@ begin
 
 
 	-- date de requalification
-	if new.id_state IN ( select distinct id_state from workflow_action wa join workflow_state ws on wa.id_state_after = ws.id_state where wa.name like '%Requalifier%' and ws.name like '%Transféré à un tiers%' )
+	select wa.name into NameLastAction from workflow_resource_history wrh join workflow_action wa on wrh.id_action = wa.id_action where wrh.id_resource = new.id_resource;
+
+    if NameLastAction like '%Requalifier%' AND new.id_state IN ( select id_state from workflow_state where name like '%Transféré à un tiers%' )
 		THEN
 			select to_char(NOW(), 'DD/MM/YYYY'), to_char(NOW(), 'hh24:mi') into NewDateRequalification, NewHeureRequalification;
 	end if;
@@ -96,4 +99,3 @@ begin
 END;
 $function$
 ;
-
