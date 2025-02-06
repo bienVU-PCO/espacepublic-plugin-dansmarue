@@ -457,7 +457,15 @@ public class SignalementService implements ISignalementService
         signalement.setPriorite( _prioriteDAO.load( signalement.getPriorite( ).getId( ) ) );
 
         // get his type
-        signalement.setTypeSignalement( _typeSignalementDAO.getTypeSignalement( signalement.getTypeSignalement( ).getId( ) ) );
+        TypeSignalement typeSignalement = _typeSignalementDAO.getTypeSignalement( signalement.getTypeSignalement( ).getId( ) );
+        if ( typeSignalement != null )
+        {
+            signalement.setTypeSignalement( typeSignalement );
+        }
+        else
+        {
+            signalement.setTypeSignalement( _typeSignalementDAO.getTypeSignalementWithoutUnit( signalement.getTypeSignalement( ).getId( ) ) );
+        }
 
         // get his address
         signalement.setAdresses( _adresseDAO.findBySignalementId( signalement.getId( ) ) );
