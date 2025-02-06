@@ -1706,6 +1706,8 @@ public class SignalementService implements ISignalementService
             TypeSignalement typeSignalement = _typeSignalementDAO.getTypeSignalement( signalement.getTypeSignalement( ).getId( ) );
             if(typeSignalement != null) {
                 signalement.setTypeSignalement( typeSignalement );
+            } else {
+                signalement.setTypeSignalement( _typeSignalementDAO.getTypeSignalementWithoutUnit( signalement.getTypeSignalement( ).getId( ) ) );
             }
             List<PhotoDMR> listPhoto = _photoDAO.findBySignalementId( signalement.getId( ) );
             List<Signaleur> listSignaleur = _signaleurDAO.findBySignalementId( signalement.getId( ) );
