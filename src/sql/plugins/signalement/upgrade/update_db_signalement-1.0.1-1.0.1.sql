@@ -1,3 +1,5 @@
+-- DROP FUNCTION public.test_exp_ins_wkf();
+
 CREATE OR REPLACE FUNCTION test_exp_ins_wkf()
  RETURNS trigger
  LANGUAGE plpgsql
@@ -42,7 +44,7 @@ begin
 
 
 	-- date de requalification
-	select wa.name into NameLastAction from workflow_resource_history wrh join workflow_action wa on wrh.id_action = wa.id_action where wrh.id_resource = new.id_resource;
+	select wa.name into NameLastAction from workflow_resource_history wrh join workflow_action wa on wrh.id_action = wa.id_action where wrh.id_resource = new.id_resource order by wrh.id_history desc limit 1;
 
     if NameLastAction like '%Requalifier%' AND new.id_state IN ( select id_state from workflow_state where name like '%Transféré à un tiers%' )
 		THEN
